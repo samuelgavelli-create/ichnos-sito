@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Sardegna Ichnos — Box alimentari dai piccoli produttori sardi</title>
+<meta name="description" content="Ogni box parte da un piccolo produttore sardo e arriva sulla tua tavola senza intermediari. Si raccoglie solo ciò che è già prenotato.">
+
+<!-- Anteprima quando il link viene condiviso su Instagram / WhatsApp.
+     Sostituisci og:image con un'immagine 1200×630 px dedicata. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://projectichnos.netlify.app/">
+<meta property="og:title" content="Sardegna Ichnos — Capitolo 0">
+<meta property="og:description" content="I produttori sardi pagati prima del raccolto. Si produce solo il prenotato.">
+<meta property="og:image" content="https://projectichnos.netlify.app/LOGO-ICHNOS.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Widget Tally: caricato una volta sola per tutta la pagina -->
+<script async src="https://tally.so/widgets/embed.js"></script>
+
+<style>
+/* ████████████████████████████████████████████████████████████████
+   ICHNOS — FOGLIO DI STILE UNICO
+   1. Base e variabili
+   2. Hero
+   3. Sezione Ranghi
+   4. Movimento ridotto (globale)
+   ████████████████████████████████████████████████████████████████ */
+
+
+/* ═══════════════ 1. BASE E VARIABILI ═══════════════ */
+:root{
+  /* >>> IMMAGINI <<< */
+  --hero-img: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2400');
+
+  /* Palette brand */
+  --verde-scuro:#1a4a2e;
+  --verde-chiaro:#639922;   /* allineato al verde brand usato nei Ranghi */
+  --oro:#D4A017;
+  --inchiostro:#0d2718;     /* derivata: fondo profondo per il contrasto */
+  --panna:#F4EFE2;          /* derivata: bianco caldo, leggibile sul verde */
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+body{background:var(--inchiostro)}
+
+
+/* ═══════════════ 2. HERO ═══════════════ */
+.ichnos-hero{
+  position:relative;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  overflow:hidden;
+  background:var(--inchiostro);
+  font-family:var(--font);
+  color:var(--panna);
+  isolation:isolate;
+}
+
+/* ---------- Sfondo: foto + duotone verde ---------- */
+.ichnos-hero__bg{
+  position:absolute; inset:0; z-index:0;
+  background-image:var(--hero-img);
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.06);
+  animation:ichnos-drift 26s ease-in-out infinite alternate;
+}
+.ichnos-hero__wash{
+  position:absolute; inset:0; z-index:1;
+  background:
+    radial-gradient(120% 90% at 78% 34%, rgba(212,160,23,.20) 0%, transparent 55%),
+    linear-gradient(100deg, rgba(13,39,24,.95) 0%, rgba(26,74,46,.86) 42%, rgba(26,74,46,.55) 72%, rgba(13,39,24,.78) 100%),
+    linear-gradient(to top, rgba(13,39,24,.98) 0%, transparent 42%);
+}
+/* grana */
+.ichnos-hero__grain{
+  position:absolute; inset:-50%; z-index:2; opacity:.05; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:ichnos-grain 8s steps(6) infinite;
+}
+
+/* ---------- Griglia contenuto ---------- */
+.ichnos-hero__inner{
+  position:relative; z-index:3;
+  width:100%;
+  max-width:1280px;
+  margin:0 auto;
+  padding:clamp(88px,14vh,150px) clamp(24px,5vw,72px) clamp(28px,5vh,48px);
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  align-items:center;
+  gap:clamp(32px,5vw,64px);
+  flex:1;
+}
+
+/* ---------- Occhiello ---------- */
+.ichnos-eyebrow{
+  display:flex; align-items:center; gap:14px;
+  font-size:clamp(10px,1.1vw,12px);
+  font-weight:700;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--oro);
+  margin-bottom:clamp(20px,3vh,30px);
+}
+.ichnos-eyebrow::after{
+  content:""; height:1px; flex:1; max-width:110px;
+  background:linear-gradient(to right,var(--oro),transparent);
+}
+
+/* ---------- Titolo ---------- */
+.ichnos-title{
+  font-size:clamp(2.4rem,6.4vw,5.4rem);
+  line-height:.94;
+  font-weight:800;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+  text-shadow:0 2px 40px rgba(13,39,24,.6);
+}
+.ichnos-title em{
+  font-style:normal;
+  display:block;
+  color:var(--oro);
+}
+.ichnos-sub{
+  margin-top:clamp(20px,3vh,30px);
+  max-width:46ch;
+  font-size:clamp(1rem,1.35vw,1.2rem);
+  line-height:1.62;
+  color:rgba(244,239,226,.84);
+}
+.ichnos-sub b{color:var(--panna); font-weight:600}
+
+/* ---------- CTA hero ---------- */
+.ichnos-cta{
+  margin-top:clamp(28px,4.5vh,44px);
+  display:flex; flex-wrap:wrap; gap:14px;
+}
+.ichnos-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:16px 30px;
+  border-radius:999px;
+  font-family:inherit;
+  font-size:clamp(.9rem,1.05vw,1rem);
+  font-weight:700;
+  letter-spacing:.01em;
+  text-decoration:none;
+  cursor:pointer;
+  border:1.5px solid transparent;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+}
+.ichnos-btn--primary{
+  background:var(--verde-chiaro);
+  color:#0d2718;
+  box-shadow:0 12px 32px -10px rgba(99,153,34,.75);
+}
+.ichnos-btn--primary:hover{
+  background:var(--oro);
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px -10px rgba(212,160,23,.8);
+}
+.ichnos-btn--ghost{
+  border-color:rgba(244,239,226,.32);
+  color:var(--panna);
+  background:rgba(244,239,226,.04);
+  backdrop-filter:blur(6px);
+}
+.ichnos-btn--ghost:hover{
+  border-color:var(--oro);
+  color:var(--oro);
+  transform:translateY(-2px);
+}
+.ichnos-btn svg{width:16px;height:16px;flex:none}
+.ichnos-btn:focus-visible{outline:3px solid var(--oro); outline-offset:3px}
+
+/* ---------- Sigillo (elemento firma) ---------- */
+.ichnos-seal{
+  position:relative;
+  justify-self:center;
+  width:min(400px,80%);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  animation:ichnos-bob 7s ease-in-out infinite;
+}
+.ichnos-seal__glow{
+  position:absolute; inset:-14%;
+  background:radial-gradient(circle,rgba(212,160,23,.30) 0%,transparent 62%);
+  filter:blur(18px);
+  animation:ichnos-breathe 6s ease-in-out infinite;
+}
+.ichnos-seal__ring{
+  position:absolute; inset:0;
+  animation:ichnos-spin 44s linear infinite;
+}
+.ichnos-seal__ring text{
+  fill:var(--oro);
+  font-family:var(--font);
+  font-size:5.1px;
+  font-weight:700;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+}
+.ichnos-seal__mark{
+  width:56%;
+  object-fit:contain;
+  /* Logo NERO su fondo bianco -> queste 2 righe lo schiariscono.
+     Se usi un PNG già trasparente (es. BIANCO.png), CANCELLALE. */
+  filter:invert(1) sepia(.5) saturate(3) hue-rotate(5deg) brightness(1.18);
+  mix-blend-mode:screen;
+}
+.ichnos-seal__fallback{
+  position:absolute;
+  width:52%; aspect-ratio:1;
+  border-radius:46% 54% 52% 48%;
+  display:grid; place-items:center;
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(212,160,23,.75); text-align:center; padding:16px;
+}
+
+/* ---------- Rail informativo ---------- */
+.ichnos-rail{
+  position:relative; z-index:3;
+  border-top:1px solid rgba(244,239,226,.14);
+  background:linear-gradient(to top,rgba(13,39,24,.55),transparent);
+}
+.ichnos-rail__inner{
+  max-width:1280px; margin:0 auto;
+  padding:18px clamp(24px,5vw,72px);
+  display:flex; flex-wrap:wrap; align-items:center;
+  gap:clamp(16px,3vw,40px);
+  font-size:clamp(11px,1.05vw,13px);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:600;
+  color:rgba(244,239,226,.72);
+}
+.ichnos-rail__item{display:flex; align-items:center; gap:9px; white-space:nowrap}
+.ichnos-rail__item--link{
+  color:inherit; text-decoration:none;
+  transition:color .2s ease;
+}
+.ichnos-rail__item--link:hover,
+.ichnos-rail__item--link:focus-visible{color:var(--oro)}
+.ichnos-rail__item--link:hover strong{color:var(--oro)}
+.ichnos-rail__item strong{color:var(--oro); font-weight:700}
+.ichnos-rail__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--verde-chiaro); flex:none;
+  box-shadow:0 0 0 0 rgba(99,153,34,.7);
+  animation:ichnos-pulse 2.4s ease-out infinite;
+}
+.ichnos-rail__sep{
+  width:1px; height:16px; background:rgba(244,239,226,.2);
+}
+
+/* ---------- Entrata ---------- */
+.fade-up{opacity:0; transform:translateY(22px); animation:ichnos-up .9s cubic-bezier(.22,.9,.3,1) forwards}
+.d1{animation-delay:.10s}.d2{animation-delay:.22s}.d3{animation-delay:.34s}
+.d4{animation-delay:.46s}.d5{animation-delay:.58s}.d6{animation-delay:.70s}
+
+@keyframes ichnos-up{to{opacity:1;transform:none}}
+@keyframes ichnos-bob{0%,100%{transform:translateY(-8px)}50%{transform:translateY(8px)}}
+@keyframes ichnos-spin{to{transform:rotate(360deg)}}
+@keyframes ichnos-breathe{0%,100%{opacity:.55;transform:scale(.97)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes ichnos-drift{to{transform:scale(1.12) translate3d(-1.5%,-1%,0)}}
+@keyframes ichnos-grain{
+  0%,100%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}
+  40%{transform:translate(3%,-4%)}60%{transform:translate(-3%,-3%)}80%{transform:translate(4%,2%)}
+}
+@keyframes ichnos-pulse{
+  0%{box-shadow:0 0 0 0 rgba(99,153,34,.7)}
+  70%{box-shadow:0 0 0 11px rgba(99,153,34,0)}
+  100%{box-shadow:0 0 0 0 rgba(99,153,34,0)}
+}
+
+/* ---------- Hero mobile ---------- */
+@media (max-width:900px){
+  .ichnos-hero{justify-content:center}
+  .ichnos-hero__inner{
+    grid-template-columns:1fr;
+    text-align:center;
+    padding-top:clamp(72px,11vh,110px);
+    gap:clamp(24px,4vh,36px);
+  }
+  .ichnos-hero__copy{order:2}
+  .ichnos-seal{order:1; width:min(230px,58vw)}
+  .ichnos-eyebrow{justify-content:center}
+  .ichnos-eyebrow::after{display:none}
+  .ichnos-title{font-size:clamp(2.1rem,8.6vw,3.2rem)}
+  .ichnos-sub{margin-left:auto;margin-right:auto}
+  .ichnos-cta{justify-content:center}
+  .ichnos-btn{flex:1 1 210px; justify-content:center}
+  .ichnos-rail__inner{justify-content:center; text-align:center; gap:12px 18px; letter-spacing:.1em}
+  .ichnos-rail__sep{display:none}
+}
+@media (max-width:420px){
+  .ichnos-rail__inner{font-size:10px}
+}
+
+
+/* ═══════════════ 3. SEZIONE RANGHI ═══════════════ */
+.ich-ranghi *,
+.ich-ranghi *::before,
+.ich-ranghi *::after { box-sizing: border-box; }
+
+.ich-ranghi {
+  --verde-scuro: #1a4a2e;
+  --verde-chiaro: #639922;
+  --oro: #D4A017;
+  --avorio: #f4f7f1;
+  --carta: #ffffff;
+  --bordo: #e2e8dd;
+  --testo: #2b3b30;
+  --testo-tenue: #5d6f62;
+
+  font-family: var(--font);
+  background: var(--avorio);
+  color: var(--testo);
+  padding: 88px 24px 80px;
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* alone ambientale di fondo */
+.ich-ranghi::before {
+  content: "";
+  position: absolute;
+  inset: -20% 0 auto;
+  height: 60%;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(99,153,34,.10), transparent 70%);
+  pointer-events: none;
+}
+
+/* ─── INTESTAZIONE ─────────────────────────────────────────── */
+.ich-intro {
+  max-width: 680px;
+  margin: 0 auto 24px;
+  text-align: center;
+  position: relative;
+}
+.ich-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--verde-chiaro);
+  margin: 0 0 14px;
+}
+.ich-titolo {
+  font-size: clamp(28px, 4.6vw, 42px);
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--verde-scuro);
+  margin: 0 0 16px;
+}
+.ich-titolo em {
+  font-style: normal;
+  color: var(--oro);
+}
+.ich-sottotitolo {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--testo-tenue);
+  margin: 0;
+}
+
+/* ─── GRIGLIA ──────────────────────────────────────────────── */
+.ich-griglia {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-top: 118px;      /* spazio per le maschere che escono dalla card */
+  position: relative;
+}
+
+/* ─── CARTA ────────────────────────────────────────────────── */
+.ich-carta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--carta);
+  border: 1px solid var(--bordo);
+  border-radius: 22px;
+  padding: 104px 26px 28px;
+  box-shadow: 0 2px 4px rgba(26,74,46,.04), 0 12px 30px -18px rgba(26,74,46,.20);
+  transition: transform .45s cubic-bezier(.2,.8,.3,1),
+              box-shadow .45s cubic-bezier(.2,.8,.3,1),
+              border-color .45s ease;
+  opacity: 0;
+  transform: translateY(26px);
+}
+.ich-carta.is-visibile { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.3,1); }
+
+/* velo verde in fondo alla carta */
+.ich-carta::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 55%;
+  border-radius: 0 0 22px 22px;
+  background: linear-gradient(to top, rgba(99,153,34,.07), transparent);
+  opacity: .8;
+  transition: opacity .45s ease;
+  pointer-events: none;
+}
+
+/* carta élite: filo d'oro sul bordo superiore */
+.ich-carta.is-elite {
+  border-color: rgba(212,160,23,.42);
+  box-shadow: 0 2px 4px rgba(26,74,46,.04), 0 14px 34px -18px rgba(212,160,23,.42);
+}
+.ich-carta.is-elite::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  border-radius: 22px 22px 0 0;
+  background: linear-gradient(90deg, transparent, var(--oro) 30%, var(--oro) 70%, transparent);
+  opacity: .85;
+  pointer-events: none;
+}
+
+/* ─── SLOT MASCHERA (elemento firma) ───────────────────────── */
+.ich-slot {
+  position: absolute;
+  top: -104px;
+  left: 50%;
+  width: 210px;
+  height: 210px;
+  margin-left: -105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* aura dorata */
+.ich-aura {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,160,23,.34), rgba(212,160,23,.10) 45%, transparent 68%);
+  opacity: .28;
+  transform: scale(.82);
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.3,1);
+}
+
+/* orbita: anello dorato in rotazione lenta */
+.ich-orbita {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    transparent 0deg, rgba(212,160,23,.85) 38deg, transparent 76deg,
+    transparent 180deg, rgba(99,153,34,.6) 214deg, transparent 252deg);
+  -webkit-mask: radial-gradient(circle, transparent 63%, #000 64%, #000 66%, transparent 67%);
+          mask: radial-gradient(circle, transparent 63%, #000 64%, #000 66%, transparent 67%);
+  opacity: 0;
+  animation: ich-ruota 14s linear infinite;
+  transition: opacity .5s ease;
+}
+
+/* ombra a terra */
+.ich-ombra {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 96px;
+  height: 12px;
+  margin-left: -48px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(26,74,46,.26), transparent 70%);
+  animation: ich-ombra 5.6s ease-in-out infinite;
+}
+
+/* contenitore in fluttuazione */
+.ich-fluttua {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ich-bob 5.6s ease-in-out infinite;
+}
+
+.ich-maschera {
+  max-width: 78%;
+  max-height: 78%;
+  display: block;
+  filter: drop-shadow(0 10px 16px rgba(26,74,46,.22));
+  transition: transform .55s cubic-bezier(.2,.8,.3,1), filter .55s ease;
+  transform-origin: 50% 62%;
+}
+
+/* segnaposto visibile finché il PNG non è caricato */
+.ich-segnaposto {
+  display: none;
+  width: 74%;
+  height: 74%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2px dashed rgba(212,160,23,.75);
+  border-radius: 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.7;
+  color: var(--oro);
+  background: rgba(255,255,255,.55);
+  padding: 8px;
+}
+.ich-slot.senza-immagine .ich-maschera { display: none; }
+.ich-slot.senza-immagine .ich-segnaposto { display: flex; }
+
+/* ritardi per far respirare le tre maschere in modo sfasato */
+.ich-carta:nth-child(2) .ich-fluttua,
+.ich-carta:nth-child(2) .ich-ombra { animation-delay: -1.9s; }
+.ich-carta:nth-child(3) .ich-fluttua,
+.ich-carta:nth-child(3) .ich-ombra { animation-delay: -3.7s; }
+
+@keyframes ich-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+@keyframes ich-ombra {
+  0%, 100% { transform: scaleX(1);   opacity: .5; }
+  50%      { transform: scaleX(.82); opacity: .28; }
+}
+@keyframes ich-ruota {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── HOVER (solo dispositivi con puntatore) ───────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .ich-carta:hover {
+    transform: translateY(-10px);
+    border-color: rgba(212,160,23,.55);
+    box-shadow: 0 4px 10px rgba(26,74,46,.06), 0 34px 60px -28px rgba(26,74,46,.38);
+  }
+  .ich-carta:hover::after { opacity: 1; }
+  .ich-carta:hover .ich-aura { opacity: 1; transform: scale(1.06); }
+  .ich-carta:hover .ich-orbita { opacity: 1; }
+  .ich-carta:hover .ich-maschera {
+    transform: scale(1.11) rotate(-2.5deg);
+    filter: drop-shadow(0 18px 26px rgba(26,74,46,.28))
+            drop-shadow(0 0 22px rgba(212,160,23,.55));
+  }
+  .ich-carta:hover .ich-moneta { transform: translateY(-3px); }
+  .ich-carta:hover .ich-moneta:nth-child(2n) { transition-delay: .04s; }
+  .ich-carta:hover .ich-moneta:nth-child(3n) { transition-delay: .08s; }
+}
+
+/* la carta reagisce anche quando il CTA prende il focus da tastiera */
+.ich-carta:focus-within .ich-aura { opacity: 1; transform: scale(1.06); }
+.ich-carta:focus-within .ich-orbita { opacity: 1; }
+
+/* ─── TESTATA CARTA ────────────────────────────────────────── */
+.ich-rango-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--verde-chiaro);
+  margin: 0 0 8px;
+  position: relative;
+}
+.ich-nome {
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  color: var(--verde-scuro);
+  margin: 0 0 10px;
+  position: relative;
+}
+.ich-prezzo {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+  position: relative;
+}
+.ich-prezzo-lancio {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--verde-scuro);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+}
+.ich-prezzo-pieno {
+  font-size: 14px;
+  color: var(--testo-tenue);
+  text-decoration: line-through;
+  text-decoration-color: rgba(212,160,23,.9);
+  text-decoration-thickness: 1.5px;
+}
+.ich-prezzo-nota {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--oro);
+  width: 100%;
+  margin-top: 2px;
+}
+
+/* ─── DESCRIZIONE ──────────────────────────────────────────── */
+.ich-descrizione {
+  position: relative;
+  margin: 0 0 24px;
+  padding-left: 16px;
+  border-left: 3px solid var(--verde-chiaro);
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--testo-tenue);
+}
+.ich-carta.is-elite .ich-descrizione { border-left-color: var(--oro); }
+
+/* ─── COSA RICEVI ──────────────────────────────────────────── */
+.ich-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--verde-scuro);
+  opacity: .55;
+  margin: 0 0 14px;
+  position: relative;
+}
+.ich-lista {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  position: relative;
+}
+.ich-lista li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--testo);
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(26,74,46,.07);
+}
+.ich-lista li:last-child { border-bottom: 0; }
+.ich-spunta {
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: rgba(99,153,34,.14);
+  color: var(--verde-chiaro);
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.ich-lista strong { font-weight: 700; color: var(--verde-scuro); }
+
+/* blocco monete */
+.ich-monete-blocco {
+  background: linear-gradient(135deg, rgba(212,160,23,.10), rgba(212,160,23,.03));
+  border: 1px solid rgba(212,160,23,.28);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0 0 20px;
+  position: relative;
+}
+.ich-monete-testa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--verde-scuro);
+  margin-bottom: 4px;
+}
+.ich-monete-testa span:first-child { font-size: 17px; line-height: 1; }
+.ich-monete-nota {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--testo-tenue);
+}
+/* dischi che rendono visibile la quantità di monete */
+.ich-dischi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+.ich-moneta {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0c14d, var(--oro) 70%);
+  box-shadow: inset 0 -1px 1px rgba(120,85,0,.35);
+  transition: transform .35s cubic-bezier(.2,.8,.3,1);
+}
+
+/* etichetta élite */
+.ich-etichetta {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--oro);
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.4);
+  border-radius: 999px;
+  padding: 5px 10px;
+  z-index: 2;
+}
+
+/* ─── CTA RANGHI ───────────────────────────────────────────── */
+.ich-azione { margin-top: auto; position: relative; }
+.ich-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--verde-scuro);
+  background: transparent;
+  border: 1.5px solid var(--verde-scuro);
+  border-radius: 12px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease, border-color .3s ease;
+}
+.ich-cta .freccia { transition: transform .3s ease; display: inline-block; }
+.ich-cta:hover,
+.ich-cta:focus-visible {
+  background: var(--verde-scuro);
+  border-color: var(--verde-scuro);
+  color: #fff;
+}
+.ich-cta:hover .freccia { transform: translateX(4px); }
+.ich-cta:focus-visible { outline: 3px solid rgba(212,160,23,.7); outline-offset: 3px; }
+.ich-cta:active { transform: translateY(1px); }
+
+.ich-cta-nota {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--testo-tenue);
+  opacity: .85;
+}
+
+/* ─── FASCIA PROMESSE ──────────────────────────────────────── */
+.ich-promesse {
+  max-width: 1160px;
+  margin: 56px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--bordo);
+  position: relative;
+}
+.ich-promessa {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--testo-tenue);
+}
+.ich-promessa b { color: var(--verde-scuro); font-weight: 700; }
+.ich-punto {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--verde-chiaro);
+  flex: 0 0 7px;
+}
+.ich-punto.oro { background: var(--oro); }
+
+/* ─── RANGHI: TABLET ───────────────────────────────────────── */
+@media (max-width: 1000px) {
+  .ich-griglia { grid-template-columns: 1fr; max-width: 470px; gap: 118px; padding-top: 104px; }
+  .ich-carta { padding: 92px 24px 26px; }
+  .ich-slot { top: -92px; width: 186px; height: 186px; margin-left: -93px; }
+  .ich-aura { opacity: .5; transform: scale(.95); }   /* su touch l'aura resta accesa */
+  .ich-orbita { opacity: .55; }
+}
+
+/* ─── RANGHI: SMARTPHONE ───────────────────────────────────── */
+@media (max-width: 560px) {
+  .ich-ranghi { padding: 64px 18px 60px; }
+  .ich-griglia { gap: 100px; padding-top: 88px; }
+  .ich-carta { padding: 80px 20px 24px; border-radius: 18px; }
+  .ich-slot { top: -80px; width: 158px; height: 158px; margin-left: -79px; }
+  .ich-ombra { width: 72px; margin-left: -36px; }
+  .ich-nome { font-size: 24px; }
+  .ich-prezzo-lancio { font-size: 23px; }
+  .ich-etichetta { top: 14px; right: 14px; }
+  .ich-promesse { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .ich-cta { font-size: 11.5px; padding: 15px 14px; letter-spacing: .08em; }
+}
+
+
+/* ═══════════════ 4. MOVIMENTO RIDOTTO (globale) ═══════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+  .fade-up { opacity: 1; transform: none; }
+  .ich-carta { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ████████████████████████████████████████████████████████████
+     HERO
+     ████████████████████████████████████████████████████████████ -->
+<section class="ichnos-hero">
+  <div class="ichnos-hero__bg"></div>
+  <div class="ichnos-hero__wash"></div>
+  <div class="ichnos-hero__grain"></div>
+
+  <div class="ichnos-hero__inner">
+
+    <div class="ichnos-hero__copy">
+      <h1 class="ichnos-title fade-up d2">
+        Sardegna<br><em>Ichnos</em>
+      </h1>
+
+      <p class="ichnos-sub fade-up d3">
+        Ogni box parte da un piccolo produttore sardo e arriva sulla tua tavola
+        senza passare per nessun intermediario. <b>Si raccoglie solo ciò che è già prenotato.</b>
+      </p>
+
+      <div class="ichnos-cta fade-up d4">
+        <!-- ⚠️ #come-funziona non esiste ancora: per ora punta ai Ranghi.
+             Quando costruisci la sezione Come Funziona, rimetti l'href originale. -->
+        <a href="#ranghi" class="ichnos-btn ichnos-btn--primary">
+          Come funziona
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <!-- ⚠️ #prodotti-del-mese è ancora un'ancora morta: nessuna sezione con questo id -->
+        <a href="#prodotti-del-mese" class="ichnos-btn ichnos-btn--ghost">I Prodotti del Mese</a>
+      </div>
+    </div>
+
+    <!-- SIGILLO: l'orma che ogni prodotto lascia -->
+    <div class="ichnos-seal fade-up d5">
+      <div class="ichnos-seal__glow"></div>
+
+      <svg class="ichnos-seal__ring" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <path id="ichnosRing" d="M50,50 m-41,0 a41,41 0 1,1 82,0 a41,41 0 1,1 -82,0"/>
+        </defs>
+        <text><textPath href="#ichnosRing" startOffset="0">
+          CAPITOLO 0 · SARDEGNA · CAPITOLO 0 · SARDEGNA ·
+        </textPath></text>
+      </svg>
+
+      <img class="ichnos-seal__mark" src="LOGO-ICHNOS.png" alt="Marchio Ichnos"
+           onerror="this.style.display='none';document.getElementById('sealFallback').style.display='grid'">
+
+      <div class="ichnos-seal__fallback" id="sealFallback" style="display:none">Logo Ichnos</div>
+    </div>
+
+  </div>
+
+  <div class="ichnos-rail">
+    <div class="ichnos-rail__inner fade-up d6">
+      <!-- ⚠️ #sardegna-day è ancora un'ancora morta -->
+      <a href="#sardegna-day" class="ichnos-rail__item ichnos-rail__item--link"><span class="ichnos-rail__dot"></span> Prossimo <strong>Sardegna&nbsp;Day</strong></a>
+      <span class="ichnos-rail__sep"></span>
+      <span class="ichnos-rail__item"><strong>+10%</strong>&nbsp;sul prezzo GDO ai produttori</span>
+      <span class="ichnos-rail__sep"></span>
+      <span class="ichnos-rail__item">Spedizione <strong>sempre inclusa</strong></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████
+     RANGHI
+     ────────────────────────────────────────────────────────────
+     ID DEI FORM TALLY — unico posto da toccare se cambiano
+       Contadinu      →  vGOy04
+       Possidenti     →  Xx1oEg
+       Meri de Ommu   →  eq0qBJ
+     Ogni ID compare 2 volte per carta: nell'href (di riserva) e in
+     data-tally-open (popup). Cerca e sostituisci entrambi.
+     ████████████████████████████████████████████████████████████ -->
+<section class="ich-ranghi" id="ranghi">
+
+  <div class="ich-intro">
+    <p class="ich-eyebrow">Capitolo 0 · Sardegna</p>
+    <h2 class="ich-titolo">Tre modi di stare <em>dalla stessa parte</em></h2>
+    <p class="ich-sottotitolo">
+      Ogni rango è una quantità di Monete Ichnos: le spendi come vuoi per comporre la tua box,
+      e arrivano ai produttori prima del raccolto.
+    </p>
+  </div>
+
+  <div class="ich-griglia">
+
+    <!-- ═══════════════ RANGO 01 — CONTADINU ═══════════════ -->
+    <article class="ich-carta">
+
+      <!-- MASCHERA CONTADINU — PNG trasparente, quadrato, min 600×600 px.
+           Attenzione: su Netlify il nome file è case-sensitive. -->
+      <div class="ich-slot">
+        <div class="ich-aura"></div>
+        <div class="ich-orbita"></div>
+        <div class="ich-ombra"></div>
+        <div class="ich-fluttua">
+          <img class="ich-maschera"
+               src="img/maschera-contadinu.png"
+               alt="Maschera del rango Contadinu"
+               decoding="async"
+               onerror="this.closest('.ich-slot').classList.add('senza-immagine')">
+          <div class="ich-segnaposto" aria-hidden="true">MASCHERA<br>CONTADINU</div>
+        </div>
+      </div>
+
+      <p class="ich-rango-num">Rango 01</p>
+      <h3 class="ich-nome">Contadinu</h3>
+      <p class="ich-prezzo">
+        <span class="ich-prezzo-lancio">35,10&nbsp;€</span>
+        <span class="ich-prezzo-pieno">39,00&nbsp;€</span>
+        <span class="ich-prezzo-nota">Prezzo di lancio · spedizione inclusa</span>
+      </p>
+
+      <p class="ich-descrizione">
+        Il Contadinu è il custode del raccolto. Conosce il ritmo delle stagioni e non ha bisogno
+        di fronzoli, ma solo di sostanza. Il rango per chi vuole iniziare il viaggio con Sardegna Ichnos.
+      </p>
+
+      <div class="ich-monete-blocco">
+        <div class="ich-monete-testa"><span>🟡</span><span>6 Monete Ichnos</span></div>
+        <div class="ich-monete-nota">Credito prepagato per comporre la tua box come vuoi.</div>
+        <div class="ich-dischi" data-monete="6" aria-hidden="true"></div>
+      </div>
+
+      <p class="ich-label">Cosa ricevi</p>
+      <ul class="ich-lista">
+        <li><span class="ich-spunta">✓</span><span>Ritiro presso l'<strong>Hub di Felizzano (AL)</strong></span></li>
+        <li><span class="ich-spunta">✓</span><span>Consegna al <strong>Sardegna Day</strong>, il giorno fisso di ogni mese</span></li>
+      </ul>
+
+      <div class="ich-azione">
+        <!-- TALLY CONTADINU — vGOy04 -->
+        <a class="ich-cta"
+           href="https://tally.so/r/vGOy04"
+           target="_blank" rel="noopener"
+           aria-label="Componi la tua box — rango Contadinu"
+           data-tally-open="vGOy04"
+           data-tally-layout="modal"
+           data-tally-width="720"
+           data-tally-overlay="1"
+           data-tally-auto-close="2500"
+           data-tally-emoji-text="🟡"
+           data-tally-emoji-animation="tada">
+          Componi la tua box <span class="freccia">→</span>
+        </a>
+        <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
+      </div>
+    </article>
+
+    <!-- ═══════════════ RANGO 02 — POSSIDENTI ═══════════════ -->
+    <article class="ich-carta">
+
+      <div class="ich-slot">
+        <div class="ich-aura"></div>
+        <div class="ich-orbita"></div>
+        <div class="ich-ombra"></div>
+        <div class="ich-fluttua">
+          <img class="ich-maschera"
+               src="img/maschera-possidenti.png"
+               alt="Maschera del rango Possidenti"
+               decoding="async"
+               onerror="this.closest('.ich-slot').classList.add('senza-immagine')">
+          <div class="ich-segnaposto" aria-hidden="true">MASCHERA<br>POSSIDENTI</div>
+        </div>
+      </div>
+
+      <p class="ich-rango-num">Rango 02</p>
+      <h3 class="ich-nome">Possidenti</h3>
+      <p class="ich-prezzo">
+        <span class="ich-prezzo-lancio">62,10&nbsp;€</span>
+        <span class="ich-prezzo-pieno">69,00&nbsp;€</span>
+        <span class="ich-prezzo-nota">Prezzo di lancio · spedizione inclusa</span>
+      </p>
+
+      <p class="ich-descrizione">
+        Il Possidenti è il pilastro della comunità. Ha la responsabilità della famiglia e della scorta.
+        Non si accontenta dell'assaggio: vuole la certezza che in tavola ci sia varietà e la massima qualità.
+      </p>
+
+      <div class="ich-monete-blocco">
+        <div class="ich-monete-testa"><span>🟡</span><span>12 Monete Ichnos</span></div>
+        <div class="ich-monete-nota">Il doppio del potere d'acquisto sulla dispensa sarda.</div>
+        <div class="ich-dischi" data-monete="12" aria-hidden="true"></div>
+      </div>
+
+      <p class="ich-label">Cosa ricevi</p>
+      <ul class="ich-lista">
+        <li><span class="ich-spunta">✓</span><span><strong>Consegna personale</strong> a casa tua o in ufficio</span></li>
+        <li><span class="ich-spunta">✓</span><span><strong>Riconoscimento dei produttori</strong> — ringraziamenti firmati dentro la box</span></li>
+        <li><span class="ich-spunta">✓</span><span>Consegna al <strong>Sardegna Day</strong>, il giorno fisso di ogni mese</span></li>
+      </ul>
+
+      <div class="ich-azione">
+        <!-- TALLY POSSIDENTI — Xx1oEg -->
+        <a class="ich-cta"
+           href="https://tally.so/r/Xx1oEg"
+           target="_blank" rel="noopener"
+           aria-label="Componi la tua box — rango Possidenti"
+           data-tally-open="Xx1oEg"
+           data-tally-layout="modal"
+           data-tally-width="720"
+           data-tally-overlay="1"
+           data-tally-auto-close="2500"
+           data-tally-emoji-text="🟡"
+           data-tally-emoji-animation="tada">
+          Componi la tua box <span class="freccia">→</span>
+        </a>
+        <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
+      </div>
+    </article>
+
+    <!-- ═══════════════ RANGO 03 — MERI DE OMMU ═══════════════ -->
+    <article class="ich-carta is-elite">
+      <span class="ich-etichetta">Élite</span>
+
+      <div class="ich-slot">
+        <div class="ich-aura"></div>
+        <div class="ich-orbita"></div>
+        <div class="ich-ombra"></div>
+        <div class="ich-fluttua">
+          <img class="ich-maschera"
+               src="img/maschera-meri-de-ommu.png"
+               alt="Maschera del rango Meri de Ommu"
+               decoding="async"
+               onerror="this.closest('.ich-slot').classList.add('senza-immagine')">
+          <div class="ich-segnaposto" aria-hidden="true">MASCHERA<br>MERI DE OMMU</div>
+        </div>
+      </div>
+
+      <p class="ich-rango-num">Rango 03</p>
+      <h3 class="ich-nome">Meri de Ommu</h3>
+      <p class="ich-prezzo">
+        <span class="ich-prezzo-lancio">89,10&nbsp;€</span>
+        <span class="ich-prezzo-pieno">99,00&nbsp;€</span>
+        <span class="ich-prezzo-nota">Prezzo di lancio · spedizione inclusa</span>
+      </p>
+
+      <p class="ich-descrizione">
+        Il Meri de Ommu è la guida. Guarda avanti, investe nel futuro e protegge la comunità.
+        Non è solo un cliente: è il sostenitore d'élite di Sardegna Ichnos.
+      </p>
+
+      <div class="ich-monete-blocco">
+        <div class="ich-monete-testa"><span>🟡</span><span>18 Monete Ichnos</span></div>
+        <div class="ich-monete-nota">Una dispensa completa di ogni rarità sarda.</div>
+        <div class="ich-dischi" data-monete="18" aria-hidden="true"></div>
+      </div>
+
+      <p class="ich-label">Cosa ricevi</p>
+      <ul class="ich-lista">
+        <li><span class="ich-spunta">✓</span><span><strong>Consegna personale</strong> a casa tua o in ufficio</span></li>
+        <li><span class="ich-spunta">✓</span><span><strong>Riconoscimento dei produttori</strong> — ringraziamenti firmati dentro la box</span></li>
+        <li><span class="ich-spunta">✓</span><span><strong>Futuro IoT</strong> — beta tester del sistema di monitoraggio dei campi</span></li>
+        <li><span class="ich-spunta">✓</span><span>Consegna al <strong>Sardegna Day</strong>, il giorno fisso di ogni mese</span></li>
+      </ul>
+
+      <div class="ich-azione">
+        <!-- TALLY MERI DE OMMU — eq0qBJ -->
+        <a class="ich-cta"
+           href="https://tally.so/r/eq0qBJ"
+           target="_blank" rel="noopener"
+           aria-label="Componi la tua box — rango Meri de Ommu"
+           data-tally-open="eq0qBJ"
+           data-tally-layout="modal"
+           data-tally-width="720"
+           data-tally-overlay="1"
+           data-tally-auto-close="2500"
+           data-tally-emoji-text="🟡"
+           data-tally-emoji-animation="tada">
+          Componi la tua box <span class="freccia">→</span>
+        </a>
+        <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="ich-promesse">
+    <div class="ich-promessa"><span class="ich-punto"></span><span>Si produce <b>solo il prenotato</b>: zero sprechi</span></div>
+    <div class="ich-promessa"><span class="ich-punto oro"></span><span>Ogni prodotto porta il <b>Sigillo Ichnos</b>: origine certificata</span></div>
+  </div>
+
+</section>
+
+
+<script>
+(function () {
+  var sezione = document.getElementById('ranghi');
+  if (!sezione) return;
+
+  /* dischi-moneta generati dalla quantità dichiarata */
+  sezione.querySelectorAll('[data-monete]').forEach(function (box) {
+    var n = parseInt(box.getAttribute('data-monete'), 10) || 0;
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('span');
+      d.className = 'ich-moneta';
+      box.appendChild(d);
+    }
+  });
+
+  /* comparsa progressiva delle carte allo scroll */
+  var carte = sezione.querySelectorAll('.ich-carta');
+  if (!('IntersectionObserver' in window)) {
+    carte.forEach(function (c) { c.classList.add('is-visibile'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function (voci) {
+    voci.forEach(function (v) {
+      if (!v.isIntersecting) return;
+      var i = Array.prototype.indexOf.call(carte, v.target);
+      setTimeout(function () { v.target.classList.add('is-visibile'); }, i * 130);
+      obs.unobserve(v.target);
+    });
+  }, { threshold: 0.15 });
+  carte.forEach(function (c) { obs.observe(c); });
+})();
+</script>
+
+</body>
+</html>
