@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
+<link rel="stylesheet" href="menu.css"><head>
 <meta charset="UTF-8"><link rel="icon" type="image/png" href="favicon.png?v=1">
 <link rel="apple-touch-icon" href="favicon.png?v=1">
 <meta name="theme-color" content="#1a4a2e">
@@ -843,7 +843,65 @@ body{background:var(--inchiostro)}
 }
 </style>
 </head>
-<body>
+<body><!-- ══════════════════════════════════════════════════════════
+     ICHNOS — blocco menu da incollare SUBITO DOPO <body>
+     Richiede menu.css nel <head> e menu.js prima di </body>
+     ══════════════════════════════════════════════════════════ -->
+<header class="ichnav" id="ichnav">
+  <div class="ichnav-barra">
+    <a href="index.html" class="ichnav-marchio" aria-label="Ichnos — home">
+      <img src="img/logo-verde.png" alt="Ichnos">
+    </a>
+
+    <nav class="ichnav-linee" aria-label="Principale">
+      <a href="#prodotti-del-mese">Prodotti del mese</a>
+      <a href="#come-funziona">Come funziona</a>
+      <a href="progetto.html">Progetto Ichnos</a>
+      <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
+      <a href="#box" class="ichnav-box">Le nostre BOX</a>
+    </nav>
+
+    <button class="ichnav-tasto" id="ichnavTasto" aria-expanded="false"
+            aria-controls="ichnavMenu" aria-label="Apri il menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="ichnav-menu" id="ichnavMenu" aria-label="Menu">
+  <div class="ichnav-lista">
+    <a class="ichnav-voce" href="#prodotti-del-mese">
+      <span class="ichnav-etichetta">Prodotti del mese
+        <span class="ichnav-nota">Cosa arriva nella box di questo mese</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">&rarr;</span>
+    </a>
+    <a class="ichnav-voce" href="#come-funziona">
+      <span class="ichnav-etichetta">Come funziona
+        <span class="ichnav-nota">Monete Ichnos, ranghi e Sardegna Day</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">&rarr;</span>
+    </a>
+    <a class="ichnav-voce" href="progetto.html">
+      <span class="ichnav-etichetta">Progetto Ichnos
+        <span class="ichnav-nota">Il metodo, il sigillo, le prossime regioni</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">&rarr;</span>
+    </a>
+    <a class="ichnav-voce" href="https://instagram.com/projectichnos" target="_blank" rel="noopener">
+      <span class="ichnav-etichetta">Instagram
+        <span class="ichnav-nota">@projectichnos</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">&rarr;</span>
+    </a>
+
+    <a class="ichnav-cta" href="#box">Le nostre BOX</a>
+    <p class="ichnav-piede">Hub di ritiro &middot; Felizzano (AL)</p>
+  </div>
+</nav>
+
+<div class="ichnav-spazio"></div>
+<!-- ══════════════════ fine blocco menu ══════════════════ -->
 
 <!-- ████████████████████████████████████████████████████████████
      HERO
@@ -1166,5 +1224,5 @@ body{background:var(--inchiostro)}
 })();
 </script>
 
-</body>
+<script src="menu.js"></script></body>
 </html>
