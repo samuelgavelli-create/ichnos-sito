@@ -1,562 +1,2465 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8"><link rel="icon" type="image/png" href="favicon.png?v=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Sardegna Ichnos — Box alimentari dai piccoli produttori sardi</title>
+<meta name="description" content="Ogni box parte da un piccolo produttore sardo e arriva sulla tua tavola senza intermediari. Si raccoglie solo ciò che è già prenotato.">
+<link rel="canonical" href="https://projectichnos.pages.dev/">
+
+<!-- Anteprima quando il link viene condiviso su Instagram / WhatsApp.
+     ⚠ og:image vuole un URL assoluto e un file vero: carica in /img/
+       un'immagine 1200×630 px chiamata og-ichnos.jpg. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Sardegna Ichnos">
+<meta property="og:url" content="https://projectichnos.pages.dev/">
+<meta property="og:title" content="Sardegna Ichnos — Capitolo 0">
+<meta property="og:description" content="I produttori sardi pagati prima del raccolto. Si produce solo il prenotato.">
+<meta property="og:image" content="https://projectichnos.pages.dev/img/og-ichnos.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" href="favicon.png?v=1">
 <link rel="apple-touch-icon" href="favicon.png?v=1">
 <meta name="theme-color" content="#1a4a2e">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Il Progetto — Ichnos</title>
-<meta name="description" content="Ichnos custodisce l'impronta dei territori italiani. Filiera diretta, magazzino zero, pagamento anticipato ai produttori. Capitolo 0: Sardegna.">
 
-<!--
-  ═══════════════════════════════════════════════════════════
-  IMMAGINI DA CARICARE IN /img/  (percorsi usati qui sotto)
-  ───────────────────────────────────────────────────────────
-  img/logo-verde.png    → il lettering ICHNOS verde   (VERDE_1)
-  img/logo-bianco.png   → il lettering ICHNOS bianco  (BIANCO)
-  img/sigillo-verde.png → il tondo/sigillo verde      (TONDO_VERDE_1)
-  img/sardegna.png      → la Sardegna coi segni nuragici
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0..100,0..1&display=swap" rel="stylesheet">
 
-  ⚠ I file che mi hai passato sono JPEG rinominati .png:
-    hanno il FONDO BIANCO, non trasparente.
-    Qui uso mix-blend-mode:multiply così funzionano lo stesso
-    su fondo chiaro. Quando il grafico ti manda i PNG veri
-    con trasparenza, basta togliere le righe .blend { }.
-  ═══════════════════════════════════════════════════════════
--->
+<!-- Widget Tally: caricato una volta sola per tutta la pagina -->
+<script async src="https://tally.so/widgets/embed.js"></script>
 
 <style>
+/* ████████████████████████████████████████████████████████████████
+   ICHNOS — FOGLIO DI STILE UNICO
+   1. Base e variabili
+   2. Barra di navigazione   (prefisso ichnav-)
+   3. Hero                   (prefisso ichnos-)
+   4. Ranghi                 (prefisso ich-)
+   5. Sardegna Day           (prefisso sd- / tutto dentro .sd)
+   6. Footer                 (prefisso ichfoot-)
+   7. Movimento ridotto (globale)
+   ████████████████████████████████████████████████████████████████ */
+
+
+/* ═══════════════ 1. BASE E VARIABILI ═══════════════ */
 :root{
+  /* >>> IMMAGINI <<< */
+  --hero-img: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2400');
+
+  /* Palette brand */
   --verde-scuro:#1a4a2e;
-  --verde-chiaro:#639922;
+  --verde-chiaro:#639922;   /* allineato al verde brand usato nei Ranghi */
   --oro:#D4A017;
-  --carta:#EDE8DC;
-  --carta-scura:#DFD8C7;
-  --inchiostro:#12160F;
-  --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --inchiostro:#0d2718;     /* derivata: fondo profondo per il contrasto */
+  --panna:#F4EFE2;          /* derivata: bianco caldo, leggibile sul verde */
+  --oro-scuro:#9a6a0d;      /* derivata: l'oro di marca su fondo panna sarebbe illeggibile */
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);
-  background:var(--carta);
-  color:var(--inchiostro);
-  -webkit-font-smoothing:antialiased;
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%; text-size-adjust:100%;
   overflow-x:hidden;
 }
-img{max-width:100%;display:block}
-a{color:inherit}
+/* niente attesa di 300 ms al tocco su niente di cliccabile */
+a,button{touch-action:manipulation; -webkit-tap-highlight-color:rgba(212,160,23,.18)}
+#ranghi,#sardegna-day{scroll-margin-top:86px}
+@media (max-width:899px){#ranghi,#prodotti-del-mese,#sardegna-day{scroll-margin-top:74px}}
+body{background:var(--inchiostro); overflow-x:hidden}
 
+
+/* ═══════════════ 2. BARRA DI NAVIGAZIONE ═══════════════ */
+.ichnav{
+  position:fixed; top:0; left:0; right:0; z-index:1100;   /* SOPRA il pannello: la X resta sempre toccabile */
+  background:transparent;
+  border-bottom:1px solid transparent;
+  font-family:var(--font);
+  transition:background .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+.ichnav-barra{
+  max-width:1280px; margin:0 auto;
+  padding:0 clamp(20px,5vw,72px);
+  height:78px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:height .35s ease;
+}
+/* stato "scrollato": la barra diventa solida */
+.ichnav.ridotta{
+  background:rgba(244,239,226,.95);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:rgba(212,160,23,.45);
+  box-shadow:0 2px 22px rgba(13,39,24,.10);
+}
+.ichnav.ridotta .ichnav-barra{height:62px}
+
+/* menu aperto: la barra sparisce e lascia solo marchio + X sul verde */
+.ichnav.menu-aperto,
+.ichnav.ridotta.menu-aperto{
+  background:transparent; box-shadow:none; border-bottom-color:transparent;
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.ichnav.menu-aperto .ichnav-logo--chiaro{opacity:1}
+.ichnav.menu-aperto .ichnav-logo--scuro{opacity:0}
+
+/* marchio: bianco sull'hero, verde quando la barra diventa solida */
+.ichnav-marchio{position:relative; display:block; line-height:0; height:28px; flex:none; transition:height .35s ease}
+.ichnav-logo{height:100%; width:auto; display:block; transition:opacity .35s ease}
+.ichnav-logo--scuro{position:absolute; top:0; left:0; opacity:0}
+.ichnav.ridotta .ichnav-marchio{height:24px}
+.ichnav.ridotta .ichnav-logo--chiaro{opacity:0}
+.ichnav.ridotta .ichnav-logo--scuro{opacity:1}
+
+.ichnav-linee{display:none; align-items:center; gap:clamp(18px,2.4vw,34px)}
+.ichnav-linee a{
+  font-size:.88rem; font-weight:600; letter-spacing:.01em;
+  color:var(--panna); text-decoration:none; position:relative; padding:6px 0;
+  transition:color .3s ease;
+}
+.ichnav.ridotta .ichnav-linee a{color:var(--verde-scuro)}
+.ichnav-linee a::after{
+  content:""; position:absolute; left:0; right:100%; bottom:0; height:1.5px;
+  background:var(--oro); transition:right .3s ease;
+}
+.ichnav-linee a:hover{color:var(--oro)}
+.ichnav-linee a:hover::after{right:0}
+
+/* ── tasto LE NOSTRE BOX: pastiglia col gettone d'oro ── */
+.ichnav-box{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 22px 12px 17px;
+  border-radius:999px;
+  background:var(--verde-scuro);
+  color:var(--panna)!important;
+  border:1.5px solid rgba(212,160,23,.55);
+  font-size:.78rem!important; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
+  box-shadow:0 12px 28px -16px rgba(13,39,24,.95);
+  transition:background .3s ease, color .3s ease, border-color .3s ease,
+             transform .25s ease, box-shadow .3s ease;
+}
+.ichnav-box::after{display:none}
+.ichnav-box:hover{
+  background:var(--oro); color:var(--verde-scuro)!important; border-color:var(--oro);
+  transform:translateY(-2px);
+  box-shadow:0 18px 34px -16px rgba(212,160,23,.9);
+}
+.gettone{
+  width:12px; height:12px; border-radius:50%; flex:none;
+  background:radial-gradient(circle at 35% 30%,#f0c14d,var(--oro) 70%);
+  box-shadow:inset 0 -1px 1px rgba(120,85,0,.35);
+  transition:background .3s ease, transform .3s ease;
+}
+.ichnav-box:hover .gettone{background:var(--verde-scuro); transform:scale(1.2)}
+
+/* ── tasto menu / chiudi ──────────────────────────────────────
+   Chiuso: due trattini.  Aperto: pastiglia con scritto CHIUDI e la ✕.
+   La parola c'è perché sul telefono una ✕ da sola si perde. */
+.ichnav-tasto{
+  display:flex; align-items:center; justify-content:flex-end;
+  height:48px; padding:0 5px; margin-right:-5px;
+  background:none; border:1.5px solid transparent; border-radius:999px;
+  cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  transition:background .3s ease, border-color .3s ease, padding .35s ease;
+}
+.ichnav-tratti{
+  width:38px; height:48px; flex:none;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px;
+}
+.ichnav-tratti i{
+  display:block; width:26px; height:2.5px; border-radius:2px; background:var(--panna);
+  transition:transform .35s cubic-bezier(.4,0,.2,1), background .3s ease;
+}
+.ichnav-chiudi{
+  max-width:0; overflow:hidden; white-space:nowrap; opacity:0;
+  font-size:.72rem; font-weight:800; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--panna);
+  transition:max-width .35s ease, opacity .25s ease, padding .35s ease;
+}
+/* stato aperto */
+.ichnav-tasto[aria-expanded="true"]{
+  background:rgba(244,239,226,.13);
+  border-color:rgba(244,239,226,.45);
+  padding:0 5px 0 18px;
+}
+.ichnav-tasto[aria-expanded="true"] .ichnav-chiudi{max-width:90px; opacity:1; padding-right:8px}
+.ichnav-tasto[aria-expanded="true"]:hover{background:rgba(212,160,23,.2); border-color:var(--oro)}
+.ichnav-tasto[aria-expanded="true"]:active{transform:scale(.95)}
+
+.ichnav.ridotta .ichnav-tratti i{background:var(--verde-scuro)}
+.ichnav-tasto[aria-expanded="true"] .ichnav-tratti i,
+.ichnav.ridotta .ichnav-tasto[aria-expanded="true"] .ichnav-tratti i{background:var(--panna)}
+.ichnav-tasto[aria-expanded="true"] .ichnav-tratti i:nth-child(1){transform:translateY(4.75px) rotate(45deg)}
+.ichnav-tasto[aria-expanded="true"] .ichnav-tratti i:nth-child(2){transform:translateY(-4.75px) rotate(-45deg)}
+
+/* ── pannello a cascata ── */
+.ichnav-menu{
+  position:fixed; inset:0; z-index:1050; background:var(--verde-scuro);
+  font-family:var(--font);
+  display:flex; flex-direction:column;
+  padding:96px 22px 40px;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));
+  clip-path:inset(0 0 100% 0);
+  transition:clip-path .55s cubic-bezier(.76,0,.24,1);
+  overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+}
+.ichnav-menu.aperto{clip-path:inset(0 0 0 0)}
+/* margin:auto invece di justify-content:center: se il telefono è basso
+   il menu scorre invece di tagliare la prima voce */
+.ichnav-lista{max-width:820px; width:100%; margin:auto; position:relative; z-index:2}
+.ichnav-voce{
+  display:flex; align-items:baseline; justify-content:space-between; gap:18px;
+  text-decoration:none; color:#fff; padding:20px 0;
+  border-bottom:1px solid rgba(255,255,255,.13);
+  opacity:0; transform:translateY(18px);
+  transition:opacity .5s ease, transform .5s ease, padding-left .3s ease;
+}
+.ichnav-menu.aperto .ichnav-voce{opacity:1; transform:none}
+.ichnav-menu.aperto .ichnav-voce:nth-child(1){transition-delay:.16s}
+.ichnav-menu.aperto .ichnav-voce:nth-child(2){transition-delay:.22s}
+.ichnav-menu.aperto .ichnav-voce:nth-child(3){transition-delay:.28s}
+.ichnav-menu.aperto .ichnav-voce:nth-child(4){transition-delay:.34s}
+
+.ichnav-etichetta{font-size:clamp(1.6rem,7vw,2.4rem); font-weight:800; letter-spacing:-.03em; line-height:1.05}
+.ichnav-nota{
+  display:block; margin-top:7px; font-size:.83rem; font-weight:400;
+  color:rgba(255,255,255,.5);
+}
+/* sul telefono la freccia si vede sempre: senza mouse non c'è hover */
+.ichnav-freccia{color:var(--oro); font-size:1.4rem; flex:none; transition:transform .3s ease}
+@media (hover:hover) and (pointer:fine){
+  .ichnav-freccia{opacity:0; transform:translateX(-8px); transition:opacity .3s ease, transform .3s ease}
+  .ichnav-voce:hover .ichnav-freccia{opacity:1; transform:none}
+  .ichnav-voce:hover{padding-left:12px}
+}
+
+.ichnav-cta{
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  margin-top:34px; text-decoration:none;
+  background:var(--oro); color:var(--verde-scuro);
+  font-weight:800; font-size:1rem; letter-spacing:.06em; text-transform:uppercase;
+  padding:19px; border-radius:999px;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .5s ease .4s, transform .5s ease .4s, background .25s ease;
+}
+.ichnav-menu.aperto .ichnav-cta{opacity:1; transform:none}
+.ichnav-cta .gettone{background:var(--verde-scuro)}
+.ichnav-cta:hover{background:var(--panna)}
+.ichnav-torna{
+  display:block; width:100%; margin-top:14px;
+  background:none; border:1px solid rgba(255,255,255,.22); border-radius:999px;
+  color:rgba(255,255,255,.7); font-family:inherit;
+  font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  padding:15px; cursor:pointer; touch-action:manipulation;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .5s ease .46s, transform .5s ease .46s, background .25s ease, color .25s ease;
+}
+.ichnav-menu.aperto .ichnav-torna{opacity:1; transform:none}
+.ichnav-torna:hover,.ichnav-torna:active{background:rgba(255,255,255,.08); color:#fff}
+
+.ichnav-piede{
+  margin-top:22px; font-size:.76rem; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(255,255,255,.35); text-align:center;
+  opacity:0; transition:opacity .5s ease .56s;
+}
+.ichnav-menu.aperto .ichnav-piede{opacity:1}
+
+.ichnav a:focus-visible,.ichnav-tasto:focus-visible,
+.ichnav-menu a:focus-visible,.ichnav-torna:focus-visible{
+  outline:2px solid var(--oro); outline-offset:4px;
+}
+
+/* sul telefono la barra ruba meno schermo */
+@media (max-width:899px){
+  .ichnav-barra{height:66px}
+  .ichnav.ridotta .ichnav-barra{height:58px}
+  .ichnav-marchio{height:25px}
+  .ichnav.ridotta .ichnav-marchio{height:22px}
+  .ichnav-menu{padding-top:86px}
+  .ichnav-etichetta{font-size:clamp(1.5rem,6.4vw,2rem)}
+  .ichnav-voce{padding:17px 0}
+  .ichnav-cta{margin-top:26px; padding:17px}
+}
+
+@media (min-width:900px){
+  .ichnav-linee{display:flex}
+  .ichnav-tasto{display:none}
+  .ichnav-menu{display:none}
+}
+
+
+/* ═══════════════ 3. HERO ═══════════════ */
+.ichnos-hero{
+  position:relative;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  overflow:hidden;
+  background:var(--inchiostro);
+  font-family:var(--font);
+  color:var(--panna);
+  isolation:isolate;
+}
+
+/* ---------- Sfondo: foto + duotone verde ---------- */
+.ichnos-hero__bg{
+  position:absolute; inset:0; z-index:0;
+  background-image:var(--hero-img);
+  background-size:cover;
+  background-position:center;
+  transform:scale(1.06);
+  animation:ichnos-drift 26s ease-in-out infinite alternate;
+}
+.ichnos-hero__wash{
+  position:absolute; inset:0; z-index:1;
+  background:
+    radial-gradient(120% 90% at 78% 34%, rgba(212,160,23,.20) 0%, transparent 55%),
+    linear-gradient(100deg, rgba(13,39,24,.95) 0%, rgba(26,74,46,.86) 42%, rgba(26,74,46,.55) 72%, rgba(13,39,24,.78) 100%),
+    linear-gradient(to top, rgba(13,39,24,.98) 0%, transparent 42%);
+}
 /* grana */
-.grana::after{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+.ichnos-hero__grain{
+  position:absolute; inset:-50%; z-index:2; opacity:.05; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:ichnos-grain 8s steps(6) infinite;
+}
+
+/* ---------- Griglia contenuto ---------- */
+.ichnos-hero__inner{
+  position:relative; z-index:3;
+  width:100%;
+  max-width:1280px;
+  margin:0 auto;
+  padding:clamp(88px,14vh,150px) clamp(24px,5vw,72px) clamp(28px,5vh,48px);
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  align-items:center;
+  gap:clamp(32px,5vw,64px);
+  flex:1;
+}
+
+/* ---------- Titolo ---------- */
+.ichnos-title{
+  font-family:var(--display);
+  font-variation-settings:'SOFT' 45,'WONK' 1,'opsz' 144;
+  font-size:clamp(2.5rem,6.6vw,5.6rem);
+  line-height:.96;
+  font-weight:600;
+  letter-spacing:-.018em;
+  text-wrap:balance;
+  text-shadow:0 2px 40px rgba(13,39,24,.6);
+}
+.ichnos-title em{
+  font-style:normal;
+  display:block;
+  color:var(--oro);
+}
+.ichnos-sub{
+  margin-top:clamp(20px,3vh,30px);
+  max-width:46ch;
+  font-size:clamp(1rem,1.35vw,1.2rem);
+  line-height:1.62;
+  color:rgba(244,239,226,.84);
+}
+.ichnos-sub b{color:var(--panna); font-weight:600}
+
+/* ---------- CTA hero ---------- */
+.ichnos-cta{
+  margin-top:clamp(28px,4.5vh,44px);
+  display:flex; flex-wrap:wrap; gap:14px;
+}
+.ichnos-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:16px 30px;
+  border-radius:999px;
+  font-family:inherit;
+  font-size:clamp(.9rem,1.05vw,1rem);
+  font-weight:700;
+  letter-spacing:.01em;
+  text-decoration:none;
+  cursor:pointer;
+  border:1.5px solid transparent;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+}
+.ichnos-btn--primary{
+  background:var(--verde-chiaro);
+  color:#0d2718;
+  box-shadow:0 12px 32px -10px rgba(99,153,34,.75);
+}
+.ichnos-btn--primary:hover{
+  background:var(--oro);
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px -10px rgba(212,160,23,.8);
+}
+.ichnos-btn--ghost{
+  border-color:rgba(244,239,226,.32);
+  color:var(--panna);
+  background:rgba(244,239,226,.04);
+  backdrop-filter:blur(6px);
+}
+.ichnos-btn--ghost:hover{
+  border-color:var(--oro);
+  color:var(--oro);
+  transform:translateY(-2px);
+}
+.ichnos-btn svg{width:16px;height:16px;flex:none}
+.ichnos-btn:focus-visible{outline:3px solid var(--oro); outline-offset:3px}
+
+/* ---------- Sigillo (elemento firma) ---------- */
+.ichnos-seal{
+  position:relative;
+  justify-self:center;
+  width:min(400px,80%);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  animation:ichnos-bob 7s ease-in-out infinite;
+}
+.ichnos-seal__glow{
+  position:absolute; inset:-14%;
+  background:radial-gradient(circle,rgba(212,160,23,.30) 0%,transparent 62%);
+  filter:blur(18px);
+  animation:ichnos-breathe 6s ease-in-out infinite;
+}
+.ichnos-seal__ring{
+  position:absolute; inset:0;
+  animation:ichnos-spin 44s linear infinite;
+}
+.ichnos-seal__ring text{
+  fill:var(--oro);
+  font-family:var(--font);
+  font-size:5.1px;
+  font-weight:700;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+}
+.ichnos-seal__mark{
+  width:54%;
+  max-height:70%;
+  object-fit:contain;
+  /* PNG bianco con trasparenza vera: nessun filtro di correzione.
+     Per la versione oro basta cambiare src in img/sigillo-oro.png */
+  filter:drop-shadow(0 6px 26px rgba(13,39,24,.6)) drop-shadow(0 0 20px rgba(212,160,23,.32));
+}
+.ichnos-seal__fallback{
+  position:absolute;
+  width:50%; aspect-ratio:.86;
+  border:2.5px solid rgba(244,239,226,.8);
+  border-radius:46% 54% 52% 48% / 50% 46% 54% 50%;
+  display:grid; place-items:center;
+  font-size:13px; font-weight:800; letter-spacing:.26em; text-transform:uppercase;
+  color:rgba(244,239,226,.88); text-align:center; padding:16px;
+}
+
+/* ---------- Rail informativo ---------- */
+.ichnos-rail{
+  position:relative; z-index:3;
+  border-top:1px solid rgba(244,239,226,.14);
+  background:linear-gradient(to top,rgba(13,39,24,.55),transparent);
+}
+.ichnos-rail__inner{
+  max-width:1280px; margin:0 auto;
+  padding:18px clamp(24px,5vw,72px);
+  display:flex; flex-wrap:wrap; align-items:center;
+  gap:clamp(16px,3vw,40px);
+  font-size:clamp(11px,1.05vw,13px);
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:600;
+  color:rgba(244,239,226,.72);
+}
+.ichnos-rail__item{display:flex; align-items:center; gap:9px; white-space:nowrap}
+.ichnos-rail__item--link{
+  color:inherit; text-decoration:none;
+  transition:color .2s ease;
+}
+.ichnos-rail__item--link:hover,
+.ichnos-rail__item--link:focus-visible{color:var(--oro)}
+.ichnos-rail__item--link:hover strong{color:var(--oro)}
+.ichnos-rail__item strong{color:var(--oro); font-weight:700}
+.ichnos-rail__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--verde-chiaro); flex:none;
+  box-shadow:0 0 0 0 rgba(99,153,34,.7);
+  animation:ichnos-pulse 2.4s ease-out infinite;
+}
+.ichnos-rail__sep{
+  width:1px; height:16px; background:rgba(244,239,226,.2);
+}
+
+/* ---------- Entrata ---------- */
+.fade-up{opacity:0; transform:translateY(22px); animation:ichnos-up .9s cubic-bezier(.22,.9,.3,1) forwards}
+.d1{animation-delay:.10s}.d2{animation-delay:.22s}.d3{animation-delay:.34s}
+.d4{animation-delay:.46s}.d5{animation-delay:.58s}.d6{animation-delay:.70s}
+
+@keyframes ichnos-up{to{opacity:1;transform:none}}
+@keyframes ichnos-bob{0%,100%{transform:translateY(-8px)}50%{transform:translateY(8px)}}
+@keyframes ichnos-spin{to{transform:rotate(360deg)}}
+@keyframes ichnos-breathe{0%,100%{opacity:.55;transform:scale(.97)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes ichnos-drift{to{transform:scale(1.12) translate3d(-1.5%,-1%,0)}}
+@keyframes ichnos-grain{
+  0%,100%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}
+  40%{transform:translate(3%,-4%)}60%{transform:translate(-3%,-3%)}80%{transform:translate(4%,2%)}
+}
+@keyframes ichnos-pulse{
+  0%{box-shadow:0 0 0 0 rgba(99,153,34,.7)}
+  70%{box-shadow:0 0 0 11px rgba(99,153,34,0)}
+  100%{box-shadow:0 0 0 0 rgba(99,153,34,0)}
+}
+
+/* ---------- Hero mobile ---------- */
+@media (max-width:900px){
+  .ichnos-hero{justify-content:center}
+  .ichnos-hero__inner{
+    grid-template-columns:1fr;
+    text-align:center;
+    padding-top:clamp(98px,13vh,124px);
+    gap:clamp(24px,4vh,36px);
+  }
+  .ichnos-hero__copy{order:2}
+  .ichnos-seal{order:1; width:min(230px,58vw)}
+  .ichnos-title{font-size:clamp(2.1rem,8.6vw,3.2rem)}
+  .ichnos-sub{margin-left:auto;margin-right:auto}
+  .ichnos-cta{justify-content:center}
+  .ichnos-btn{flex:1 1 210px; justify-content:center}
+  .ichnos-rail__inner{justify-content:center; text-align:center; gap:12px 18px; letter-spacing:.1em}
+  .ichnos-rail__sep{display:none}
+}
+@media (max-width:420px){
+  .ichnos-rail__inner{font-size:10px}
+}
+
+/* ── telefono: foto più leggera e niente animazioni a schermo pieno ──
+   La grana e lo scorrimento dello sfondo ridipingono tutto lo schermo
+   di continuo: sul telefono costano batteria e fanno scattare lo scroll. */
+@media (max-width:900px){
+  :root{--hero-img:url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1100')}
+  .ichnos-hero__bg{animation:none; transform:none}
+  .ichnos-hero__grain{animation:none; inset:0}
+  .ichnos-seal__glow{animation:none}
+}
+
+
+/* ═══════════════ 4. SEZIONE RANGHI ═══════════════ */
+.ich-ranghi *,
+.ich-ranghi *::before,
+.ich-ranghi *::after { box-sizing: border-box; }
+
+.ich-ranghi {
+  --verde-scuro: #1a4a2e;
+  --verde-chiaro: #639922;
+  --oro: #D4A017;
+  --avorio: #f4f7f1;
+  --carta: #ffffff;
+  --bordo: #e2e8dd;
+  --testo: #2b3b30;
+  --testo-tenue: #5d6f62;
+
+  font-family: var(--font);
+  background: var(--avorio);
+  color: var(--testo);
+  padding: 88px 24px 80px;
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* alone ambientale di fondo */
+.ich-ranghi::before {
+  content: "";
+  position: absolute;
+  inset: -20% 0 auto;
+  height: 60%;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(99,153,34,.10), transparent 70%);
+  pointer-events: none;
+}
+
+/* ─── INTESTAZIONE ─────────────────────────────────────────── */
+.ich-intro {
+  max-width: 680px;
+  margin: 0 auto 24px;
+  text-align: center;
+  position: relative;
+}
+.ich-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--verde-chiaro);
+  margin: 0 0 14px;
+}
+.ich-titolo {
+  font-family: var(--display);
+  font-variation-settings: 'SOFT' 40,'WONK' 1,'opsz' 100;
+  font-size: clamp(29px, 4.8vw, 44px);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -.012em;
+  color: var(--verde-scuro);
+  margin: 0 0 16px;
+}
+.ich-titolo em {
+  font-style: normal;
+  color: var(--oro);
+}
+.ich-sottotitolo {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--testo-tenue);
+  margin: 0;
+}
+
+/* ─── GRIGLIA ──────────────────────────────────────────────── */
+.ich-griglia {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-top: 118px;      /* spazio per le maschere che escono dalla card */
+  position: relative;
+}
+
+/* ─── CARTA ────────────────────────────────────────────────── */
+.ich-carta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--carta);
+  border: 1px solid var(--bordo);
+  border-radius: 22px;
+  padding: 104px 26px 28px;
+  box-shadow: 0 2px 4px rgba(26,74,46,.04), 0 12px 30px -18px rgba(26,74,46,.20);
+  transition: transform .45s cubic-bezier(.2,.8,.3,1),
+              box-shadow .45s cubic-bezier(.2,.8,.3,1),
+              border-color .45s ease;
+  opacity: 0;
+  transform: translateY(26px);
+}
+.ich-carta.is-visibile { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.3,1); }
+
+/* velo verde in fondo alla carta */
+.ich-carta::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 55%;
+  border-radius: 0 0 22px 22px;
+  background: linear-gradient(to top, rgba(99,153,34,.07), transparent);
+  opacity: .8;
+  transition: opacity .45s ease;
+  pointer-events: none;
+}
+
+/* carta élite: filo d'oro sul bordo superiore */
+.ich-carta.is-elite {
+  border-color: rgba(212,160,23,.42);
+  box-shadow: 0 2px 4px rgba(26,74,46,.04), 0 14px 34px -18px rgba(212,160,23,.42);
+}
+.ich-carta.is-elite::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  border-radius: 22px 22px 0 0;
+  background: linear-gradient(90deg, transparent, var(--oro) 30%, var(--oro) 70%, transparent);
+  opacity: .85;
+  pointer-events: none;
+}
+
+/* ─── SLOT MASCHERA (elemento firma) ───────────────────────── */
+.ich-slot {
+  position: absolute;
+  top: -104px;
+  left: 50%;
+  width: 210px;
+  height: 210px;
+  margin-left: -105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* aura dorata */
+.ich-aura {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,160,23,.34), rgba(212,160,23,.10) 45%, transparent 68%);
+  opacity: .28;
+  transform: scale(.82);
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.3,1);
+}
+
+/* orbita: anello dorato in rotazione lenta */
+.ich-orbita {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+    transparent 0deg, rgba(212,160,23,.85) 38deg, transparent 76deg,
+    transparent 180deg, rgba(99,153,34,.6) 214deg, transparent 252deg);
+  -webkit-mask: radial-gradient(circle, transparent 63%, #000 64%, #000 66%, transparent 67%);
+          mask: radial-gradient(circle, transparent 63%, #000 64%, #000 66%, transparent 67%);
+  opacity: 0;
+  animation: ich-ruota 14s linear infinite;
+  transition: opacity .5s ease;
+}
+
+/* ombra a terra */
+.ich-ombra {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 96px;
+  height: 12px;
+  margin-left: -48px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(26,74,46,.26), transparent 70%);
+  animation: ich-ombra 5.6s ease-in-out infinite;
+}
+
+/* contenitore in fluttuazione */
+.ich-fluttua {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ich-bob 5.6s ease-in-out infinite;
+}
+
+.ich-maschera {
+  max-width: 78%;
+  max-height: 78%;
+  display: block;
+  filter: drop-shadow(0 10px 16px rgba(26,74,46,.22));
+  transition: transform .55s cubic-bezier(.2,.8,.3,1), filter .55s ease;
+  transform-origin: 50% 62%;
+}
+
+/* segnaposto visibile finché il PNG non è caricato */
+.ich-segnaposto {
+  display: none;
+  width: 74%;
+  height: 74%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2px dashed rgba(212,160,23,.75);
+  border-radius: 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.7;
+  color: var(--oro);
+  background: rgba(255,255,255,.55);
+  padding: 8px;
+}
+.ich-slot.senza-immagine .ich-maschera { display: none; }
+.ich-slot.senza-immagine .ich-segnaposto { display: flex; }
+
+/* ritardi per far respirare le tre maschere in modo sfasato */
+.ich-carta:nth-child(2) .ich-fluttua,
+.ich-carta:nth-child(2) .ich-ombra { animation-delay: -1.9s; }
+.ich-carta:nth-child(3) .ich-fluttua,
+.ich-carta:nth-child(3) .ich-ombra { animation-delay: -3.7s; }
+
+@keyframes ich-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+@keyframes ich-ombra {
+  0%, 100% { transform: scaleX(1);   opacity: .5; }
+  50%      { transform: scaleX(.82); opacity: .28; }
+}
+@keyframes ich-ruota {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── HOVER (solo dispositivi con puntatore) ───────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .ich-carta:hover {
+    transform: translateY(-10px);
+    border-color: rgba(212,160,23,.55);
+    box-shadow: 0 4px 10px rgba(26,74,46,.06), 0 34px 60px -28px rgba(26,74,46,.38);
+  }
+  .ich-carta:hover::after { opacity: 1; }
+  .ich-carta:hover .ich-aura { opacity: 1; transform: scale(1.06); }
+  .ich-carta:hover .ich-orbita { opacity: 1; }
+  .ich-carta:hover .ich-maschera {
+    transform: scale(1.11) rotate(-2.5deg);
+    filter: drop-shadow(0 18px 26px rgba(26,74,46,.28))
+            drop-shadow(0 0 22px rgba(212,160,23,.55));
+  }
+  .ich-carta:hover .ich-moneta { transform: translateY(-3px); }
+  .ich-carta:hover .ich-moneta:nth-child(2n) { transition-delay: .04s; }
+  .ich-carta:hover .ich-moneta:nth-child(3n) { transition-delay: .08s; }
+}
+
+/* la carta reagisce anche quando il CTA prende il focus da tastiera */
+.ich-carta:focus-within .ich-aura { opacity: 1; transform: scale(1.06); }
+.ich-carta:focus-within .ich-orbita { opacity: 1; }
+
+/* ─── TESTATA CARTA ────────────────────────────────────────── */
+.ich-rango-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--verde-chiaro);
+  margin: 0 0 8px;
+  position: relative;
+}
+.ich-nome {
+  font-family: var(--display);
+  font-variation-settings: 'SOFT' 40,'WONK' 1,'opsz' 60;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.1;
+  color: var(--verde-scuro);
+  margin: 0 0 10px;
+  position: relative;
+}
+.ich-prezzo {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+  position: relative;
+}
+.ich-prezzo-lancio {
+  font-family: var(--display);
+  font-variation-settings: 'SOFT' 40,'opsz' 50;
+  font-size: 27px;
+  font-weight: 600;
+  color: var(--verde-scuro);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+}
+.ich-prezzo-pieno {
+  font-size: 14px;
+  color: var(--testo-tenue);
+  text-decoration: line-through;
+  text-decoration-color: rgba(212,160,23,.9);
+  text-decoration-thickness: 1.5px;
+}
+.ich-prezzo-nota {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--oro);
+  width: 100%;
+  margin-top: 2px;
+}
+
+/* ─── DESCRIZIONE ──────────────────────────────────────────── */
+.ich-descrizione {
+  position: relative;
+  margin: 0 0 24px;
+  padding-left: 16px;
+  border-left: 3px solid var(--verde-chiaro);
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--testo-tenue);
+}
+.ich-carta.is-elite .ich-descrizione { border-left-color: var(--oro); }
+
+/* ─── COSA RICEVI ──────────────────────────────────────────── */
+.ich-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--verde-scuro);
+  opacity: .55;
+  margin: 0 0 14px;
+  position: relative;
+}
+.ich-lista {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  position: relative;
+}
+.ich-lista li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--testo);
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(26,74,46,.07);
+}
+.ich-lista li:last-child { border-bottom: 0; }
+.ich-spunta {
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: rgba(99,153,34,.14);
+  color: var(--verde-chiaro);
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.ich-lista strong { font-weight: 700; color: var(--verde-scuro); }
+
+/* blocco monete */
+.ich-monete-blocco {
+  background: linear-gradient(135deg, rgba(212,160,23,.10), rgba(212,160,23,.03));
+  border: 1px solid rgba(212,160,23,.28);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 0 0 20px;
+  position: relative;
+}
+.ich-monete-testa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--verde-scuro);
+  margin-bottom: 4px;
+}
+.ich-monete-testa span:first-child { font-size: 17px; line-height: 1; }
+.ich-monete-nota {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--testo-tenue);
+}
+/* dischi che rendono visibile la quantità di monete */
+.ich-dischi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+.ich-moneta {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0c14d, var(--oro) 70%);
+  box-shadow: inset 0 -1px 1px rgba(120,85,0,.35);
+  transition: transform .35s cubic-bezier(.2,.8,.3,1);
+}
+
+/* etichetta élite */
+.ich-etichetta {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--oro);
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.4);
+  border-radius: 999px;
+  padding: 5px 10px;
+  z-index: 2;
+}
+
+/* ─── CTA RANGHI ───────────────────────────────────────────── */
+.ich-azione { margin-top: auto; position: relative; }
+.ich-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--verde-scuro);
+  background: transparent;
+  border: 1.5px solid var(--verde-scuro);
+  border-radius: 12px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease, border-color .3s ease;
+}
+.ich-cta .freccia { transition: transform .3s ease; display: inline-block; }
+.ich-cta:hover,
+.ich-cta:focus-visible {
+  background: var(--verde-scuro);
+  border-color: var(--verde-scuro);
+  color: #fff;
+}
+.ich-cta:hover .freccia { transform: translateX(4px); }
+.ich-cta:focus-visible { outline: 3px solid rgba(212,160,23,.7); outline-offset: 3px; }
+.ich-cta:active { transform: translateY(1px); }
+
+.ich-cta-nota {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--testo-tenue);
+  opacity: .85;
+}
+
+/* ─── FASCIA PROMESSE ──────────────────────────────────────── */
+.ich-promesse {
+  max-width: 1160px;
+  margin: 56px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--bordo);
+  position: relative;
+}
+.ich-promessa {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--testo-tenue);
+}
+.ich-promessa b { color: var(--verde-scuro); font-weight: 700; }
+.ich-punto {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--verde-chiaro);
+  flex: 0 0 7px;
+}
+.ich-punto.oro { background: var(--oro); }
+
+/* ─── RANGHI: TABLET ───────────────────────────────────────── */
+@media (max-width: 1000px) {
+  .ich-griglia { grid-template-columns: 1fr; max-width: 470px; gap: 104px; padding-top: 94px; }
+  .ich-carta { padding: 92px 24px 26px; }
+  .ich-slot { top: -92px; width: 186px; height: 186px; margin-left: -93px; }
+  .ich-aura { opacity: .5; transform: scale(.95); }   /* su touch l'aura resta accesa */
+  .ich-orbita { opacity: .55; }
+}
+
+/* ─── RANGHI: SMARTPHONE ───────────────────────────────────── */
+@media (max-width: 560px) {
+  .ich-ranghi { padding: 60px 16px 56px; }
+  .ich-griglia { gap: 84px; padding-top: 74px; }
+  .ich-carta { padding: 70px 18px 22px; border-radius: 18px; }
+  .ich-slot { top: -70px; width: 138px; height: 138px; margin-left: -69px; }
+  .ich-ombra { width: 62px; margin-left: -31px; }
+  .ich-nome { font-size: 24px; }
+  .ich-prezzo-lancio { font-size: 23px; }
+  .ich-etichetta { top: 14px; right: 14px; }
+  .ich-promesse { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .ich-cta { font-size: 11.5px; padding: 15px 14px; letter-spacing: .08em; }
+}
+
+
+/* ═══════════════ 6. SARDEGNA DAY ═══════════════ */
+.sd{
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,var(--inchiostro),#123720 48%,var(--inchiostro));
+  color:var(--panna); font-family:var(--font);
+  padding:clamp(76px,10vw,120px) clamp(20px,5vw,72px) clamp(66px,9vw,100px);
+}
+.sd::before{
+  content:""; position:absolute; z-index:0; pointer-events:none;
+  width:760px; height:760px; right:-280px; top:-340px;
+  background:radial-gradient(circle,rgba(212,160,23,.17),transparent 66%);
+}
+.sd::after{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+.sd-dentro{position:relative; z-index:1; max-width:1160px; margin:0 auto}
 
-.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+/* ── intestazione ── */
+.sd-testa{max-width:640px; margin:0 auto; text-align:center}
+.sd-eyebrow{
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  font-size:11px; font-weight:700; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--oro); margin:0 0 18px;
+}
+.sd-eyebrow::before,.sd-eyebrow::after{content:""; height:1px; flex:1; max-width:90px; background:var(--oro); opacity:.5}
+.sd-titolo{
+  font-family:var(--display);
+  font-size:clamp(2.4rem,7vw,4.2rem); font-weight:600; line-height:.96;
+  letter-spacing:-.02em; margin:0 0 20px;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 100;
+}
+.sd-titolo em{font-style:normal; color:var(--oro); display:block}
+.sd-lead{
+  font-size:clamp(1rem,1.4vw,1.16rem); line-height:1.68;
+  color:rgba(244,239,226,.8); margin:0 auto;
+}
+.sd-lead b{color:var(--panna); font-weight:600}
 
-/* ── tipografia ─────────────────────────────── */
-.occhiello{
-  font-size:.7rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--oro);display:flex;align-items:center;gap:14px;margin-bottom:26px;
-}
-.occhiello::after{content:"";height:1px;flex:1;max-width:120px;background:var(--oro);opacity:.45}
+/* ── la ruota ── */
+.sd-scena{margin:clamp(44px,7vw,72px) auto 0; display:flex; flex-direction:column; align-items:center}
+.sd .ruota{position:relative; width:min(480px,100%); aspect-ratio:1; touch-action:manipulation}
+.sd .anello{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
 
-h2{
-  font-size:clamp(2rem,5.2vw,3.2rem);font-weight:800;line-height:1.05;
-  letter-spacing:-.03em;margin-bottom:22px;
+.sd .punteggiata{
+  fill:none; stroke:rgba(244,239,226,.16); stroke-width:1; stroke-dasharray:1 9; stroke-linecap:round;
+  transform-origin:100px 100px; animation:gira 110s linear infinite;
 }
-h3{font-size:1.18rem;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
-p{font-size:1.03rem;line-height:1.72}
-.lead{font-size:clamp(1.1rem,2.2vw,1.3rem);line-height:1.62}
+.sd .pista{fill:none; stroke:rgba(244,239,226,.09); stroke-width:9}
+.sd .verso{fill:none; stroke:rgba(244,239,226,.3); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+.sd .avanzamento{fill:none; stroke:url(#gradienteCiclo); stroke-width:9; stroke-linecap:round}
+.sd .scia{fill:none; stroke:rgba(212,160,23,.28); stroke-width:17; stroke-linecap:round; filter:blur(5px)}
+.sd .tacca-adesso{stroke:var(--oro); stroke-width:2.4; stroke-linecap:round; opacity:.85}
+.sd .alone{fill:rgba(212,160,23,.3); animation:respira 2.8s ease-in-out infinite}
+.sd .testina{fill:var(--oro); stroke:var(--panna); stroke-width:2.2}
+.sd .ruota.spenta .avanzamento, .sd .ruota.spenta .scia, .sd .ruota.spenta .testina, .sd .ruota.spenta .alone{opacity:0}
+.sd .ruota.carica .pista{animation:carica 3.4s ease-in-out infinite}
 
-/* ── header ─────────────────────────────────── */
-header{
-  position:sticky;top:0;z-index:60;background:rgba(237,232,220,.92);
-  backdrop-filter:blur(10px);border-bottom:1px solid rgba(26,74,46,.14);
-}
-.barra{display:flex;align-items:center;justify-content:space-between;height:66px}
-.marchio img{height:26px;width:auto}
-.marchio{display:block;line-height:0}
+@keyframes gira{to{transform:rotate(360deg)}}
+@keyframes respira{0%,100%{opacity:.45;r:12px}50%{opacity:1;r:17px}}
+@keyframes carica{0%,100%{stroke:rgba(244,239,226,.09)}50%{stroke:rgba(212,160,23,.22)}}
 
-.hamburger{
-  background:none;border:0;cursor:pointer;padding:10px;display:flex;
-  flex-direction:column;gap:5px;
+/* nucleo */
+.sd .nucleo{
+  position:absolute; inset:24%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center; gap:7px;
 }
-.hamburger span{
-  display:block;width:24px;height:2.5px;background:var(--verde-scuro);
-  transition:transform .3s,opacity .2s;
+.sd .nucleo-mappa{position:absolute; height:88%; width:auto; opacity:.09; pointer-events:none}
+.sd .nucleo-stato{font-size:.6rem; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--oro); position:relative}
+.sd .nucleo-nome{
+  font-family:var(--display); font-size:clamp(1.2rem,4.2vw,1.85rem); font-weight:600;
+  letter-spacing:-.01em; line-height:1.04; position:relative;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 60;
 }
-.hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
-.hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
-.hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.sd .nucleo-nota{font-size:.8rem; line-height:1.45; color:rgba(244,239,226,.6); max-width:21ch; position:relative}
+.sd .nucleo-cambio{animation:sfuma .45s ease}
+@keyframes sfuma{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.menu{
-  position:fixed;inset:66px 0 0;background:var(--verde-scuro);z-index:55;
-  padding:44px 24px;display:flex;flex-direction:column;gap:4px;
-  transform:translateY(-12px);opacity:0;visibility:hidden;
-  transition:opacity .28s ease,transform .28s ease,visibility .28s;
+/* le quattro monete sul cerchio */
+.sd .tappa{
+  position:absolute; transform:translate(-50%,-50%); background:none; border:0; padding:0;
+  cursor:pointer; display:grid; place-items:center; font-family:inherit; color:inherit;
 }
-.menu.aperto{opacity:1;visibility:visible;transform:none}
-.menu a{
-  color:#fff;text-decoration:none;font-size:1.55rem;font-weight:700;
-  letter-spacing:-.02em;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.12);
+.sd .t1{left:50%;top:11.5%}.t2{left:88.5%;top:50%}.t3{left:50%;top:88.5%}.t4{left:11.5%;top:50%}
+.sd .moneta{
+  width:clamp(48px,10.5vw,60px); aspect-ratio:1; border-radius:50%;
+  background:rgba(13,39,24,.94); border:2px solid rgba(244,239,226,.3);
+  display:grid; place-items:center;
+  font-size:.84rem; font-weight:800; color:rgba(244,239,226,.75);
+  transition:transform .45s cubic-bezier(.2,.8,.3,1),background .4s,border-color .4s,color .4s,box-shadow .45s;
 }
-.menu a[aria-current]{color:var(--oro)}
-.menu a:hover{color:var(--verde-chiaro)}
-.menu .box-cta{
-  margin-top:28px;border:0;background:var(--oro);color:var(--verde-scuro);
-  text-align:center;border-radius:2px;font-size:1.05rem;letter-spacing:.02em;padding:18px;
+.sd .tappa-nome{
+  position:absolute; white-space:nowrap; font-size:.84rem; font-weight:700;
+  color:rgba(244,239,226,.6); transition:opacity .3s,color .3s;
 }
+.sd .t1 .tappa-nome{bottom:100%; margin-bottom:14px}
+.sd .t2 .tappa-nome{left:100%; margin-left:16px}
+.sd .t3 .tappa-nome{top:100%; margin-top:14px}
+.sd .t4 .tappa-nome{right:100%; margin-right:16px}
 
-/* ── hero ───────────────────────────────────── */
-.hero{
-  position:relative;background:var(--verde-scuro);color:#fff;
-  padding:clamp(76px,13vw,140px) 0 clamp(64px,10vw,110px);overflow:hidden;
+.sd .tappa.fatta .moneta{
+  background:radial-gradient(circle at 35% 28%,#8fc23d,var(--verde-chiaro) 72%);
+  border-color:var(--verde-chiaro); color:#0d2718;
 }
-.hero::before{
-  content:"";position:absolute;width:640px;height:640px;right:-220px;top:-260px;
-  background:radial-gradient(circle,rgba(212,160,23,.16),transparent 68%);
+.sd .tappa.attiva .moneta{
+  background:radial-gradient(circle at 35% 28%,#f0c14d,var(--oro) 72%);
+  border-color:var(--oro); color:#12300f;
+  animation:battito 2.8s ease-in-out infinite;
 }
-.hero .wrap{position:relative;z-index:2}
-.parola{
-  font-size:clamp(3.6rem,15vw,9rem);font-weight:800;letter-spacing:-.05em;
-  line-height:.9;margin-bottom:18px;
+@keyframes battito{
+  0%,100%{box-shadow:0 0 0 5px rgba(212,160,23,.16)}
+  50%{box-shadow:0 0 0 15px rgba(212,160,23,0)}
 }
-.glossa{
-  font-size:.95rem;line-height:1.7;color:rgba(255,255,255,.62);
-  border-left:2px solid var(--oro);padding-left:16px;max-width:520px;margin-bottom:38px;
+.sd .tappa.accendi .moneta{animation:lampo .7s cubic-bezier(.2,.8,.3,1)}
+@keyframes lampo{
+  0%{transform:scale(1);box-shadow:0 0 0 0 rgba(212,160,23,.65)}
+  45%{transform:scale(1.22);box-shadow:0 0 0 18px rgba(212,160,23,0)}
+  100%{transform:scale(1);box-shadow:0 0 0 0 rgba(212,160,23,0)}
 }
-.glossa em{color:var(--oro);font-style:normal;font-weight:600}
-.hero .lead{max-width:620px;color:rgba(255,255,255,.9)}
-.hero .lead strong{color:#fff;font-weight:700}
+/* moneta bloccata da un clic: anello d'oro fisso */
+.sd .tappa.scelta .moneta{transform:scale(1.14)}
+.sd .tappa.ferma .moneta{box-shadow:0 0 0 4px rgba(212,160,23,.5); animation:none}
+.sd .tappa.scelta .tappa-nome, .sd .tappa:hover .tappa-nome{opacity:1; color:var(--panna)}
+.sd .tappa:hover .moneta{transform:scale(1.14); border-color:var(--oro)}
+.sd .tappa:focus-visible{outline:none}
+.sd .tappa:focus-visible .moneta{outline:3px solid var(--oro); outline-offset:5px; transform:scale(1.14)}
 
-/* ── sezioni ────────────────────────────────── */
-section{position:relative}
-.sez{padding:clamp(70px,11vw,120px) 0}
-.chiara{background:var(--carta)}
-.scura{background:var(--verde-scuro);color:#fff}
-.scura p{color:rgba(255,255,255,.76)}
+/* chip sotto il cerchio */
+.sd .legenda{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:34px}
+.sd .chip{
+  border:1px solid rgba(244,239,226,.2); background:rgba(244,239,226,.05); border-radius:999px;
+  padding:0 16px; min-height:44px; font-size:.8rem; font-weight:700;
+  color:rgba(244,239,226,.75); cursor:pointer; touch-action:manipulation;
+  font-family:inherit; display:flex; align-items:center; gap:7px;
+  transition:background .3s,color .3s,border-color .3s,box-shadow .3s;
+}
+.sd .chip i{font-style:normal; font-size:.66rem; letter-spacing:.1em; opacity:.7}
+.sd .chip.fatta{border-color:rgba(99,153,34,.55); color:#a9d16b}
+.sd .chip.attiva{background:var(--oro); border-color:var(--oro); color:#12300f}
+.sd .chip.ferma{box-shadow:0 0 0 3px rgba(212,160,23,.45)}
 
-/* visione */
-.visione-griglia{display:grid;gap:44px}
-.visione-testo p+p{margin-top:18px}
-.chiusa{
-  font-size:clamp(1.25rem,3.2vw,1.7rem);font-weight:700;line-height:1.35;
-  letter-spacing:-.02em;color:var(--verde-scuro);margin-top:34px;max-width:15ch;
+.sd-nota-ruota{
+  margin-top:22px; display:flex; align-items:center; justify-content:center; gap:14px;
+  flex-wrap:wrap; font-size:.78rem; color:rgba(244,239,226,.5);
 }
-.mappa-sardegna{max-width:230px;margin:0 auto}
-.blend{mix-blend-mode:multiply}
+.sd-sblocca{
+  border:1px solid rgba(212,160,23,.5); background:rgba(212,160,23,.1); color:var(--oro);
+  border-radius:999px; padding:7px 15px; font-size:.75rem; font-weight:700; cursor:pointer;
+  font-family:inherit; letter-spacing:.04em; display:none; align-items:center; gap:7px;
+  transition:background .25s,color .25s;
+}
+.sd-sblocca.visibile{display:inline-flex}
+.sd-sblocca:hover{background:var(--oro); color:#12300f}
 
-/* metodo */
-.metodo{display:grid;gap:1px;background:rgba(255,255,255,.13);margin-top:52px;border:1px solid rgba(255,255,255,.13)}
-.pilastro{background:var(--verde-scuro);padding:34px 30px}
-.pilastro .tacca{width:26px;height:3px;background:var(--verde-chiaro);margin-bottom:22px}
-.pilastro h3{color:#fff}
-.pilastro p{font-size:.97rem}
-.pilastro strong{color:var(--verde-chiaro);font-weight:700}
+/* ── pannello di dettaglio ── */
+.sd .pannello{
+  position:relative; overflow:hidden; max-width:780px; margin:clamp(34px,5vw,52px) auto 0;
+  background:rgba(244,239,226,.045); border:1px solid rgba(244,239,226,.13);
+  border-left:3px solid var(--verde-chiaro); border-radius:18px;
+  padding:clamp(26px,4.5vw,40px); min-height:290px;
+  transition:border-left-color .4s ease;
+}
+.sd .pannello.oro{border-left-color:var(--oro)}
+.sd .pannello-fantasma{
+  position:absolute; top:-18px; right:16px; font-family:var(--display);
+  font-size:clamp(5rem,14vw,8.5rem); font-weight:600; letter-spacing:-.04em;
+  color:var(--panna); opacity:.07; pointer-events:none; line-height:1;
+}
+.sd .pannello-alto{display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:6px; position:relative}
+.sd .pannello h3{
+  font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.1rem); font-weight:600;
+  letter-spacing:-.01em; margin:0;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 80;
+}
+.sd .stato-chip{
+  font-size:.62rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+  border-radius:999px; padding:6px 12px; display:inline-flex; align-items:center; gap:7px;
+  background:rgba(244,239,226,.1); color:rgba(244,239,226,.7);
+}
+.sd .stato-chip.corso{background:rgba(212,160,23,.2); color:#f0c14d}
+.sd .stato-chip.fatta{background:rgba(99,153,34,.2); color:#a9d16b}
+.sd .stato-chip .pt{width:6px; height:6px; border-radius:50%; background:currentColor}
+.sd .stato-chip.corso .pt{animation:lampeggia 1.9s ease-in-out infinite}
+@keyframes lampeggia{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* sigillo */
-.sigillo-griglia{display:grid;gap:48px;align-items:center}
-.sigillo-img{max-width:250px;margin:0 auto}
-.sigillo-testo p+p{margin-top:18px}
-.ranghi{
-  display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;
+.sd .pannello-periodo{
+  font-size:.76rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--verde-chiaro); margin-bottom:16px; position:relative;
 }
-.rango{
-  font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  border:1px solid rgba(26,74,46,.3);border-radius:999px;padding:9px 16px;color:var(--verde-scuro);
+.sd .pannello-testo{color:rgba(244,239,226,.78); font-size:1rem; line-height:1.7; position:relative}
+.sd .pannello-lista{list-style:none; margin:22px 0 0; padding:0; border-top:1px solid rgba(244,239,226,.13); position:relative}
+.sd .pannello-lista li{
+  display:flex; gap:12px; align-items:flex-start; padding:11px 0;
+  border-bottom:1px solid rgba(244,239,226,.08);
+  font-size:.95rem; line-height:1.5; color:rgba(244,239,226,.78);
+  opacity:0; animation:saleVoce .5s cubic-bezier(.22,.9,.3,1) forwards;
 }
+.sd .pannello-lista li:nth-child(1){animation-delay:.06s}
+.sd .pannello-lista li:nth-child(2){animation-delay:.13s}
+.sd .pannello-lista li:nth-child(3){animation-delay:.2s}
+.sd .pannello-lista li:last-child{border-bottom:0}
+.sd .disco{
+  flex:0 0 13px; width:13px; height:13px; margin-top:5px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f0c14d,var(--oro) 70%);
+  box-shadow:inset 0 -1px 1px rgba(120,85,0,.35);
+}
+.sd .entra{animation:sale .5s cubic-bezier(.22,.9,.3,1)}
+@keyframes sale{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes saleVoce{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 
-/* ── LA ROTTA (elemento firma) ──────────────── */
-.capitolo-aperto{
-  display:grid;gap:32px;align-items:center;margin-top:54px;
-  border:1px solid rgba(212,160,23,.4);padding:clamp(28px,5vw,48px);
+/* ── perché un solo giorno ── */
+.sd-motivi{
+  display:grid; gap:1px; background:rgba(244,239,226,.13);
+  margin:clamp(52px,7vw,80px) 0 0; border:1px solid rgba(244,239,226,.13);
 }
-.timbro{
-  width:clamp(140px,26vw,190px);aspect-ratio:1;margin:0 auto;position:relative;
-  background:var(--oro);
-  border-radius:48% 52% 43% 57% / 55% 45% 58% 42%;
-  display:grid;place-items:center;
-}
-.timbro img{width:56%;mix-blend-mode:multiply}
-.stato{
-  display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--oro);margin-bottom:14px;
-}
-.punto{width:7px;height:7px;border-radius:50%;background:var(--verde-chiaro);animation:battito 2.4s ease-in-out infinite}
-@keyframes battito{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
-.capitolo-aperto h3{font-size:clamp(1.5rem,3.6vw,2.1rem);letter-spacing:-.02em}
+.sd .motivo{background:#143b23; padding:32px 28px; transition:background .4s ease}
+.sd .motivo:hover{background:#1b4d2e}
+.sd .motivo .tacca{width:26px; height:3px; background:var(--verde-chiaro); margin-bottom:18px; transition:width .4s ease,background .4s ease}
+.sd .motivo:hover .tacca{width:52px; background:var(--oro)}
+.sd .motivo h3{font-size:1.1rem; font-weight:700; margin:0 0 9px; letter-spacing:-.01em}
+.sd .motivo p{margin:0; font-size:.94rem; line-height:1.62; color:rgba(244,239,226,.72)}
+.sd .motivo strong{color:var(--verde-chiaro); font-weight:700}
 
-.attesa-titolo{
-  margin-top:64px;font-size:.7rem;font-weight:700;letter-spacing:.28em;
-  text-transform:uppercase;color:rgba(255,255,255,.42);
-}
-.sigilli-vuoti{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));
-  gap:20px;margin-top:26px;max-width:760px;
-}
-.vuoto{text-align:center}
-.vuoto .anello{
-  width:100%;max-width:96px;aspect-ratio:1;margin:0 auto 12px;
-  border:1.5px dashed rgba(212,160,23,.42);
-  border-radius:48% 52% 43% 57% / 55% 45% 58% 42%;
-  transition:border-color .35s,transform .35s;
-}
-.vuoto:hover .anello{border-color:var(--oro);transform:rotate(-4deg)}
-.vuoto span{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.02em}
-.vuoto:last-child .anello{border-style:dotted}
-.vuoto:last-child span{color:var(--oro)}
-
-/* ── patto ──────────────────────────────────── */
-.patto{background:var(--oro);color:var(--verde-scuro);padding:clamp(70px,10vw,110px) 0;text-align:center}
-.patto blockquote{
-  font-size:clamp(1.4rem,4.4vw,2.5rem);font-weight:800;line-height:1.24;
-  letter-spacing:-.03em;max-width:20ch;margin:0 auto;
-}
-.firma{margin-top:32px;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.72}
-
-/* ── collabora ──────────────────────────────── */
-.due-carte{display:grid;gap:22px;margin-top:52px}
-.carta{
-  background:#fff;border:1px solid rgba(26,74,46,.14);padding:34px 30px;
-  display:flex;flex-direction:column;
-}
-.carta h3{color:var(--verde-scuro);font-size:1.3rem}
-.carta p{font-size:.98rem;color:#3d4438;flex:1}
-.carta strong{color:var(--verde-scuro)}
-.bottone{
-  display:inline-block;margin-top:26px;text-align:center;text-decoration:none;
-  background:var(--verde-scuro);color:#fff;font-weight:700;font-size:.98rem;
-  padding:16px 26px;border-radius:2px;transition:background .25s;
-}
-.bottone:hover{background:var(--verde-chiaro)}
-.bottone.oro{background:var(--oro);color:var(--verde-scuro)}
-.bottone.oro:hover{background:var(--verde-chiaro);color:#fff}
-.bottone.fantasma{background:none;color:var(--oro);border:1px solid rgba(212,160,23,.55);margin-top:40px}
-.bottone.fantasma:hover{background:var(--oro);color:var(--verde-scuro)}
-
-/* ── footer ─────────────────────────────────── */
-footer{background:var(--verde-scuro);color:#fff;padding:60px 0 34px}
-.footer-alto{display:flex;flex-wrap:wrap;gap:34px;justify-content:space-between;align-items:flex-start}
-footer img{height:30px;width:auto}
-.footer-link{display:flex;flex-direction:column;gap:12px}
-.footer-link a{color:rgba(255,255,255,.72);text-decoration:none;font-size:.95rem}
-.footer-link a:hover{color:var(--oro)}
-.footer-basso{
-  margin-top:46px;padding-top:22px;border-top:1px solid rgba(255,255,255,.13);
-  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
-  font-size:.82rem;color:rgba(255,255,255,.5);
-}
-
-/* ── animazioni di entrata ──────────────────── */
-.rivela{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
-.rivela.visto{opacity:1;transform:none}
-
-:focus-visible{outline:2px solid var(--oro);outline-offset:3px}
-
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
-  .rivela{opacity:1;transform:none}
-  html{scroll-behavior:auto}
+/* ── chiusura: scheda di carta staccata dal verde ──────────────
+   Patto e conto alla rovescia stanno su fondo panna, sollevati
+   dalla sezione: sono l'ultima cosa che si legge, devono staccare. */
+.sd-chiusura{
+  margin:clamp(52px,7vw,80px) 0 0;
+  background:var(--panna); color:var(--inchiostro);
+  border-radius:clamp(18px,2.4vw,26px);
+  padding:clamp(28px,4vw,46px);
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.16) inset;
 }
 
-/* ── desktop ────────────────────────────────── */
+/* ── patto + invito ── */
+.sd-patto{
+  display:grid; gap:26px; align-items:center;
+}
+.sd-patto p{
+  margin:0; font-family:var(--display); font-size:clamp(1.25rem,3.1vw,1.65rem); font-weight:600;
+  line-height:1.34; letter-spacing:-.01em; max-width:24ch; color:var(--inchiostro);
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 72;
+}
+.sd-patto p span{color:var(--oro-scuro)}
+.sd-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:11px; justify-self:start;
+  padding:17px 30px; border-radius:999px;
+  background:var(--verde-chiaro); color:#0d2718; text-decoration:none;
+  font-weight:800; font-size:.88rem; letter-spacing:.06em; text-transform:uppercase;
+  box-shadow:0 10px 24px -12px rgba(26,74,46,.55);
+  transition:background .3s ease,transform .25s ease,box-shadow .3s ease;
+}
+.sd-btn:hover{background:var(--oro); transform:translateY(-2px); box-shadow:0 16px 32px -12px rgba(26,74,46,.6)}
+.sd-btn .freccia{transition:transform .3s ease}
+.sd-btn:hover .freccia{transform:translateX(4px)}
+
+/* ── prossimo Sardegna Day: striscia in fondo alla scheda ── */
+.sd-prossimo{
+  margin-top:clamp(30px,4vw,42px); padding-top:clamp(26px,3.4vw,34px);
+  border-top:1px solid rgba(26,74,46,.16);
+  display:flex; flex-wrap:wrap; align-items:center; gap:12px 26px;
+}
+.sd-prossimo-eti{
+  font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(13,39,24,.5); margin:0; flex:none;
+}
+.sd-prossimo-num{
+  margin:0; font-family:var(--display); font-size:1.9rem; font-weight:600; line-height:1;
+  letter-spacing:-.02em; color:var(--oro-scuro); font-variant-numeric:tabular-nums; flex:none;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 60;
+}
+.sd-prossimo-num small{font-size:.62rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(13,39,24,.5); margin-left:7px}
+.sd-prossimo-sep{width:1px; height:26px; background:rgba(26,74,46,.18); flex:none}
+.sd-prossimo-data{margin:0; font-size:.95rem; font-weight:700; color:var(--verde-scuro); flex:none}
+.sd-prossimo-data::first-letter{text-transform:uppercase}
+.sd-prossimo-nota{margin:0 0 0 auto; font-size:.8rem; color:rgba(13,39,24,.55)}
+
+.sd a:focus-visible,.sd button:focus-visible{outline:3px solid var(--oro); outline-offset:3px}
+.sd-chiusura a:focus-visible{outline-color:var(--oro-scuro)}
+
+@media (max-width:759px){
+  .sd .tappa-nome{display:none}
+  .sd .ruota{width:min(330px,100%)}
+  .sd .nucleo{inset:22%}
+  .sd-btn{width:100%}
+  .sd .legenda{gap:10px}
+  .sd-prossimo{flex-direction:column; align-items:flex-start; gap:8px}
+  .sd-prossimo-sep{display:none}
+  .sd-prossimo-nota{margin:0}
+}
 @media (min-width:760px){
-  .visione-griglia{grid-template-columns:1.4fr .9fr;gap:70px}
-  .metodo{grid-template-columns:1fr 1fr}
-  .sigillo-griglia{grid-template-columns:.8fr 1.2fr;gap:70px}
-  .capitolo-aperto{grid-template-columns:auto 1fr;gap:48px}
-  .timbro{margin:0}
-  .due-carte{grid-template-columns:1fr 1fr}
+  .sd-motivi{grid-template-columns:repeat(3,1fr)}
+  .sd-patto{grid-template-columns:1fr auto; gap:40px}
+  .sd-btn{justify-self:end}
 }
-@media (min-width:1000px){
-  .metodo{grid-template-columns:repeat(4,1fr)}
+
+
+/* ═══════════════ 6. FOOTER ═══════════════ */
+.ichfoot{
+  background:var(--verde-scuro);
+  color:var(--panna);
+  font-family:var(--font);
+  padding:clamp(56px,8vw,84px) clamp(24px,5vw,72px) 34px;
+  position:relative;
+  overflow:hidden;
+}
+.ichfoot::before{
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ichfoot-inner{max-width:1160px; margin:0 auto; position:relative; z-index:2}
+
+/* ---------- Marchio, indirizzi, link ---------- */
+.ichfoot-alto{
+  display:flex; flex-wrap:wrap; gap:34px; justify-content:space-between;
+  align-items:flex-start;
+}
+.ichfoot-logo{height:30px; width:auto; display:block}
+.ichfoot-sede{
+  margin:16px 0 0; font-size:.9rem; line-height:1.6;
+  color:rgba(244,239,226,.55); max-width:280px;
+}
+.ichfoot-link{display:flex; flex-direction:column; gap:12px}
+.ichfoot-link a{
+  color:rgba(244,239,226,.72); text-decoration:none; font-size:.95rem;
+  transition:color .2s ease;
+}
+.ichfoot-link a:hover{color:var(--oro)}
+.ichfoot-riga{
+  margin-top:44px; padding-top:22px;
+  border-top:1px solid rgba(244,239,226,.14);
+  display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between;
+  font-size:.82rem; color:rgba(244,239,226,.5);
+}
+.ichfoot a:focus-visible{outline:3px solid var(--oro); outline-offset:3px}
+
+
+
+
+/* ═══════════════ 7. MOVIMENTO RIDOTTO (globale) ═══════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+  .fade-up { opacity: 1; transform: none; }
+  .ich-carta { opacity: 1; transform: none; }
+  .ichnav-voce, .ichnav-cta, .ichnav-piede { opacity: 1; transform: none; }
+  .pannello-lista li { opacity: 1; }
+  .ichnav-menu { transition: none; }
 }
 </style>
-<script async src="https://tally.so/widgets/embed.js"></script></head>
+</head>
 <body>
 
-<!-- ═══ HEADER ═══ -->
-<header>
-  <div class="wrap barra">
-    <a href="index.html" class="marchio" aria-label="Ichnos — home">
-      <img src="img/logo-verde.png" alt="Ichnos">
+<!-- ████████████████████████████████████████████████████████████
+     BARRA DI NAVIGAZIONE
+     Trasparente sull'hero, diventa color carta appena scrolli.
+     ████████████████████████████████████████████████████████████ -->
+<header class="ichnav" id="ichnav">
+  <div class="ichnav-barra">
+    <a href="index.html" class="ichnav-marchio" aria-label="Ichnos — home">
+      <img class="ichnav-logo ichnav-logo--chiaro" src="img/logo-bianco.png" alt="Ichnos">
+      <img class="ichnav-logo ichnav-logo--scuro" src="img/logo-verde.png" alt="" aria-hidden="true">
     </a>
-    <button class="hamburger" id="tastoMenu" aria-expanded="false" aria-controls="menu" aria-label="Apri il menu">
-      <span></span><span></span><span></span>
+
+    <nav class="ichnav-linee" aria-label="Principale">
+      <a href="prodotti.html">Prodotti del mese</a>
+      <a href="#sardegna-day">Sardegna Day</a>
+      <a href="progetto.html">Progetto Ichnos</a>
+      <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
+      <a href="#ranghi" class="ichnav-box"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+    </nav>
+
+    <button class="ichnav-tasto" id="ichnavTasto" aria-expanded="false"
+            aria-controls="ichnavMenu" aria-label="Apri il menu">
+      <span class="ichnav-chiudi" aria-hidden="true">Chiudi</span>
+      <span class="ichnav-tratti" aria-hidden="true"><i></i><i></i></span>
     </button>
   </div>
 </header>
 
-<nav class="menu" id="menu">
-  <a href="index.html#prodotti-del-mese">I prodotti del mese</a>
-  <a href="progetto.html" aria-current="page">Progetto Ichnos</a>
-  <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
-  <a href="index.html#box" class="box-cta">Le nostre BOX</a>
+<nav class="ichnav-menu" id="ichnavMenu" aria-label="Menu">
+  <div class="ichnav-lista">
+    <a class="ichnav-voce" href="prodotti.html">
+      <span class="ichnav-etichetta">Prodotti del mese
+        <span class="ichnav-nota">Cosa arriva nella box di questo mese</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">→</span>
+    </a>
+    <a class="ichnav-voce" href="#sardegna-day">
+      <span class="ichnav-etichetta">Sardegna Day
+        <span class="ichnav-nota">Il ciclo del mese, dal vivo</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">→</span>
+    </a>
+    <a class="ichnav-voce" href="progetto.html">
+      <span class="ichnav-etichetta">Progetto Ichnos
+        <span class="ichnav-nota">Il metodo, il sigillo, le prossime regioni</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">→</span>
+    </a>
+    <a class="ichnav-voce" href="https://instagram.com/projectichnos" target="_blank" rel="noopener">
+      <span class="ichnav-etichetta">Instagram
+        <span class="ichnav-nota">@projectichnos</span>
+      </span>
+      <span class="ichnav-freccia" aria-hidden="true">→</span>
+    </a>
+
+    <a class="ichnav-cta" href="#ranghi"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+
+    <!-- secondo modo per uscire: in fondo, dove arriva il pollice -->
+    <button class="ichnav-torna" type="button" id="ichnavTorna">&larr; Torna alla pagina</button>
+    <p class="ichnav-piede">Hub di ritiro · Felizzano (AL)</p>
+  </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<section class="hero grana">
-  <div class="wrap">
-    <div class="occhiello">Il progetto</div>
-    <div class="parola">ichnos</div>
-    <p class="glossa">
-      dal greco <em>ἴχνος</em> — orma, traccia, segno lasciato dal passaggio di qualcuno.
-      Non solo l'impronta nel terreno: il lavoro delle persone, la storia di un territorio,
-      quello che resta quando chi è passato non c'è più.
-    </p>
-    <p class="lead">
-      Non siamo un e-commerce. Siamo una <strong>scatola che cammina</strong>:
-      parte soltanto quando qualcuno l'ha già chiesta, e porta con sé l'impronta
-      esatta del posto da cui viene.
-    </p>
-  </div>
-</section>
 
-<!-- ═══ LA VISIONE ═══ -->
-<section class="sez chiara" id="visione">
-  <div class="wrap">
-    <div class="visione-griglia rivela">
-      <div class="visione-testo">
-        <div class="occhiello">La visione</div>
-        <h2>Restituire un volto al cibo</h2>
-        <p>
-          Conosciamo i marchi, non le persone. Sappiamo quanto costa un formaggio,
-          ma non il nome di chi ha munto il latte, né dove pascolavano le pecore quella mattina.
-          In pochi decenni la grande distribuzione ha reso il cibo anonimo.
-        </p>
-        <p>
-          Ichnos nasce per invertire il processo. L'obiettivo non è soltanto accorciare
-          la filiera: è ricostruire un rapporto diretto fra chi produce e chi mangia,
-          con nomi, volti e distanze verificabili.
-        </p>
-        <p class="chiusa">Ogni prodotto conserva le tracce di chi lo ha lavorato. Noi ci limitiamo a non cancellarle.</p>
-      </div>
-      <div>
-        <img class="mappa-sardegna blend" src="img/sardegna.png" alt="La Sardegna incisa con i segni della tradizione nuragica">
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ████████████████████████████████████████████████████████████
+     HERO
+     ████████████████████████████████████████████████████████████ -->
+<section class="ichnos-hero">
+  <div class="ichnos-hero__bg"></div>
+  <div class="ichnos-hero__wash"></div>
+  <div class="ichnos-hero__grain"></div>
 
-<!-- ═══ IL METODO ═══ -->
-<section class="sez scura grana" id="metodo">
-  <div class="wrap">
-    <div class="rivela">
-      <div class="occhiello">Il metodo</div>
-      <h2>Quattro scelte, non slogan</h2>
-      <p class="lead" style="max-width:640px">
-        Ogni promessa che facciamo è vincolata a un vincolo operativo che ci siamo dati.
-        Se salta il vincolo, salta la promessa.
+  <div class="ichnos-hero__inner">
+
+    <div class="ichnos-hero__copy">
+      <h1 class="ichnos-title fade-up d2">
+        Sardegna<br><em>Ichnos</em>
+      </h1>
+
+      <p class="ichnos-sub fade-up d3">
+        Ogni box parte da un piccolo produttore sardo e arriva sulla tua tavola
+        senza passare per nessun intermediario. <b>Si raccoglie solo ciò che è già prenotato.</b>
       </p>
+
+      <div class="ichnos-cta fade-up d4">
+        <a href="#sardegna-day" class="ichnos-btn ichnos-btn--primary">
+          Come funziona
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="prodotti.html" class="ichnos-btn ichnos-btn--ghost">I Prodotti del Mese</a>
+      </div>
     </div>
 
-    <div class="metodo rivela">
-      <div class="pilastro">
-        <div class="tacca"></div>
-        <h3>Magazzino zero</h3>
-        <p>Non esistono scorte invendute a prendere polvere. Il furgone parte solo per <strong>pre-ordini già confermati</strong>: si produce quello che è già stato scelto, niente di più.</p>
-      </div>
-      <div class="pilastro">
-        <div class="tacca"></div>
-        <h3>Prezzo equo, pagato prima</h3>
-        <p>Ai produttori riconosciamo un margine <strong>superiore del 10% rispetto alla grande distribuzione</strong>, e lo paghiamo in anticipo. Chi lavora la terra non deve aspettare la vendita per essere pagato.</p>
-      </div>
-      <div class="pilastro">
-        <div class="tacca"></div>
-        <h3>Hub di prossimità</h3>
-        <p>I prodotti viaggiano dalla terra d'origine all'<strong>hub di Felizzano</strong>, in provincia di Alessandria. Da lì, una logistica corta e chirurgica su tutto il Nord Italia.</p>
-      </div>
-      <div class="pilastro">
-        <div class="tacca"></div>
-        <h3>Tracciabilità reale</h3>
-        <p>Sensori IoT seguono viaggio e temperature <strong>in tempo reale</strong>. Sai chi ha prodotto il tuo cibo, dove si trova il suo campo e cosa ha attraversato per arrivare da te.</p>
-      </div>
+    <!-- SIGILLO: l'orma che ogni prodotto lascia -->
+    <div class="ichnos-seal fade-up d5">
+      <div class="ichnos-seal__glow"></div>
+
+      <svg class="ichnos-seal__ring" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <path id="ichnosRing" d="M50,50 m-41,0 a41,41 0 1,1 82,0 a41,41 0 1,1 -82,0"/>
+        </defs>
+        <text><textPath href="#ichnosRing" startOffset="0">
+          CAPITOLO 0 · SARDEGNA · CAPITOLO 0 · SARDEGNA ·
+        </textPath></text>
+      </svg>
+
+      <img class="ichnos-seal__mark" src="img/sigillo-bianco.png" alt="Sigillo Ichnos"
+           onerror="this.style.display='none';document.getElementById('sealFallback').style.display='grid'">
+
+      <div class="ichnos-seal__fallback" id="sealFallback" style="display:none">Ichnos</div>
+    </div>
+
+  </div>
+
+  <div class="ichnos-rail">
+    <div class="ichnos-rail__inner fade-up d6">
+      <a href="#sardegna-day" class="ichnos-rail__item ichnos-rail__item--link"><span class="ichnos-rail__dot"></span> Prossimo <strong>Sardegna&nbsp;Day</strong></a>
+      <span class="ichnos-rail__sep"></span>
+      <span class="ichnos-rail__item"><strong>+10%</strong>&nbsp;sul prezzo GDO ai produttori</span>
+      <span class="ichnos-rail__sep"></span>
+      <span class="ichnos-rail__item">Spedizione <strong>sempre inclusa</strong></span>
     </div>
   </div>
 </section>
 
-<!-- ═══ IL SIGILLO ═══ -->
-<section class="sez chiara" id="sigillo">
-  <div class="wrap">
-    <div class="sigillo-griglia rivela">
-      <div>
-        <img class="sigillo-img blend" src="img/sigillo-verde.png" alt="Il sigillo Ichnos, ispirato alle antiche monete mediterranee">
-      </div>
-      <div class="sigillo-testo">
-        <div class="occhiello">Il sigillo e le monete</div>
-        <h2>Un simbolo che certifica, non che vende</h2>
-        <p>
-          Per migliaia di anni il Mediterraneo è stato attraversato da mercanti che
-          trasportavano prodotti, conoscenze e tradizioni. Il nostro simbolo riprende
-          il linguaggio visivo di quelle monete antiche: non rappresenta il denaro,
-          ma il commercio inteso come incontro fra culture. Applicare il sigillo a un
-          prodotto significa dichiararne l'origine esatta.
-        </p>
-        <p>
-          Dentro il sistema circolano le <strong>Monete Ichnos</strong> 🟡. Non sono un gioco:
-          sono il modo in cui un abbonamento diventa impegno anticipato verso chi produce,
-          fuori dalle logiche della grande distribuzione. Tre ranghi accompagnano il percorso —
-          e sono un livello di scoperta del territorio, non un listino.
-        </p>
-        <div class="ranghi">
-          <span class="rango">Contadinu</span>
-          <span class="rango">Possidenti</span>
-          <span class="rango">Meri de Ommu</span>
+
+<!-- ████████████████████████████████████████████████████████████
+     RANGHI
+     ────────────────────────────────────────────────────────────
+     ID DEI FORM TALLY — unico posto da toccare se cambiano
+       Contadinu      →  vGOy04
+       Possidenti     →  Xx1oEg
+       Meri de Ommu   →  eq0qBJ
+     Ogni ID compare 2 volte per carta: nell'href (di riserva) e in
+     data-tally-open (popup). Cerca e sostituisci entrambi.
+     ████████████████████████████████████████████████████████████ -->
+<section class="ich-ranghi" id="ranghi">
+
+  <div class="ich-intro">
+    <p class="ich-eyebrow">Capitolo 0 · Sardegna</p>
+    <h2 class="ich-titolo">Tre modi di stare <em>dalla stessa parte</em></h2>
+    <p class="ich-sottotitolo">
+      Ogni rango è una quantità di Monete Ichnos: le spendi come vuoi per comporre la tua box,
+      e arrivano ai produttori prima del raccolto.
+    </p>
+  </div>
+
+  <div class="ich-griglia">
+
+    <!-- ═══════════════ RANGO 01 — CONTADINU ═══════════════ -->
+    <article class="ich-carta">
+
+      <!-- MASCHERA CONTADINU — PNG trasparente, quadrato, min 600×600 px.
+           Attenzione: su Netlify il nome file è case-sensitive. -->
+      <div class="ich-slot">
+        <div class="ich-aura"></div>
+        <div class="ich-orbita"></div>
+        <div class="ich-ombra"></div>
+        <div class="ich-fluttua">
+          <img class="ich-maschera"
+               src="img/maschera-contadinu.png"
+               loading="lazy"
+               alt="Maschera del rango Contadinu"
+               decoding="async"
+               onerror="this.closest('.ich-slot').classList.add('senza-immagine')">
+          <div class="ich-segnaposto" aria-hidden="true">MASCHERA<br>CONTADINU</div>
         </div>
       </div>
-    </div>
+
+      <p class="ich-rango-num">Rango 01</p>
+      <h3 class="ich-nome">Contadinu</h3>
+      <p class="ich-prezzo">
+        <span class="ich-prezzo-lancio">35,10&nbsp;€</span>
+        <span class="ich-prezzo-pieno">39,00&nbsp;€</span>
+        <span class="ich-prezzo-nota">Prezzo di lancio · spedizione inclusa</span>
+      </p>
+
+      <p class="ich-descrizione">
+        Il Contadinu è il custode del raccolto. Conosce il ritmo delle stagioni e non ha bisogno
+        di fronzoli, ma solo di sostanza. Il rango per chi vuole iniziare il viaggio con Sardegna Ichnos.
+      </p>
+
+      <div class="ich-monete-blocco">
+        <div class="ich-monete-testa"><span>🟡</span><span>6 Monete Ichnos</span></div>
+        <div class="ich-monete-nota">Credito prepagato per comporre la tua box come vuoi.</div>
+        <div class="ich-dischi" data-monete="6" aria-hidden="true"></div>
+      </div>
+
+      <p class="ich-label">Cosa ricevi</p>
+      <ul class="ich-lista">
+        <li><span class="ich-spunta">✓</span><span>Ritiro presso l'<strong>Hub di Felizzano (AL)</strong></span></li>
+        <li><span class="ich-spunta">✓</span><span>Consegna al <strong>Sardegna Day</strong>, il giorno fisso di ogni mese</span></li>
+      </ul>
+
+      <div class="ich-azione">
+        <!-- TALLY CONTADINU — vGOy04 -->
+        <a class="ich-cta"
+           href="https://tally.so/r/vGOy04"
+           target="_blank" rel="noopener"
+           aria-label="Componi la tua box — rango Contadinu"
+           data-tally-open="vGOy04"
+           data-tally-layout="modal"
+           data-tally-width="720"
+           data-tally-overlay="1"
+           data-tally-auto-close="2500"
+           data-tally-emoji-text="🟡"
+           data-tally-emoji-animation="tada">
+          Componi la tua box <span class="freccia">→</span>
+        </a>
+        <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
+      </div>
+    </article>
+
+    <!-- ═══════════════ RANGO 02 — POSSIDENTI ═══════════════ -->
+    <article class="ich-carta">
+
+      <div class="ich-slot">
+        <div class="ich-aura"></div>
+        <div class="ich-orbita"></div>
+        <div class="ich-ombra"></div>
+        <div class="ich-fluttua">
+          <img class="ich-maschera"
+               src="img/maschera-possidenti.png"
+               loading="lazy"
+               alt="Maschera del rango Possidenti"
+               decoding="async"
+               onerror="this.closest('.ich-slot').classList.add('senza-immagine')">
+          <div class="ich-segnaposto" aria-hidden="true">MASCHERA<br>POSSIDENTI</div>
+        </div>
+      </div>
+
+      <p class="ich-rango-num">Rango 02</p>
+      <h3 class="ich-nome">Possidenti</h3>
+      <p class="ich-prezzo">
+        <span class="ich-prezzo-lancio">62,10&nbsp;€</span>
+        <span class="ich-prezzo-pieno">69,00&nbsp;€</span>
+        <span class="ich-prezzo-nota">Prezzo di lancio · spedizione inclusa</span>
+      </p>
+
+      <p class="ich-descrizione">
+        Il Possidenti è il pilastro della comunità. Ha la responsabilità della famiglia e della scorta.
+        Non si accontenta dell'assaggio: vuole la certezza che in tavola ci sia varietà e la massima qualità.
+      </p>
+
+      <div class="ich-monete-blocco">
+        <div class="ich-monete-testa"><span>🟡</span><span>12 Monete Ichnos</span></div>
+        <div class="ich-monete-nota">Il doppio del potere d'acquisto sulla dispensa sarda.</div>
+        <div class="ich-dischi" data-monete="12" aria-hidden="true"></div>
+      </div>
+
+      <p class="ich-label">Cosa ricevi</p>
+      <ul class="ich-lista">
+        <li><span class="ich-spunta">✓</span><span><strong>Consegna personale</strong> a casa tua o in ufficio</span></li>
+        <li><span class="ich-spunta">✓</span><span><strong>Riconoscimento dei produttori</strong> — ringraziamenti firmati dentro la box</span></li>
+        <li><span class="ich-spunta">✓</span><span>Consegna al <strong>Sardegna Day</strong>, il giorno fisso di ogni mese</span></li>
+      </ul>
+
+      <div class="ich-azione">
+        <!-- TALLY POSSIDENTI — Xx1oEg -->
+        <a class="ich-cta"
+           href="https://tally.so/r/Xx1oEg"
+           target="_blank" rel="noopener"
+           aria-label="Componi la tua box — rango Possidenti"
+           data-tally-open="Xx1oEg"
+           data-tally-layout="modal"
+           data-tally-width="720"
+           data-tally-overlay="1"
+           data-tally-auto-close="2500"
+           data-tally-emoji-text="🟡"
+           data-tally-emoji-animation="tada">
+          Componi la tua box <span class="freccia">→</span>
+        </a>
+        <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
+      </div>
+    </article>
+
+    <!-- ═══════════════ RANGO 03 — MERI DE OMMU ═══════════════ -->
+    <article class="ich-carta is-elite">
+      <span class="ich-etichetta">Élite</span>
+
+      <div class="ich-slot">
+        <div class="ich-aura"></div>
+        <div class="ich-orbita"></div>
+        <div class="ich-ombra"></div>
+        <div class="ich-fluttua">
+          <img class="ich-maschera"
+               src="img/maschera-meri-de-ommu.png"
+               loading="lazy"
+               alt="Maschera del rango Meri de Ommu"
+               decoding="async"
+               onerror="this.closest('.ich-slot').classList.add('senza-immagine')">
+          <div class="ich-segnaposto" aria-hidden="true">MASCHERA<br>MERI DE OMMU</div>
+        </div>
+      </div>
+
+      <p class="ich-rango-num">Rango 03</p>
+      <h3 class="ich-nome">Meri de Ommu</h3>
+      <p class="ich-prezzo">
+        <span class="ich-prezzo-lancio">89,10&nbsp;€</span>
+        <span class="ich-prezzo-pieno">99,00&nbsp;€</span>
+        <span class="ich-prezzo-nota">Prezzo di lancio · spedizione inclusa</span>
+      </p>
+
+      <p class="ich-descrizione">
+        Il Meri de Ommu è la guida. Guarda avanti, investe nel futuro e protegge la comunità.
+        Non è solo un cliente: è il sostenitore d'élite di Sardegna Ichnos.
+      </p>
+
+      <div class="ich-monete-blocco">
+        <div class="ich-monete-testa"><span>🟡</span><span>18 Monete Ichnos</span></div>
+        <div class="ich-monete-nota">Una dispensa completa di ogni rarità sarda.</div>
+        <div class="ich-dischi" data-monete="18" aria-hidden="true"></div>
+      </div>
+
+      <p class="ich-label">Cosa ricevi</p>
+      <ul class="ich-lista">
+        <li><span class="ich-spunta">✓</span><span><strong>Consegna personale</strong> a casa tua o in ufficio</span></li>
+        <li><span class="ich-spunta">✓</span><span><strong>Riconoscimento dei produttori</strong> — ringraziamenti firmati dentro la box</span></li>
+        <li><span class="ich-spunta">✓</span><span><strong>Futuro IoT</strong> — beta tester del sistema di monitoraggio dei campi</span></li>
+        <li><span class="ich-spunta">✓</span><span>Consegna al <strong>Sardegna Day</strong>, il giorno fisso di ogni mese</span></li>
+      </ul>
+
+      <div class="ich-azione">
+        <!-- TALLY MERI DE OMMU — eq0qBJ -->
+        <a class="ich-cta"
+           href="https://tally.so/r/eq0qBJ"
+           target="_blank" rel="noopener"
+           aria-label="Componi la tua box — rango Meri de Ommu"
+           data-tally-open="eq0qBJ"
+           data-tally-layout="modal"
+           data-tally-width="720"
+           data-tally-overlay="1"
+           data-tally-auto-close="2500"
+           data-tally-emoji-text="🟡"
+           data-tally-emoji-animation="tada">
+          Componi la tua box <span class="freccia">→</span>
+        </a>
+        <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
+      </div>
+    </article>
+
   </div>
+
+  <div class="ich-promesse">
+    <div class="ich-promessa"><span class="ich-punto"></span><span>Si produce <b>solo il prenotato</b>: zero sprechi</span></div>
+    <div class="ich-promessa"><span class="ich-punto oro"></span><span>Ogni prodotto porta il <b>Sigillo Ichnos</b>: origine certificata</span></div>
+  </div>
+
 </section>
 
-<!-- ═══ LA ROTTA — elemento firma ═══ -->
-<section class="sez scura grana" id="rotta">
-  <div class="wrap">
-    <div class="rivela">
-      <div class="occhiello">La rotta</div>
-      <h2>Un territorio alla volta</h2>
-      <p class="lead" style="max-width:660px">
-        Il software logistico è universale, il viaggio no: si muove a tappe.
-        Un capitolo si apre soltanto quando il precedente cammina da solo.
-        Nessuna fretta di occupare la mappa.
+
+<!-- ████████████████████████████████████████████████████████████
+     SARDEGNA DAY — il ciclo del mese
+     ────────────────────────────────────────────────────────────
+     ⚙️ DA AGGIORNARE OGNI MESE: le 8 date nel blocco "FASI",
+     in fondo alla pagina. Tutto il resto si sposta da solo.
+     ████████████████████████████████████████████████████████████ -->
+<section class="sd" id="sardegna-day">
+  <div class="sd-dentro">
+
+    <div class="sd-testa">
+      <p class="sd-eyebrow">Il giorno fisso</p>
+      <h2 class="sd-titolo">Un solo giorno<em>Sardegna Day</em></h2>
+      <p class="sd-lead">
+        Le box non partono quando fa comodo a noi: partono quando la Sardegna è pronta.
+        Quattro momenti, sempre nello stesso ordine.
+        <b>Tocca una moneta per vedere cosa succede in quella fase.</b>
       </p>
     </div>
 
-    <div class="capitolo-aperto rivela">
-      <div class="timbro">
-        <img src="img/sardegna.png" alt="">
+    <div class="sd-scena">
+      <div class="ruota spenta" id="ruota">
+
+        <svg class="anello" viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <linearGradient id="gradienteCiclo" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#639922"/>
+              <stop offset="70%" stop-color="#D4A017"/>
+              <stop offset="100%" stop-color="#f0c14d"/>
+            </linearGradient>
+          </defs>
+
+          <circle class="punteggiata" cx="100" cy="100" r="92"/>
+          <circle class="pista" cx="100" cy="100" r="74"/>
+
+          <path class="verso" d="M97 21 L100.5 24 L97 27" transform="rotate(45 100 100)"/>
+          <path class="verso" d="M97 21 L100.5 24 L97 27" transform="rotate(135 100 100)"/>
+          <path class="verso" d="M97 21 L100.5 24 L97 27" transform="rotate(225 100 100)"/>
+          <path class="verso" d="M97 21 L100.5 24 L97 27" transform="rotate(315 100 100)"/>
+
+          <circle class="scia"        id="scia"        cx="100" cy="100" r="74" transform="rotate(-90 100 100)"/>
+          <circle class="avanzamento" id="avanzamento" cx="100" cy="100" r="74" transform="rotate(-90 100 100)"/>
+
+          <!-- tacca "adesso": resta ferma anche mentre sfogli le altre fasi -->
+          <line class="tacca-adesso" id="taccaAdesso" x1="100" y1="18" x2="100" y2="30" opacity="0"/>
+
+          <circle class="alone"   id="alone"   cx="100" cy="26" r="13"/>
+          <circle class="testina" id="testina" cx="100" cy="26" r="6"/>
+        </svg>
+
+        <div class="nucleo">
+          <img class="nucleo-mappa" src="img/sardegna-chiara.png" alt="" aria-hidden="true" onerror="this.remove()">
+          <p class="nucleo-stato" id="nucleoStato">Il cerchio</p>
+          <p class="nucleo-nome" id="nucleoNome">Sardegna Day</p>
+          <p class="nucleo-nota" id="nucleoNota"></p>
+        </div>
+
+        <button class="tappa t1" type="button" aria-pressed="false" aria-label="Fase 1 — La Chiamata">
+          <span class="moneta">01</span><span class="tappa-nome">La Chiamata</span>
+        </button>
+        <button class="tappa t2" type="button" aria-pressed="false" aria-label="Fase 2 — La Conta">
+          <span class="moneta">02</span><span class="tappa-nome">La Conta</span>
+        </button>
+        <button class="tappa t3" type="button" aria-pressed="false" aria-label="Fase 3 — La Traversata">
+          <span class="moneta">03</span><span class="tappa-nome">La Traversata</span>
+        </button>
+        <button class="tappa t4" type="button" aria-pressed="false" aria-label="Fase 4 — Sardegna Day">
+          <span class="moneta">04</span><span class="tappa-nome">Sardegna Day</span>
+        </button>
       </div>
+
+      <div class="legenda" id="legenda"></div>
+
+      <div class="sd-nota-ruota">
+        <span id="suggerimento">Tocca una moneta per bloccare la fase</span>
+        <button class="sd-sblocca" id="sblocca" type="button">↺ Torna ad adesso</button>
+      </div>
+    </div>
+
+    <article class="pannello" id="pannello" aria-live="polite">
+      <span class="pannello-fantasma" id="pFantasma">01</span>
+      <div class="pannello-alto">
+        <h3 id="pNome">La Chiamata</h3>
+        <span class="stato-chip" id="pStato"><span class="pt"></span><span id="pStatoT">In arrivo</span></span>
+      </div>
+      <p class="pannello-periodo" id="pPeriodo">Le prenotazioni si aprono</p>
+      <p class="pannello-testo" id="pTesto">Il cerchio si apre: scegli i prodotti e spendi le tue Monete Ichnos.</p>
+      <ul class="pannello-lista" id="pLista"></ul>
+    </article>
+
+    <div class="sd-motivi">
+      <div class="motivo">
+        <div class="tacca"></div>
+        <h3>Nessun magazzino</h3>
+        <p>Non c'è niente in attesa di essere venduto. Si raccoglie <strong>solo ciò che è già prenotato</strong>: quello che parte ha già un nome sopra.</p>
+      </div>
+      <div class="motivo">
+        <div class="tacca"></div>
+        <h3>Il produttore lavora sul certo</h3>
+        <p>L'ordine arriva chiuso e <strong>pagato in anticipo</strong>, con un margine superiore del 10% rispetto alla GDO. Nessuna scommessa sul raccolto.</p>
+      </div>
+      <div class="motivo">
+        <div class="tacca"></div>
+        <h3>Un viaggio invece di dieci</h3>
+        <p>Una sola traversata al mese per tutte le box, con arrivo all'<strong>hub di Felizzano (AL)</strong>. Meno strada, prodotti più freschi.</p>
+      </div>
+    </div>
+
+    <!-- scheda di carta: stacca dal verde ed è l'ultima cosa che si legge -->
+    <div class="sd-chiusura">
+
+      <div class="sd-patto">
+        <p>Se non è prenotato, <span>non parte.</span> È l'unico modo che conosciamo per non buttare via niente.</p>
+        <a class="sd-btn" href="#ranghi">Scegli il tuo rango <span class="freccia">→</span></a>
+      </div>
+
+      <div class="sd-prossimo">
+        <p class="sd-prossimo-eti">Prossimo Sardegna Day</p>
+        <p class="sd-prossimo-num" id="contoNum">—<small id="contoUni">giorni</small></p>
+        <span class="sd-prossimo-sep"></span>
+        <p class="sd-prossimo-data" id="contoData">&nbsp;</p>
+        <p class="sd-prossimo-nota" id="contoNota">&nbsp;</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████
+     FOOTER
+     ████████████████████████████████████████████████████████████ -->
+<footer class="ichfoot">
+  <div class="ichfoot-inner">
+
+    <div class="ichfoot-alto">
       <div>
-        <div class="stato"><span class="punto"></span> Capitolo 0 · aperto ora</div>
-        <h3>Sardegna</h3>
-        <p style="margin-top:12px">
-          La rotta pilota parte dalle terre dei centenari. Dai pascoli della Barbagia
-          alle coste di Cabras: piccoli artigiani, quantità limitate, niente che non sia
-          già stato prenotato. La Sardegna è stata uno dei grandi punti d'incontro
-          delle antiche rotte commerciali — ricominciamo da lì.
-        </p>
-      </div>
-    </div>
-
-    <p class="attesa-titolo">In attesa di sigillo</p>
-    <div class="sigilli-vuoti rivela">
-      <div class="vuoto"><div class="anello"></div><span>Sicilia</span></div>
-      <div class="vuoto"><div class="anello"></div><span>Puglia</span></div>
-      <div class="vuoto"><div class="anello"></div><span>Campania</span></div>
-      <div class="vuoto"><div class="anello"></div><span>Toscana</span></div>
-      <div class="vuoto"><div class="anello"></div><span>Piemonte</span></div>
-      <div class="vuoto"><div class="anello"></div><span>la tua?</span></div>
-    </div>
-
-    <p style="max-width:620px;margin-top:34px">
-      Ogni capitolo manterrà lo stesso sigillo e lo stesso patto. Cambieranno le mani,
-      le maschere, il dialetto e la stagione — mai il metodo.
-    </p>
-
-    <a class="bottone fantasma"    href="https://tally.so/r/J9MP5R"    target="_blank" rel="noopener"    data-tally-open="J9MP5R"    data-tally-layout="modal"    data-tally-width="720"    data-tally-overlay="1"    data-tally-auto-close="2500"    data-tally-emoji-text="👋"    data-tally-emoji-animation="wave">Proponi la prossima regione</a>
-  </div>
-</section>
-
-<!-- ═══ IL PATTO ═══ -->
-<section class="patto" id="patto">
-  <div class="wrap rivela">
-    <blockquote>Ichnos custodisce l'impronta dei territori italiani, portandola ovunque senza alterarne l'origine.</blockquote>
-    <p class="firma">Samuel Gavelli · CEO</p>
-  </div>
-</section>
-
-<!-- ═══ COLLABORA ═══ -->
-<section class="sez chiara" id="collabora">
-  <div class="wrap">
-    <div class="rivela">
-      <div class="occhiello">Costruiamolo insieme</div>
-      <h2>C'è posto per te nella scatola</h2>
-      <p class="lead" style="max-width:600px;color:#3d4438">
-        Il progetto sta in piedi solo se chi produce e chi crede nella filiera corta
-        arrivano prima dei clienti.
-      </p>
-    </div>
-
-    <div class="due-carte rivela">
-      <div class="carta">
-        <h3>Sei un produttore</h3>
-        <p>
-          Se hai un'azienda agricola, un gregge, un laboratorio artigiano, stringiamo un patto:
-          <strong>prezzo equo e pagamento anticipato del pre-ordinato</strong>. Tu produci solo
-          quello che è già stato scelto, noi lo portiamo intatto a persone che amano la tua terra.
-          Nessuna esclusiva, nessun vincolo di volume.
-        </p>
-        <a class="bottone" href="#" data-tally>Diventa produttore partner</a>
-      </div>
-      <div class="carta">
-        <h3>Sei un'azienda o un brand</h3>
-        <p>
-          Se credi nell'innovazione logistica e nella sostenibilità, puoi sostenere il progetto
-          come <strong>sponsor</strong>: visibilità dentro le box fisiche e sui canali digitali,
-          accanto a storie di persone vere. Cerchiamo pochi partner, coerenti.
-        </p>
-        <a class="bottone oro" href="#" data-tally>Collabora con Ichnos</a>
-      </div>
-    </div>
-
-    <!-- Quando avrai i loghi veri degli sponsor, scommenta questa striscia.
-    <div style="margin-top:56px">
-      <p class="attesa-titolo" style="color:rgba(26,74,46,.45);margin-top:0">Sostengono il progetto</p>
-      <div style="display:flex;flex-wrap:wrap;gap:38px;align-items:center;margin-top:22px">
-        <img src="img/sponsor-1.png" alt="" style="height:38px;opacity:.65">
-      </div>
-    </div>
-    -->
-  </div>
-</section>
-
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="wrap">
-    <div class="footer-alto">
-      <div>
-        <img src="img/logo-bianco.png" alt="Ichnos">
-        <p style="margin-top:16px;font-size:.9rem;color:rgba(255,255,255,.55);max-width:280px">
+        <img class="ichfoot-logo" src="img/logo-bianco.png" alt="Ichnos">
+        <p class="ichfoot-sede">
           Hub di ritiro: Felizzano (AL).<br>Sede operativa: Alessandria.
         </p>
       </div>
-      <div class="footer-link">
-        <a href="index.html#prodotti-del-mese">I prodotti del mese</a>
-        <a href="index.html#come-funziona">Come funziona</a>
-        <a href="index.html#sardegna-day">Sardegna Day</a>
-        <a href="index.html#faq">Domande frequenti</a>
+      <nav class="ichfoot-link" aria-label="Collegamenti">
+        <a href="prodotti.html">I prodotti del mese</a>
+        <a href="#ranghi">I ranghi</a>
+        <a href="#sardegna-day">Sardegna Day</a>
+        <a href="progetto.html">Progetto Ichnos</a>
         <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
-      </div>
+      </nav>
     </div>
-    <div class="footer-basso">
+
+    <div class="ichfoot-riga">
       <span>© 2026 Sardegna Ichnos</span>
       <span>Capitolo 0 · Sardegna</span>
     </div>
+
   </div>
 </footer>
 
+
+<!-- ── ranghi: dischi-moneta + comparsa delle carte ── -->
 <script>
-// menu
-const tasto = document.getElementById('tastoMenu');
-const menu  = document.getElementById('menu');
-tasto.addEventListener('click', () => {
-  const aperto = tasto.getAttribute('aria-expanded') === 'true';
-  tasto.setAttribute('aria-expanded', String(!aperto));
-  tasto.setAttribute('aria-label', aperto ? 'Apri il menu' : 'Chiudi il menu');
-  menu.classList.toggle('aperto', !aperto);
-  document.body.style.overflow = aperto ? '' : 'hidden';
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && menu.classList.contains('aperto')) tasto.click();
+(function () {
+  var sezione = document.getElementById('ranghi');
+  if (!sezione) return;
+
+  /* dischi-moneta generati dalla quantità dichiarata */
+  sezione.querySelectorAll('[data-monete]').forEach(function (box) {
+    var n = parseInt(box.getAttribute('data-monete'), 10) || 0;
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('span');
+      d.className = 'ich-moneta';
+      box.appendChild(d);
+    }
+  });
+
+  /* comparsa progressiva delle carte allo scroll */
+  var carte = sezione.querySelectorAll('.ich-carta');
+  if (!('IntersectionObserver' in window)) {
+    carte.forEach(function (c) { c.classList.add('is-visibile'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function (voci) {
+    voci.forEach(function (v) {
+      if (!v.isIntersecting) return;
+      var i = Array.prototype.indexOf.call(carte, v.target);
+      setTimeout(function () { v.target.classList.add('is-visibile'); }, i * 130);
+      obs.unobserve(v.target);
+    });
+  }, { threshold: 0.15 });
+  carte.forEach(function (c) { obs.observe(c); });
+})();
+</script>
+
+<!-- ── barra di navigazione + Sardegna Day ── -->
+<script>
+/* ─── barra di navigazione ─────────────────────────────────────
+   Modi per uscire dal menu, tutti equivalenti:
+     · il tasto CHIUDI in alto a destra
+     · «Torna alla pagina» in fondo al pannello
+     · il tasto indietro del telefono / la gesture di ritorno
+     · il tasto Esc sul computer
+   ───────────────────────────────────────────────────────────── */
+(function(){
+  var barra = document.getElementById('ichnav');
+  var tasto = document.getElementById('ichnavTasto');
+  var menu  = document.getElementById('ichnavMenu');
+  var torna = document.getElementById('ichnavTorna');
+  if(!barra || !tasto || !menu) return;
+
+  var pagina = document.documentElement;
+  var yPrima = 0;
+  var statoSpinto = false;   /* abbiamo aggiunto un passo alla cronologia? */
+
+  function aperto(){ return tasto.getAttribute('aria-expanded') === 'true'; }
+
+  /* blocco dello scorrimento che regge anche su iOS */
+  function blocca(attivo){
+    if (attivo){
+      yPrima = window.pageYOffset || 0;
+      document.body.style.position = 'fixed';
+      document.body.style.top   = -yPrima + 'px';
+      document.body.style.left  = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+      pagina.style.overflow = 'hidden';
+    } else {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      pagina.style.overflow = '';
+      var prima = pagina.style.scrollBehavior;
+      pagina.style.scrollBehavior = 'auto';   /* niente volo all'indietro */
+      window.scrollTo(0, yPrima);
+      pagina.style.scrollBehavior = prima;
+    }
+  }
+
+  function apri(){
+    if (aperto()) return;
+    tasto.setAttribute('aria-expanded','true');
+    tasto.setAttribute('aria-label','Chiudi il menu');
+    menu.classList.add('aperto');
+    barra.classList.add('menu-aperto');
+    blocca(true);
+    /* così il tasto indietro del telefono chiude il menu
+       invece di buttarti fuori dal sito */
+    try { history.pushState({ichnosMenu:1}, ''); statoSpinto = true; } catch(e){}
+  }
+
+  /* modo: 'indietro' = arriva dal tasto indietro
+           'via'      = si sta lasciando la pagina
+           niente     = chiusura normale, la cronologia torna com'era */
+  function chiudi(modo){
+    if (!aperto()) return;
+    tasto.setAttribute('aria-expanded','false');
+    tasto.setAttribute('aria-label','Apri il menu');
+    menu.classList.remove('aperto');
+    barra.classList.remove('menu-aperto');
+    blocca(false);
+    if (statoSpinto && !modo) { statoSpinto = false; try { history.back(); } catch(e){} }
+    else statoSpinto = false;
+  }
+
+  tasto.addEventListener('click', function(){ aperto() ? chiudi() : apri(); });
+  if (torna) torna.addEventListener('click', function(){ chiudi(); });
+
+  addEventListener('popstate', function(){ chiudi('indietro'); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') chiudi(); });
+
+  /* i link del menu: chiudono e poi portano dove devono */
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(ev){
+      var h = a.getAttribute('href') || '';
+      if (h.charAt(0) === '#' && h.length > 1){
+        var bersaglio = document.getElementById(h.slice(1));
+        if (bersaglio){
+          ev.preventDefault();
+          chiudi();
+          var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          setTimeout(function(){
+            bersaglio.scrollIntoView({ behavior: calmo ? 'auto' : 'smooth', block:'start' });
+          }, 70);
+          return;
+        }
+      }
+      chiudi('via');   /* altra pagina o Instagram: la cronologia serve al browser */
+    });
+  });
+
+  /* barra piena o trasparente — calcolata anche al caricamento,
+     così se ricarichi a metà pagina il marchio non sparisce */
+  function statoBarra(){ barra.classList.toggle('ridotta', (window.pageYOffset || 0) > 40); }
+  statoBarra();
+  addEventListener('scroll', statoBarra, { passive:true });
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   SARDEGNA DAY — il ciclo del mese
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║  MODIFICA QUI — le date del ciclo in corso.                  ║
+   ║  Formato: 'AAAA-MM-GG'. "fine" è l'ultimo giorno incluso.    ║
+   ║  Ogni mese aggiorni solo queste 8 date: cerchio, colori,     ║
+   ║  countdown e periodi si spostano da soli.                    ║
+   ╚══════════════════════════════════════════════════════════════╝ */
+var FASI = [
+  {
+    num:'01', nome:'La Chiamata', sotto:'Le prenotazioni si aprono',
+    inizio:'2026-08-17', fine:'2026-09-27',
+    testo:'Il cerchio si apre. Scegli i prodotti e spendi le tue Monete Ichnos: ogni moneta prenota un posto su un banco che ancora non esiste. In questa finestra puoi cambiare idea quante volte vuoi — non è stato raccolto ancora niente.',
+    punti:[
+      'Componi la tua box con le Monete Ichnos',
+      'Modifiche libere fino alla chiusura',
+      'Nessun prodotto viene raccolto prima di ora'
+    ]
+  },
+  {
+    num:'02', nome:'La Conta', sotto:'Ordini chiusi, produttori pagati',
+    inizio:'2026-09-28', fine:'2026-10-07',
+    testo:'Chiudiamo le prenotazioni e contiamo. Quel numero — non uno in più — diventa l\'ordine che parte verso i produttori sardi, pagato prima del raccolto e superiore del 10% al prezzo della grande distribuzione. Da qui in avanti la tua box non è una previsione: è un impegno preso con qualcuno.',
+    punti:[
+      'Si produce solo il prenotato: zero scorte',
+      'Pagamento anticipato, +10% sul prezzo GDO',
+      'Ogni lotto riceve il Sigillo Ichnos di origine'
+    ]
+  },
+  {
+    num:'03', nome:'La Traversata', sotto:'Raccolta e viaggio dalla Sardegna',
+    inizio:'2026-10-08', fine:'2026-10-16',
+    testo:'Andiamo a prendere le cose di persona. Dai pascoli della Barbagia alle coste di Cabras, i prodotti vengono raccolti negli ultimi giorni utili e caricati per il viaggio verso l\'hub di Felizzano. Temperature e percorso restano sotto controllo fino all\'arrivo: nessun deposito, nessuna sosta inutile.',
+    punti:[
+      'Raccolta a mano, produttore per produttore',
+      'Viaggio e temperature monitorati fino all\'hub',
+      'Arrivo all\'Hub di Felizzano (AL)'
+    ]
+  },
+  {
+    num:'04', nome:'Sardegna Day', sotto:'Il giorno della consegna',
+    inizio:'2026-10-17', fine:'2026-10-17',
+    testo:'Un solo giorno, una volta al mese. Le box vengono composte e consegnate: ritiro all\'hub di Felizzano per il rango Contadinu, consegna personale per Possidenti e Meri de Ommu. Dentro trovi i nomi e i luoghi di chi ha prodotto. Poi il cerchio si chiude — e la sera stessa riparte.',
+    punti:[
+      'Ritiro all\'Hub di Felizzano o consegna personale',
+      'Nella box i nomi dei produttori e i loro luoghi',
+      'Zero rimanenze: quello che arriva è già di qualcuno'
+    ]
+  }
+];
+
+/* Per bloccare a mano una fase (1..4) invece di usare le date, metti il numero.
+   Lascia null per il calcolo automatico.
+   Dal telefono puoi provare le fasi aggiungendo ?fase=3 all'indirizzo. */
+var FASE_MANUALE = null;
+
+/* ══════════════ da qui in giù non serve toccare ══════════════ */
+
+var ruota = document.getElementById('ruota');
+if (!ruota) return;
+
+var MESI  = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+var BREVI = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+var GIORNO = 86400000;
+var CALMO = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function data(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function fineEsclusa(f){ var d = data(f.fine); d.setDate(d.getDate()+1); return d; }
+function oggi(){ var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+
+function periodo(f){
+  var a = data(f.inizio), b = data(f.fine);
+  if (a.getTime() === b.getTime()) return a.getDate() + ' ' + MESI[a.getMonth()];
+  if (a.getMonth() === b.getMonth()) return a.getDate() + ' – ' + b.getDate() + ' ' + MESI[a.getMonth()];
+  return a.getDate() + ' ' + BREVI[a.getMonth()] + ' – ' + b.getDate() + ' ' + BREVI[b.getMonth()];
+}
+
+/* ── dove siamo nel cerchio ─────────────────────── */
+function stato(){
+  var url = new URLSearchParams(location.search).get('fase');
+  var forz = FASE_MANUALE || (url ? parseInt(url, 10) : 0);
+  if (forz >= 1 && forz <= 4) return { fase: forz-1, p: (forz-1+0.5)/4, quando: 'dentro' };
+
+  var ora = new Date();
+  if (ora < data(FASI[0].inizio)) return { fase: 0, p: 0, quando: 'prima' };
+  if (ora >= fineEsclusa(FASI[3])) return { fase: 3, p: 1, quando: 'dopo' };
+
+  for (var i = 0; i < 4; i++){
+    var a = data(FASI[i].inizio), b = fineEsclusa(FASI[i]);
+    if (ora >= a && ora < b) return { fase: i, p: (i + (ora - a) / (b - a)) / 4, quando: 'dentro' };
+    if (ora < a) return { fase: i, p: i/4, quando: 'dentro' };
+  }
+  return { fase: 3, p: 1, quando: 'dopo' };
+}
+
+var S = stato();
+var sd = data(FASI[3].inizio);
+var mancano = Math.round((sd - oggi()) / GIORNO);
+
+/* ── striscia finale: prossimo Sardegna Day ─────── */
+(function(){
+  var num = document.getElementById('contoNum');
+  var uni = document.getElementById('contoUni');
+  var dat = document.getElementById('contoData');
+  var not = document.getElementById('contoNota');
+  if (!num) return;
+
+  function scrivi(n){ num.firstChild.nodeValue = n; }
+
+  dat.textContent = sd.toLocaleDateString('it-IT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  var ap = data(FASI[0].inizio), chiude = data(FASI[0].fine);
+  not.textContent = S.quando === 'prima'
+    ? 'Prenotazioni aperte dal ' + ap.getDate() + ' ' + MESI[ap.getMonth()] + '.'
+    : (oggi() <= chiude
+        ? 'Prenotazioni aperte fino al ' + chiude.getDate() + ' ' + MESI[chiude.getMonth()] + '.'
+        : 'Prenotazioni chiuse per questo cerchio.');
+
+  if (mancano < 0){
+    scrivi('—'); uni.textContent = 'data in arrivo';
+    dat.textContent = 'Prossimo Sardegna Day in definizione';
+    not.textContent = 'L\'annuncio esce prima su Instagram.';
+    return;
+  }
+  if (mancano === 0){ scrivi('Oggi'); uni.textContent = 'la Sardegna è arrivata'; return; }
+
+  uni.textContent = mancano === 1 ? 'giorno' : 'giorni';
+  if (CALMO){ scrivi(mancano); return; }
+  var t0 = null;
+  requestAnimationFrame(function sale(t){
+    if (!t0) t0 = t;
+    var k = Math.min((t - t0) / 900, 1);
+    scrivi(Math.round(mancano * (1 - Math.pow(1 - k, 3))));
+    if (k < 1) requestAnimationFrame(sale);
+  });
+})();
+
+/* ── il cerchio ─────────────────────────────────── */
+var R = 74, C = 2 * Math.PI * R;
+var arco    = document.getElementById('avanzamento');
+var scia    = document.getElementById('scia');
+var testina = document.getElementById('testina');
+var alone   = document.getElementById('alone');
+var tacca   = document.getElementById('taccaAdesso');
+
+[arco, scia].forEach(function(el){
+  el.setAttribute('stroke-dasharray', C);
+  el.setAttribute('stroke-dashoffset', C);
 });
 
-// rivelazione allo scroll
-const osservatore = new IntersectionObserver(voci => {
-  voci.forEach(v => { if (v.isIntersecting) { v.target.classList.add('visto'); osservatore.unobserve(v.target); } });
-}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-document.querySelectorAll('.rivela').forEach(el => osservatore.observe(el));
+var tappe = Array.prototype.slice.call(document.querySelectorAll('.tappa'));
+
+function puntoSu(p){
+  var ang = (p * 360 - 90) * Math.PI / 180;
+  return { x: 100 + R * Math.cos(ang), y: 100 + R * Math.sin(ang) };
+}
+
+function disegna(p){
+  if (p <= 0.002){ ruota.classList.add('spenta'); return; }
+  ruota.classList.remove('spenta');
+  arco.setAttribute('stroke-dashoffset', C * (1 - p));
+  scia.setAttribute('stroke-dashoffset', C * (1 - p));
+  var q = puntoSu(p);
+  testina.setAttribute('cx', q.x); testina.setAttribute('cy', q.y);
+  alone.setAttribute('cx', q.x);   alone.setAttribute('cy', q.y);
+}
+
+/* tacca "adesso": ferma sulla posizione reale anche mentre sfogli */
+if (S.p > 0.002){
+  var qa = puntoSu(S.p), k1 = (R-9)/R, k2 = (R+9)/R;
+  tacca.setAttribute('x1', 100 + (qa.x-100)*k1); tacca.setAttribute('y1', 100 + (qa.y-100)*k1);
+  tacca.setAttribute('x2', 100 + (qa.x-100)*k2); tacca.setAttribute('y2', 100 + (qa.y-100)*k2);
+  tacca.setAttribute('opacity', '.85');
+}
+
+/* un solo movimento alla volta */
+var corsa = null;
+function vaiA(da, a, durata, alPasso){
+  if (corsa) cancelAnimationFrame(corsa);
+  if (CALMO || durata === 0){ disegna(a); if (alPasso) alPasso(a); return; }
+  var t0 = null;
+  corsa = requestAnimationFrame(function passo(t){
+    if (!t0) t0 = t;
+    var k = Math.min((t - t0) / durata, 1);
+    var p = da + (a - da) * (1 - Math.pow(1 - k, 3));
+    disegna(p);
+    if (alPasso) alPasso(p);
+    if (k < 1) corsa = requestAnimationFrame(passo);
+  });
+}
+
+/* prima apparizione: l'arco si disegna e accende le monete che incontra */
+var partito = false;
+function avvia(){
+  if (partito) return; partito = true;
+  if (S.quando === 'prima'){ ruota.classList.add('carica'); disegna(0); return; }
+  var acceso = -1;
+  vaiA(0, S.p, 1900, function(p){
+    var i = Math.floor(p * 4 + 0.0001);
+    while (acceso < i && acceso < 3){
+      acceso++;
+      (function(t){
+        if (!t) return;
+        t.classList.add('accendi');
+        setTimeout(function(){ t.classList.remove('accendi'); }, 700);
+      })(tappe[acceso]);
+    }
+  });
+}
+
+if ('IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(v){
+    v.forEach(function(e){ if (e.isIntersecting){ avvia(); io.unobserve(e.target); } });
+  }, { threshold: 0.25 });
+  io.observe(ruota);
+} else { avvia(); }
+
+/* ── nucleo ─────────────────────────────────────── */
+var nStato = document.getElementById('nucleoStato');
+var nNome  = document.getElementById('nucleoNome');
+var nNota  = document.getElementById('nucleoNota');
+
+function nucleo(a, b, c){
+  nStato.textContent = a; nNome.textContent = b; nNota.textContent = c;
+  [nStato, nNome, nNota].forEach(function(el){
+    el.classList.remove('nucleo-cambio'); void el.offsetWidth; el.classList.add('nucleo-cambio');
+  });
+}
+
+function nucleoAdesso(){
+  if (S.quando === 'prima'){
+    var ap = data(FASI[0].inizio);
+    var g = Math.round((ap - oggi()) / GIORNO);
+    nucleo('Il cerchio è fermo', 'In apertura',
+      g > 0 ? 'Si apre fra ' + g + (g === 1 ? ' giorno' : ' giorni') + ', il ' + ap.getDate() + ' ' + MESI[ap.getMonth()] + '.'
+            : 'Le prenotazioni si aprono oggi.');
+  } else if (S.quando === 'dopo'){
+    nucleo('Cerchio completato', 'Consegnato', 'Il prossimo si apre a breve.');
+  } else {
+    nucleo('Fase ' + FASI[S.fase].num + ' di 04 · adesso', FASI[S.fase].nome,
+      mancano > 0 ? 'Mancano ' + mancano + ' giorni al Sardegna Day.' : mancano === 0 ? 'È oggi.' : '');
+  }
+}
+
+/* ── stato visivo delle monete ──────────────────── */
+tappe.forEach(function(t, i){
+  if (S.quando === 'prima') return;
+  if (S.quando === 'dopo' || i < S.fase) t.classList.add('fatta');
+  else if (i === S.fase) t.classList.add('attiva');
+});
+
+/* ── chip sotto il cerchio ──────────────────────── */
+var legenda = document.getElementById('legenda');
+FASI.forEach(function(f, i){
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'chip' + (tappe[i].classList.contains('fatta') ? ' fatta' : '')
+                       + (tappe[i].classList.contains('attiva') ? ' attiva' : '');
+  b.setAttribute('aria-pressed', 'false');
+  b.innerHTML = '<i>' + f.num + '</i>';
+  b.appendChild(document.createTextNode(f.nome));
+  legenda.appendChild(b);
+});
+var chip = Array.prototype.slice.call(legenda.children);
+
+/* ── pannello ───────────────────────────────────── */
+var pannello = document.getElementById('pannello');
+var pFant = document.getElementById('pFantasma'), pNome = document.getElementById('pNome');
+var pStato = document.getElementById('pStato'), pStatoT = document.getElementById('pStatoT');
+var pPeriodo = document.getElementById('pPeriodo'), pTesto = document.getElementById('pTesto');
+var pLista = document.getElementById('pLista');
+var sblocca = document.getElementById('sblocca');
+
+var bloccata = null;   /* fase fissata da un clic; null = segue "adesso" */
+var mostrata = -1;
+var pCorrente = S.p;
+
+function etichetta(i){
+  if (S.quando === 'prima') return ['In arrivo',''];
+  if (S.quando === 'dopo')  return ['Conclusa','fatta'];
+  if (i < S.fase)  return ['Conclusa','fatta'];
+  if (i === S.fase) return ['In corso','corso'];
+  return ['In arrivo',''];
+}
+
+function mostra(i){
+  if (i === mostrata) return;
+  mostrata = i;
+  var f = FASI[i], e = etichetta(i);
+  pFant.textContent = f.num;
+  pNome.textContent = f.nome;
+  pStatoT.textContent = e[0];
+  pStato.className = 'stato-chip ' + e[1];
+  pPeriodo.textContent = f.sotto + ' · ' + periodo(f);
+  pTesto.textContent = f.testo;
+  pLista.innerHTML = '';
+  f.punti.forEach(function(t){
+    var li = document.createElement('li');
+    var d = document.createElement('span'); d.className = 'disco';
+    var s = document.createElement('span'); s.textContent = t;
+    li.appendChild(d); li.appendChild(s); pLista.appendChild(li);
+  });
+  pannello.classList.toggle('oro', e[1] === 'corso');
+  pannello.classList.remove('entra'); void pannello.offsetWidth; pannello.classList.add('entra');
+
+  tappe.forEach(function(t, k){ t.classList.toggle('scelta', k === i); });
+  chip.forEach(function(c, k){ c.classList.toggle('scelta', k === i); });
+}
+
+/* segna quale fase è fissata da un clic */
+function segnaBlocco(){
+  tappe.forEach(function(t, k){
+    var on = bloccata === k;
+    t.classList.toggle('ferma', on);
+    t.setAttribute('aria-pressed', String(on));
+  });
+  chip.forEach(function(c, k){
+    var on = bloccata === k;
+    c.classList.toggle('ferma', on);
+    c.setAttribute('aria-pressed', String(on));
+  });
+  sblocca.classList.toggle('visibile', bloccata !== null);
+}
+
+/* mostra una fase e porta lì il cerchio */
+function vaiAllaFase(i, durata){
+  mostra(i);
+  if (!partito) return;
+  var meta = (i + 0.5) / 4;
+  vaiA(pCorrente, meta, durata === undefined ? 480 : durata);
+  pCorrente = meta;
+  nucleo('Fase ' + FASI[i].num + ' di 04' + (bloccata === i ? ' · fissata' : ' · anteprima'),
+         FASI[i].nome, periodo(FASI[i]));
+}
+
+/* torna allo stato reale */
+function tornaAdesso(){
+  mostra(S.fase);
+  if (!partito) return;
+  vaiA(pCorrente, S.p, 620);
+  pCorrente = S.p;
+  nucleoAdesso();
+}
+
+/* fine di un passaggio col mouse: se c'è un blocco resta lì */
+function riposo(){
+  if (bloccata !== null) vaiAllaFase(bloccata, 380);
+  else tornaAdesso();
+}
+
+function collega(el, i){
+  el.addEventListener('click', function(){
+    bloccata = (bloccata === i) ? null : i;   /* riclicca per sbloccare */
+    segnaBlocco();
+    if (bloccata === null) tornaAdesso(); else vaiAllaFase(i);
+  });
+  el.addEventListener('pointerenter', function(ev){ if (ev.pointerType === 'mouse') vaiAllaFase(i); });
+  el.addEventListener('focus', function(){ vaiAllaFase(i); });
+}
+tappe.forEach(collega);
+chip.forEach(collega);
+
+ruota.addEventListener('pointerleave', function(ev){ if (ev.pointerType === 'mouse') riposo(); });
+legenda.addEventListener('pointerleave', function(ev){ if (ev.pointerType === 'mouse') riposo(); });
+
+sblocca.addEventListener('click', function(){ bloccata = null; segnaBlocco(); tornaAdesso(); });
+
+mostra(S.fase);
+segnaBlocco();
+nucleoAdesso();
+
+if (matchMedia('(hover: hover) and (pointer: fine)').matches){
+  document.getElementById('suggerimento').textContent = 'Passa sopra una moneta per sfogliarla, clicca per fissarla';
+}
+
+})();
 </script>
 
 </body>
