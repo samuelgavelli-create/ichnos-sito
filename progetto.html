@@ -9,17 +9,17 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="Sardegna Ichnos">
-<meta property="og:url" content="https://projectichnos.samuel-gavelli.workers.dev/progetto">
-<link rel="canonical" href="https://projectichnos.samuel-gavelli.workers.dev/progetto">
+<meta property="og:url" content="https://projectichnos.netlify.app/progetto.html">
+<link rel="canonical" href="https://projectichnos.netlify.app/progetto.html">
 <meta property="og:title" content="Il Progetto — Ichnos">
 <meta property="og:description" content="Filiera diretta, magazzino zero, pagamento anticipato ai produttori. Capitolo 0: Sardegna.">
-<meta property="og:image" content="https://projectichnos.samuel-gavelli.workers.dev/img/og-ichnos.jpg">
+<meta property="og:image" content="https://projectichnos.netlify.app/img/og-ichnos.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" type="image/png" href="/favicon.png?v=1">
-<link rel="apple-touch-icon" href="/favicon.png?v=1">
+<link rel="icon" type="image/png" href="favicon.png?v=1">
+<link rel="apple-touch-icon" href="favicon.png?v=1">
 <meta name="theme-color" content="#1a4a2e">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -370,7 +370,7 @@ section{position:relative}
 .scura{background:var(--verde-scuro);color:#fff}
 .scura p{color:rgba(255,255,255,.76)}
 
-/* visione */
+/* visione — su fondo scuro: la mappa chiara, l'ultima riga in oro */
 .visione-griglia{display:grid;gap:44px}
 .visione-testo p+p{margin-top:18px}
 .visione-testo p{max-width:58ch}
@@ -378,17 +378,33 @@ section{position:relative}
   font-family:var(--display);
   font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 80;
   font-size:clamp(1.3rem,3.3vw,1.75rem);font-weight:600;line-height:1.32;
-  letter-spacing:-.02em;color:var(--verde-scuro);margin-top:34px;max-width:15ch;
+  letter-spacing:-.02em;margin-top:34px;max-width:16ch;
 }
-.mappa-sardegna{max-width:230px;margin:0 auto}
+/* due classi battono classe+elemento: vince sull'ereditarietà di .scura p */
+.scura .chiusa{color:var(--oro)}
+.visione-mappa{display:grid;place-items:center}
+/* attenzione: sardegna-chiara.png è su tela quadrata 894×894 e l'isola ne
+   occupa solo il 41% in larghezza. Serve più larghezza della versione scura
+   per farla leggere allo stesso corpo. */
+.mappa-sardegna{
+  width:100%;max-width:420px;margin:0 auto;
+  filter:drop-shadow(0 22px 48px rgba(0,0,0,.42));
+}
 
-/* metodo */
-.metodo{display:grid;gap:1px;background:rgba(255,255,255,.13);margin-top:52px;border:1px solid rgba(255,255,255,.13)}
-.pilastro{background:var(--verde-scuro);padding:34px 30px}
-.pilastro .tacca{width:26px;height:3px;background:var(--verde-chiaro);margin-bottom:22px}
-.pilastro h3{color:#fff}
-.pilastro p{font-size:.97rem}
-.pilastro strong{color:var(--verde-chiaro);font-weight:700}
+/* metodo — su fondo chiaro: schede bianche separate da un filo verde */
+.metodo{
+  display:grid;gap:1px;margin-top:52px;
+  background:rgba(26,74,46,.16);
+  border:1px solid rgba(26,74,46,.16);
+}
+.pilastro{background:#fff;padding:34px 30px;transition:background .3s ease}
+.pilastro:hover{background:#FBF8F1}
+.tacca{display:flex;align-items:center;gap:13px;margin-bottom:20px}
+.tacca i{display:block;width:26px;height:3px;background:var(--verde-chiaro);flex:none}
+.tacca b{font-size:.68rem;font-weight:800;letter-spacing:.22em;color:var(--oro)}
+.pilastro h3{color:var(--verde-scuro)}
+.pilastro p{font-size:.97rem;color:#3d4438}
+.pilastro strong{color:var(--verde-scuro);font-weight:700}
 
 /* sigillo */
 .sigillo-griglia{display:grid;gap:48px;align-items:center}
@@ -448,7 +464,7 @@ section{position:relative}
   display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;
   letter-spacing:.2em;text-transform:uppercase;color:var(--oro);margin-bottom:14px;
 }
-.punto{width:7px;height:7px;border-radius:50%;background:var(--verde-chiaro);animation:battito 4.5s ease-in-out infinite}
+.punto{width:7px;height:7px;border-radius:50%;background:var(--verde-chiaro);animation:battito 7s ease-in-out infinite}
 @keyframes battito{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
 .capitolo-aperto h3{
   font-family:var(--display);
@@ -477,20 +493,31 @@ section{position:relative}
 .vuoto:last-child span{color:var(--oro)}
 
 /* ── patto ──────────────────────────────────── */
-.patto{background:var(--oro);color:var(--verde-scuro);padding:clamp(70px,10vw,110px) 0;text-align:center}
+.patto{background:var(--oro);color:var(--verde-scuro);padding:clamp(78px,11vw,120px) 0;text-align:center;overflow:hidden}
+/* fregio: due filetti e un punto, come il segno di chiusura di un documento */
+.fregio{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:30px}
+.fregio i{display:block;width:clamp(34px,9vw,60px);height:1px;background:rgba(26,74,46,.38)}
+.fregio span{width:9px;height:9px;border-radius:50%;background:var(--verde-scuro);opacity:.7}
 .patto blockquote{
   font-family:var(--display);
   font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 120;
   font-size:clamp(1.45rem,4.5vw,2.6rem);font-weight:600;line-height:1.22;
   letter-spacing:-.03em;max-width:20ch;margin:0 auto;
 }
-.firma{margin-top:32px;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.72}
+.firma{margin-top:34px;font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.72}
+.firma::before{content:"";display:block;width:34px;height:1px;background:rgba(26,74,46,.35);margin:0 auto 18px}
 
 /* ── collabora ──────────────────────────────── */
 .due-carte{display:grid;gap:22px;margin-top:52px}
 .carta{
   background:#fff;border:1px solid rgba(26,74,46,.14);padding:34px 30px;
   display:flex;flex-direction:column;
+  transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;
+}
+.carta:hover{
+  transform:translateY(-4px);
+  border-color:rgba(212,160,23,.55);
+  box-shadow:0 26px 50px -32px rgba(13,39,24,.6);
 }
 .carta h3{
   font-family:var(--display);
@@ -589,7 +616,8 @@ section{position:relative}
   .sigilli-vuoti{grid-template-columns:repeat(3,1fr);gap:16px}
   .capitolo-aperto{padding:24px 20px}
   .timbro{width:clamp(132px,42vw,170px)}
-  .patto{padding:56px 0}
+  .patto{padding:62px 0}
+  .mappa-sardegna{max-width:320px}
 }
 
 @media (min-width:760px){
@@ -610,17 +638,17 @@ section{position:relative}
 <!-- ═══ BARRA ═══ -->
 <header class="ichnav" id="ichnav">
   <div class="ichnav-barra">
-    <a href="/" class="ichnav-marchio" aria-label="Ichnos — home">
-      <img class="ichnav-logo ichnav-logo--chiaro" src="/img/logo-bianco.png" alt="Ichnos">
-      <img class="ichnav-logo ichnav-logo--scuro" src="/img/logo-verde.png" alt="" aria-hidden="true">
+    <a href="index.html" class="ichnav-marchio" aria-label="Ichnos — home">
+      <img class="ichnav-logo ichnav-logo--chiaro" src="img/logo-bianco.png" alt="Ichnos">
+      <img class="ichnav-logo ichnav-logo--scuro" src="img/logo-verde.png" alt="" aria-hidden="true">
     </a>
 
     <nav class="ichnav-linee" aria-label="Principale">
-      <a href="/prodotti">Prodotti del mese</a>
-      <a href="/#sardegna-day">Sardegna Day</a>
-      <a href="/progetto" aria-current="page">Progetto Ichnos</a>
+      <a href="prodotti.html">Prodotti del mese</a>
+      <a href="index.html#sardegna-day">Sardegna Day</a>
+      <a href="progetto.html" aria-current="page">Progetto Ichnos</a>
       <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
-      <a href="/#ranghi" class="ichnav-box"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+      <a href="index.html#ranghi" class="ichnav-box"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
     </nav>
 
     <button class="ichnav-tasto" id="ichnavTasto" aria-expanded="false"
@@ -633,19 +661,19 @@ section{position:relative}
 
 <nav class="ichnav-menu" id="ichnavMenu" aria-label="Menu">
   <div class="ichnav-lista">
-    <a class="ichnav-voce" href="/prodotti">
+    <a class="ichnav-voce" href="prodotti.html">
       <span class="ichnav-etichetta">Prodotti del mese
         <span class="ichnav-nota">Cosa arriva nella box di questo mese</span>
       </span>
       <span class="ichnav-freccia" aria-hidden="true">→</span>
     </a>
-    <a class="ichnav-voce" href="/#sardegna-day">
+    <a class="ichnav-voce" href="index.html#sardegna-day">
       <span class="ichnav-etichetta">Sardegna Day
         <span class="ichnav-nota">Il ciclo del mese, dal vivo</span>
       </span>
       <span class="ichnav-freccia" aria-hidden="true">→</span>
     </a>
-    <a class="ichnav-voce" href="/progetto" aria-current="page">
+    <a class="ichnav-voce" href="progetto.html" aria-current="page">
       <span class="ichnav-etichetta">Progetto Ichnos
         <span class="ichnav-nota">Il metodo, il sigillo, le prossime regioni</span>
       </span>
@@ -658,7 +686,7 @@ section{position:relative}
       <span class="ichnav-freccia" aria-hidden="true">→</span>
     </a>
 
-    <a class="ichnav-cta" href="/#ranghi"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+    <a class="ichnav-cta" href="index.html#ranghi"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
 
     <!-- secondo modo per uscire: in fondo, dove arriva il pollice -->
     <button class="ichnav-torna" type="button" id="ichnavTorna">&larr; Torna alla pagina</button>
@@ -691,8 +719,8 @@ section{position:relative}
     <div class="occhiello">Il progetto</div>
     <div class="parola">ichnos</div>
     <p class="glossa">
-      dal greco <em>ἴχνος</em> — orma, traccia, segno lasciato dal passaggio di qualcuno.
-      Non solo l'impronta nel terreno: il lavoro delle persone, la storia di un territorio,
+      dal greco <em>ἴχνος</em> — orma, traccia, segno di un passaggio. Non solo
+      l'impronta nel terreno: il lavoro delle persone, la storia di un territorio,
       quello che resta quando chi è passato non c'è più.
     </p>
     <p class="lead">
@@ -703,97 +731,38 @@ section{position:relative}
   </div>
 </section>
 
-<!-- ═══ LA VISIONE ═══ -->
-<section class="sez chiara" id="visione">
-  <div class="wrap">
-    <div class="visione-griglia rivela">
-      <div class="visione-testo">
-        <div class="occhiello">La visione</div>
-        <h2>Restituire un volto al cibo</h2>
-        <p>
-          Conosciamo i marchi, non le persone. Sappiamo quanto costa un formaggio,
-          ma non il nome di chi ha munto il latte, né dove pascolavano le pecore quella mattina.
-          In pochi decenni la grande distribuzione ha reso il cibo anonimo.
-        </p>
-        <p>
-          Ichnos nasce per invertire il processo. L'obiettivo non è soltanto accorciare
-          la filiera: è ricostruire un rapporto diretto fra chi produce e chi mangia,
-          con nomi, volti e distanze verificabili.
-        </p>
-        <p class="chiusa">Ogni prodotto conserva le tracce di chi lo ha lavorato. Noi ci limitiamo a non cancellarle.</p>
-      </div>
-      <div class="visione-mappa">
-        <img class="mappa-sardegna" src="/img/sardegna.png" alt="La Sardegna incisa con i segni della tradizione nuragica">
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══ IL METODO ═══ -->
-<section class="sez scura grana" id="metodo">
+<section class="sez chiara" id="metodo">
   <div class="wrap">
     <div class="rivela">
       <div class="occhiello">Il metodo</div>
       <h2>Quattro scelte, non slogan</h2>
-      <p class="lead" style="max-width:640px">
-        Ogni promessa che facciamo è vincolata a un vincolo operativo che ci siamo dati.
+      <p class="lead" style="max-width:600px;color:#3d4438">
+        Ogni promessa qui sotto è legata a un vincolo operativo.
         Se salta il vincolo, salta la promessa.
       </p>
     </div>
 
     <div class="metodo rivela">
       <div class="pilastro">
-        <div class="tacca"></div>
+        <div class="tacca"><i></i><b>01</b></div>
         <h3>Magazzino zero</h3>
-        <p>Non esistono scorte invendute a prendere polvere. Il furgone parte solo per <strong>pre-ordini già confermati</strong>: si produce quello che è già stato scelto, niente di più.</p>
+        <p>Nessuna scorta invenduta. Il furgone parte solo per <strong>pre-ordini già confermati</strong>: si produce quello che è già stato scelto, niente di più.</p>
       </div>
       <div class="pilastro">
-        <div class="tacca"></div>
+        <div class="tacca"><i></i><b>02</b></div>
         <h3>Prezzo equo, pagato prima</h3>
-        <p>Ai produttori riconosciamo un margine <strong>superiore del 10% rispetto alla grande distribuzione</strong>, e lo paghiamo in anticipo. Chi lavora la terra non deve aspettare la vendita per essere pagato.</p>
+        <p>Ai produttori riconosciamo un margine <strong>superiore del 10% rispetto alla grande distribuzione</strong>, e lo paghiamo in anticipo. Chi lavora la terra non aspetta la vendita per essere pagato.</p>
       </div>
       <div class="pilastro">
-        <div class="tacca"></div>
+        <div class="tacca"><i></i><b>03</b></div>
         <h3>Hub di prossimità</h3>
-        <p>I prodotti viaggiano dalla terra d'origine all'<strong>hub di Felizzano</strong>, in provincia di Alessandria. Da lì, una logistica corta e chirurgica su tutto il Nord Italia.</p>
+        <p>Dalla terra d'origine all'<strong>hub di Felizzano</strong>, in provincia di Alessandria. Da lì, una logistica corta su tutto il Nord Italia.</p>
       </div>
       <div class="pilastro">
-        <div class="tacca"></div>
+        <div class="tacca"><i></i><b>04</b></div>
         <h3>Tracciabilità reale</h3>
-        <p>Sensori IoT seguono viaggio e temperature <strong>in tempo reale</strong>. Sai chi ha prodotto il tuo cibo, dove si trova il suo campo e cosa ha attraversato per arrivare da te.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ IL SIGILLO ═══ -->
-<section class="sez chiara" id="sigillo">
-  <div class="wrap">
-    <div class="sigillo-griglia rivela">
-      <div>
-        <img class="sigillo-img" src="/img/sigillo-verde.png" alt="Il sigillo Ichnos, ispirato alle antiche monete mediterranee">
-      </div>
-      <div class="sigillo-testo">
-        <div class="occhiello">Il sigillo e le monete</div>
-        <h2>Un simbolo che certifica, non che vende</h2>
-        <p>
-          Per migliaia di anni il Mediterraneo è stato attraversato da mercanti che
-          trasportavano prodotti, conoscenze e tradizioni. Il nostro simbolo riprende
-          il linguaggio visivo di quelle monete antiche: non rappresenta il denaro,
-          ma il commercio inteso come incontro fra culture. Applicare il sigillo a un
-          prodotto significa dichiararne l'origine esatta.
-        </p>
-        <p>
-          Dentro il sistema circolano le <strong>Monete Ichnos</strong> 🟡. Non sono un gioco:
-          sono il modo in cui un abbonamento diventa impegno anticipato verso chi produce,
-          fuori dalle logiche della grande distribuzione. Tre ranghi accompagnano il percorso —
-          e sono un livello di scoperta del territorio, non un listino.
-        </p>
-        <div class="ranghi">
-          <a class="rango" href="/#ranghi" aria-label="Contadinu — vai agli abbonamenti">Contadinu</a>
-          <a class="rango" href="/#ranghi" aria-label="Possidenti — vai agli abbonamenti">Possidenti</a>
-          <a class="rango" href="/#ranghi" aria-label="Meri de Ommu — vai agli abbonamenti">Meri de Ommu</a>
-        </div>
+        <p>Viaggio e temperature seguiti <strong>in tempo reale</strong>. Sai chi ha prodotto il tuo cibo, dove si trova il suo campo e cosa ha attraversato per arrivare da te.</p>
       </div>
     </div>
   </div>
@@ -805,26 +774,24 @@ section{position:relative}
     <div class="rivela">
       <div class="occhiello">La rotta</div>
       <h2>Un territorio alla volta</h2>
-      <p class="lead" style="max-width:660px">
-        Il software logistico è universale, il viaggio no: si muove a tappe.
+      <p class="lead" style="max-width:620px">
         Un capitolo si apre soltanto quando il precedente cammina da solo.
         Nessuna fretta di occupare la mappa.
       </p>
     </div>
 
     <div class="capitolo-aperto rivela">
-      <a class="timbro" href="/" aria-label="Vai a Sardegna Ichnos — Capitolo 0">
-        <img src="/img/sardegna.png" alt="">
+      <a class="timbro" href="index.html" aria-label="Vai a Sardegna Ichnos — Capitolo 0">
+        <img src="img/sardegna.png" alt="">
         <span class="timbro-freccia" aria-hidden="true">&rarr;</span>
       </a>
       <div>
         <div class="stato"><span class="punto"></span> Capitolo 0 · aperto ora</div>
         <h3>Sardegna</h3>
         <p style="margin-top:12px">
-          La rotta pilota parte dalle terre dei centenari. Dai pascoli della Barbagia
-          alle coste di Cabras: piccoli artigiani, quantità limitate, niente che non sia
-          già stato prenotato. La Sardegna è stata uno dei grandi punti d'incontro
-          delle antiche rotte commerciali — ricominciamo da lì.
+          Dai pascoli della Barbagia alle coste di Cabras: piccoli artigiani,
+          quantità limitate, niente che non sia già stato prenotato. Uno dei grandi
+          crocevia delle antiche rotte del Mediterraneo — ricominciamo da lì.
         </p>
       </div>
     </div>
@@ -839,22 +806,79 @@ section{position:relative}
       <div class="vuoto"><div class="anello"></div><span>la tua?</span></div>
     </div>
 
-    <p style="max-width:620px;margin-top:34px">
-      Ogni capitolo manterrà lo stesso sigillo e lo stesso patto. Cambieranno le mani,
+    <p style="max-width:600px;margin-top:34px">
+      Ogni capitolo porterà lo stesso sigillo e lo stesso patto. Cambieranno le mani,
       le maschere, il dialetto e la stagione — mai il metodo.
     </p>
 
-    <!-- ⚙️ QUANDO AVRAI IL FORM TALLY: sostituisci l'href con https://tally.so/r/TUO_ID
-         e aggiungi data-tally-open="TUO_ID" data-tally-layout="modal" data-tally-width="720"
-         data-tally-overlay="1". Per ora il bottone porta ai messaggi Instagram: funziona. -->
-    <a class="bottone fantasma" href="https://instagram.com/projectichnos"
+    <a class="bottone fantasma" href="https://tally.so/r/J9MP5R"
+       data-tally-open="J9MP5R" data-tally-layout="modal"
+       data-tally-width="720" data-tally-overlay="1"
        target="_blank" rel="noopener">Proponi la prossima regione</a>
   </div>
 </section>
 
+<!-- ═══ IL SIGILLO E LE MONETE ═══ -->
+<section class="sez chiara" id="sigillo">
+  <div class="wrap">
+    <div class="sigillo-griglia rivela">
+      <div>
+        <img class="sigillo-img" src="img/sigillo-verde.png" alt="Il sigillo Ichnos, ispirato alle antiche monete mediterranee">
+      </div>
+      <div class="sigillo-testo">
+        <div class="occhiello">Il sigillo e le monete</div>
+        <h2>Un simbolo che certifica, non che vende</h2>
+        <p>
+          Il nostro segno riprende il linguaggio delle monete che attraversavano
+          il Mediterraneo: non raccontano il denaro, ma il commercio inteso come
+          incontro fra culture. Applicare il sigillo a un prodotto significa
+          dichiararne l'origine esatta.
+        </p>
+        <p>
+          Dentro il sistema circolano le <strong>Monete Ichnos</strong> 🟡: sono il modo
+          in cui un abbonamento diventa impegno anticipato verso chi produce. Tre ranghi
+          accompagnano il percorso — un livello di scoperta del territorio, non un listino.
+        </p>
+        <div class="ranghi">
+          <a class="rango" href="index.html#ranghi" aria-label="Contadinu — vai agli abbonamenti">Contadinu</a>
+          <a class="rango" href="index.html#ranghi" aria-label="Possidenti — vai agli abbonamenti">Possidenti</a>
+          <a class="rango" href="index.html#ranghi" aria-label="Meri de Ommu — vai agli abbonamenti">Meri de Ommu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LA VISIONE ═══ -->
+<section class="sez scura grana" id="visione">
+  <div class="wrap">
+    <div class="visione-griglia rivela">
+      <div class="visione-testo">
+        <div class="occhiello">La visione</div>
+        <h2>Restituire un volto al cibo</h2>
+        <p>
+          Conosciamo i marchi, non le persone. Sappiamo quanto costa un formaggio,
+          ma non il nome di chi ha munto il latte. In pochi decenni la grande
+          distribuzione ha reso il cibo anonimo.
+        </p>
+        <p>
+          Ichnos nasce per invertire il processo. Non solo accorciare la filiera:
+          ricostruire un rapporto diretto fra chi produce e chi mangia, con nomi,
+          volti e distanze verificabili.
+        </p>
+        <p class="chiusa">Ogni prodotto conserva le tracce di chi lo ha lavorato. Noi ci limitiamo a non cancellarle.</p>
+      </div>
+      <div class="visione-mappa">
+        <img class="mappa-sardegna" src="img/sardegna-chiara.png" alt="La Sardegna incisa con i segni della tradizione nuragica">
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ IL PATTO ═══ -->
-<section class="patto" id="patto">
+<section class="patto grana" id="patto">
   <div class="wrap rivela">
+    <div class="fregio" aria-hidden="true"><i></i><span></span><i></i></div>
     <blockquote>Ichnos custodisce l'impronta dei territori italiani, portandola ovunque senza alterarne l'origine.</blockquote>
     <p class="firma">Samuel Gavelli · CEO</p>
   </div>
@@ -881,9 +905,9 @@ section{position:relative}
           quello che è già stato scelto, noi lo portiamo intatto a persone che amano la tua terra.
           Nessuna esclusiva, nessun vincolo di volume.
         </p>
-      <!-- ⚙️ QUANDO AVRAI IL FORM TALLY: sostituisci l'href con https://tally.so/r/TUO_ID
-           e aggiungi data-tally-open="TUO_ID" data-tally-layout="modal" data-tally-width="720"
-           data-tally-overlay="1". Per ora il bottone porta ai messaggi Instagram: funziona. -->
+      <!-- TODO Tally: quando avrai l'ID, aggiungi data-tally-open="ID" data-tally-layout="modal"
+           data-tally-width="720" data-tally-overlay="1" e cambia href in https://tally.so/r/ID.
+           Fino ad allora il bottone porta ai messaggi Instagram: funziona. -->
         <a class="bottone" href="https://instagram.com/projectichnos"
            target="_blank" rel="noopener">Diventa produttore partner</a>
       </div>
@@ -894,9 +918,7 @@ section{position:relative}
           come <strong>sponsor</strong>: visibilità dentro le box fisiche e sui canali digitali,
           accanto a storie di persone vere. Cerchiamo pochi partner, coerenti.
         </p>
-      <!-- ⚙️ QUANDO AVRAI IL FORM TALLY: sostituisci l'href con https://tally.so/r/TUO_ID
-           e aggiungi data-tally-open="TUO_ID" data-tally-layout="modal" data-tally-width="720"
-           data-tally-overlay="1". Per ora il bottone porta ai messaggi Instagram: funziona. -->
+      <!-- TODO Tally: stessa cosa qui. -->
         <a class="bottone oro" href="https://instagram.com/projectichnos"
            target="_blank" rel="noopener">Collabora con Ichnos</a>
       </div>
@@ -906,7 +928,7 @@ section{position:relative}
     <div style="margin-top:56px">
       <p class="attesa-titolo" style="color:rgba(26,74,46,.45);margin-top:0">Sostengono il progetto</p>
       <div style="display:flex;flex-wrap:wrap;gap:38px;align-items:center;margin-top:22px">
-        <img src="/img/sponsor-1.png" alt="" style="height:38px;opacity:.65">
+        <img src="img/sponsor-1.png" alt="" style="height:38px;opacity:.65">
       </div>
     </div>
     -->
@@ -919,16 +941,16 @@ section{position:relative}
 
     <div class="ichfoot-alto">
       <div>
-        <img class="ichfoot-logo" src="/img/logo-bianco.png" alt="Ichnos">
+        <img class="ichfoot-logo" src="img/logo-bianco.png" alt="Ichnos">
         <p class="ichfoot-sede">
           Hub di ritiro: Felizzano (AL).<br>Sede operativa: Alessandria.
         </p>
       </div>
       <nav class="ichfoot-link" aria-label="Collegamenti">
-        <a href="/prodotti">I prodotti del mese</a>
-        <a href="/#ranghi">I ranghi</a>
-        <a href="/#sardegna-day">Sardegna Day</a>
-        <a href="/progetto" aria-current="page">Progetto Ichnos</a>
+        <a href="prodotti.html">I prodotti del mese</a>
+        <a href="index.html#ranghi">I ranghi</a>
+        <a href="index.html#sardegna-day">Sardegna Day</a>
+        <a href="progetto.html" aria-current="page">Progetto Ichnos</a>
         <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
       </nav>
     </div>
