@@ -58,6 +58,7 @@
   --inchiostro:#0d2718;     /* derivata: fondo profondo per il contrasto */
   --panna:#F4EFE2;          /* derivata: bianco caldo, leggibile sul verde */
   --oro-scuro:#9a6a0d;      /* derivata: l'oro di marca su fondo panna sarebbe illeggibile */
+  --verde-alto:#1e4d32;     /* derivata: il verde su cui galleggia la barra, usato anche in prodotti.html */
 
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --display: "Fraunces", Georgia, "Times New Roman", serif;
@@ -131,33 +132,68 @@ body{background:var(--inchiostro); overflow-x:hidden}
 }
 .ichnav-linee a:hover{color:var(--oro)}
 .ichnav-linee a:hover::after{right:0}
+/* pagina corrente: filetto oro già tirato */
+.ichnav-linee a[aria-current]{color:var(--oro)}
+.ichnav-linee a[aria-current]::after{right:0}
+.ichnav.ridotta .ichnav-linee a[aria-current]{color:var(--oro)}
 
-/* ── tasto LE NOSTRE BOX: pastiglia col gettone d'oro ── */
+/* ── tasto LE NOSTRE BOX: la scatola di cartone che si apre ──
+   Al passaggio del mouse le alette si aprono e la moneta esce.
+   Al clic si spalanca del tutto, poi porta ai ranghi. */
 .ichnav-box{
-  display:inline-flex; align-items:center; gap:10px;
-  padding:12px 22px 12px 17px;
+  display:inline-flex; align-items:center; gap:12px;
+  padding:13px 28px 13px 21px;
   border-radius:999px;
-  background:var(--verde-scuro);
-  color:var(--panna)!important;
-  border:1.5px solid rgba(212,160,23,.55);
-  font-size:.78rem!important; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
-  box-shadow:0 12px 28px -16px rgba(13,39,24,.95);
-  transition:background .3s ease, color .3s ease, border-color .3s ease,
-             transform .25s ease, box-shadow .3s ease;
+  background:linear-gradient(158deg,#eec24a 0%,var(--oro) 52%,#b98209 100%);
+  color:var(--verde-scuro)!important;
+  border:0;
+  font-size:.78rem!important; font-weight:800; letter-spacing:.085em; text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 10px 24px -14px rgba(120,85,0,.55);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1), box-shadow .3s ease, filter .3s ease;
+  -webkit-tap-highlight-color:transparent;
 }
 .ichnav-box::after{display:none}
 .ichnav-box:hover{
-  background:var(--oro); color:var(--verde-scuro)!important; border-color:var(--oro);
   transform:translateY(-2px);
-  box-shadow:0 18px 34px -16px rgba(212,160,23,.9);
+  filter:brightness(1.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 18px 32px -14px rgba(120,85,0,.55);
 }
+.ichnav-box:active{transform:translateY(0) scale(.97)}
+
+/* la scatola */
+.scatola{
+  width:22px; height:22px; flex:none; overflow:visible;
+  fill:none; stroke:currentColor;
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+}
+.scatola-aletta{transition:transform .42s cubic-bezier(.34,1.24,.5,1)}
+.scatola-aletta--sx{transform-box:view-box; transform-origin:4.5px 12px}
+.scatola-aletta--dx{transform-box:view-box; transform-origin:27.5px 12px}
+.scatola-moneta{fill:currentColor; stroke:none; transition:transform .46s cubic-bezier(.2,1.4,.4,1)}
+
+/* si apre: mouse, tastiera, dito */
+.ichnav-box:hover .scatola-aletta--sx,
+.ichnav-box:focus-visible .scatola-aletta--sx,
+.ichnav-box:active .scatola-aletta--sx{transform:rotate(-78deg)}
+.ichnav-box:hover .scatola-aletta--dx,
+.ichnav-box:focus-visible .scatola-aletta--dx,
+.ichnav-box:active .scatola-aletta--dx{transform:rotate(78deg)}
+.ichnav-box:hover .scatola-moneta,
+.ichnav-box:focus-visible .scatola-moneta,
+.ichnav-box:active .scatola-moneta{transform:translateY(-12px)}
+
+/* al clic si spalanca prima di partire */
+.ichnav-box.apre{transform:translateY(-1px) scale(1.02)}
+.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-118deg)}
+.ichnav-box.apre .scatola-aletta--dx{transform:rotate(118deg)}
+.ichnav-box.apre .scatola-moneta{transform:translateY(-14.5px)}
+
+/* il gettone resta: lo usa la CTA del menu telefono */
 .gettone{
   width:12px; height:12px; border-radius:50%; flex:none;
   background:radial-gradient(circle at 35% 30%,#f0c14d,var(--oro) 70%);
   box-shadow:inset 0 -1px 1px rgba(120,85,0,.35);
-  transition:background .3s ease, transform .3s ease;
 }
-.ichnav-box:hover .gettone{background:var(--verde-scuro); transform:scale(1.2)}
 
 /* ── tasto menu / chiudi ──────────────────────────────────────
    Chiuso: due trattini.  Aperto: pastiglia con scritto CHIUDI e la ✕.
@@ -226,6 +262,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
 .ichnav-menu.aperto .ichnav-voce:nth-child(2){transition-delay:.22s}
 .ichnav-menu.aperto .ichnav-voce:nth-child(3){transition-delay:.28s}
 .ichnav-menu.aperto .ichnav-voce:nth-child(4){transition-delay:.34s}
+.ichnav-voce[aria-current] .ichnav-etichetta{color:var(--oro)}
 
 .ichnav-etichetta{font-size:clamp(1.6rem,7vw,2.4rem); font-weight:800; letter-spacing:-.03em; line-height:1.05}
 .ichnav-nota{
@@ -1404,6 +1441,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
   transition:color .2s ease;
 }
 .ichfoot-link a:hover{color:var(--oro)}
+.ichfoot-link a[aria-current]{color:var(--oro)}
 .ichfoot-riga{
   margin-top:44px; padding-top:22px;
   border-top:1px solid rgba(244,239,226,.14);
@@ -1435,6 +1473,8 @@ body{background:var(--inchiostro); overflow-x:hidden}
 <!-- ████████████████████████████████████████████████████████████
      BARRA DI NAVIGAZIONE
      Trasparente sull'hero, diventa color carta appena scrolli.
+     Ordine fisso in tutto il sito:
+     Progetto Ichnos · Prodotti del mese · Sardegna Day · Instagram · BOX
      ████████████████████████████████████████████████████████████ -->
 <header class="ichnav" id="ichnav">
   <div class="ichnav-barra">
@@ -1444,11 +1484,20 @@ body{background:var(--inchiostro); overflow-x:hidden}
     </a>
 
     <nav class="ichnav-linee" aria-label="Principale">
-     <a href="progetto.html">Progetto Ichnos</a>
+      <a href="progetto.html">Progetto Ichnos</a>
       <a href="prodotti.html">Prodotti del mese</a>
       <a href="#sardegna-day">Sardegna Day</a>
       <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
-      <a href="#ranghi" class="ichnav-box"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+      <a href="#ranghi" class="ichnav-box">
+        <svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
+          <defs><clipPath id="ichBocca"><rect x="-10" y="-22" width="52" height="34"/></clipPath></defs>
+          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="17" r="4.4"/></g>
+          <path d="M4.5 12v12A2.5 2.5 0 0 0 7 26.5h18a2.5 2.5 0 0 0 2.5-2.5V12"/>
+          <path class="scatola-aletta scatola-aletta--sx" d="M4.5 12V6.6h10.7V12z"/>
+          <path class="scatola-aletta scatola-aletta--dx" d="M27.5 12V6.6H16.8V12z"/>
+        </svg>
+        Le nostre BOX
+      </a>
     </nav>
 
     <button class="ichnav-tasto" id="ichnavTasto" aria-expanded="false"
@@ -1461,7 +1510,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
 
 <nav class="ichnav-menu" id="ichnavMenu" aria-label="Menu">
   <div class="ichnav-lista">
-   <a class="ichnav-voce" href="progetto.html">
+    <a class="ichnav-voce" href="progetto.html">
       <span class="ichnav-etichetta">Progetto Ichnos
         <span class="ichnav-nota">Il metodo, il sigillo, le prossime regioni</span>
       </span>
@@ -1925,10 +1974,10 @@ body{background:var(--inchiostro); overflow-x:hidden}
         </p>
       </div>
       <nav class="ichfoot-link" aria-label="Collegamenti">
-        <a href="prodotti.html">I prodotti del mese</a>
-        <a href="#ranghi">I ranghi</a>
-        <a href="#sardegna-day">Sardegna Day</a>
         <a href="progetto.html">Progetto Ichnos</a>
+        <a href="prodotti.html">I prodotti del mese</a>
+        <a href="#sardegna-day">Sardegna Day</a>
+        <a href="#ranghi">I ranghi</a>
         <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
       </nav>
     </div>
@@ -1973,6 +2022,33 @@ body{background:var(--inchiostro); overflow-x:hidden}
     });
   }, { threshold: 0.15 });
   carte.forEach(function (c) { obs.observe(c); });
+})();
+</script>
+
+<!-- ── il tasto BOX: la scatola si apre, poi porta ai ranghi ── -->
+<script>
+(function(){
+  var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.ichnav-box').forEach(function(t){
+    t.addEventListener('click', function(ev){
+      /* clic con tasti modificatori o rotellina: lascia fare al browser */
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
+      var h = t.getAttribute('href') || '';
+      if (!h || calmo) return;
+
+      var interno = h.charAt(0) === '#' && h.length > 1;
+      var meta = interno ? document.getElementById(h.slice(1)) : null;
+      if (interno && !meta) return;   /* ancora morta: non bloccare niente */
+
+      ev.preventDefault();
+      t.classList.add('apre');
+      setTimeout(function(){
+        if (meta) meta.scrollIntoView({ behavior:'smooth', block:'start' });
+        else location.href = h;
+      }, 340);
+      setTimeout(function(){ t.classList.remove('apre'); }, 1100);
+    });
+  });
 })();
 </script>
 
