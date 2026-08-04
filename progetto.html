@@ -294,7 +294,9 @@ section[id]{scroll-margin-top:86px}
 /* ── hero ───────────────────────────────────── */
 .hero{
   position:relative;background:var(--verde-scuro);color:#fff;
-  padding:clamp(122px,18vw,190px) 0 clamp(64px,10vw,110px);overflow:hidden;
+  /* il fondo è più alto di prima (era 64/110): quella fascia vuota
+     sotto il testo è il terreno su cui passano le orme. */
+  padding:clamp(122px,18vw,190px) 0 clamp(200px,22vw,260px);overflow:hidden;
 }
 .hero::before{
   content:"";position:absolute;width:640px;height:640px;right:-220px;top:-260px;
@@ -319,6 +321,47 @@ section[id]{scroll-margin-top:86px}
 .glossa em{color:var(--oro);font-style:normal;font-weight:600}
 .hero .lead{max-width:620px;color:rgba(255,255,255,.9)}
 .hero .lead strong{color:#fff;font-weight:700}
+
+/* ── la camminata ────────────────────────────
+   Le impronte non stanno nell'HTML: le costruisce lo script in
+   fondo alla pagina, che prima misura dove arriva il testo e poi
+   posa il passo solo dove è libero. Cambia lo schermo, cambia il
+   percorso: le scritte non vengono mai toccate. */
+.orme{
+  position:absolute;inset:0;z-index:1;
+  pointer-events:none;overflow:hidden;
+}
+/* la traccia va verso una luce calda, sul lato destro */
+.orme::before{
+  content:"";position:absolute;
+  right:-14%;bottom:-30%;
+  width:min(880px,120vw);height:min(880px,120vw);
+  background:radial-gradient(circle,rgba(212,160,23,.17),transparent 62%);
+}
+.orma{
+  position:absolute;top:0;left:0;
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+.orma > i{
+  display:block;opacity:0;transform:scale(.8);
+  transition:opacity .6s ease,transform .6s ease;
+}
+/* orma appoggiata */
+.orma.giu > i{
+  opacity:var(--op,.3);transform:scale(1);
+  transition:opacity .5s ease,transform .4s cubic-bezier(.18,1.5,.35,1);
+}
+/* l'ultima appoggiata si accende un istante, poi rientra nella traccia */
+.orma.giu.fresca > i{
+  opacity:calc(var(--op,.3) * 2.1);
+  transition:opacity .13s ease-out,transform .4s cubic-bezier(.18,1.5,.35,1);
+}
+.orma svg{
+  display:block;width:100%;height:auto;
+  fill:var(--oro);
+  filter:drop-shadow(0 2px 7px rgba(212,160,23,.32));
+}
 
 /* ── sezioni ────────────────────────────────── */
 section{position:relative}
@@ -625,6 +668,25 @@ section{position:relative}
 
 <!-- ═══ HERO ═══ -->
 <section class="hero grana">
+
+  <!-- il passaggio: le orme le crea lo script in fondo alla pagina -->
+  <div class="orme" id="orme" aria-hidden="true"></div>
+
+  <!-- sagoma del piede destro, riusata da ogni impronta.
+       Il sinistro è lo stesso, ribaltato. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="ich-piede" viewBox="0 0 64 150">
+      <ellipse cx="15.5" cy="18.5" rx="9.2" ry="11"  transform="rotate(-18 15.5 18.5)"/>
+      <ellipse cx="32"   cy="12"   rx="5.6" ry="6.8" transform="rotate(-10 32 12)"/>
+      <ellipse cx="42.6" cy="15.2" rx="4.9" ry="5.9" transform="rotate(-6 42.6 15.2)"/>
+      <ellipse cx="50.8" cy="20.8" rx="4.2" ry="5.1"/>
+      <ellipse cx="57.2" cy="28.4" rx="3.4" ry="4.3"/>
+      <path d="M30 33c16-1.5 29.5 5 30 16 .5 11-8.5 23.5-20.5 25.5C26 76.5 12.5 69.5 8.5 57 5.5 46.5 14.5 34.5 30 33Z"/>
+      <ellipse cx="46.5" cy="87"  rx="7"    ry="17"   transform="rotate(8 46.5 87)"/>
+      <ellipse cx="29.5" cy="124" rx="15.5" ry="19.5"/>
+    </symbol>
+  </svg>
+
   <div class="wrap">
     <div class="occhiello">Il progetto</div>
     <div class="parola">ichnos</div>
@@ -979,6 +1041,246 @@ const osservatore = new IntersectionObserver(voci => {
   voci.forEach(v => { if (v.isIntersecting) { v.target.classList.add('visto'); osservatore.unobserve(v.target); } });
 }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 document.querySelectorAll('.rivela').forEach(el => osservatore.observe(el));
+
+/* ═══════════════════════════════════════════════════════════════
+   LE ORME — la camminata dell'hero
+
+   1. misura l'ingombro vero delle scritte (non il riquadro che le
+      contiene: proprio dove arriva l'inchiostro);
+   2. traccia una curva che entra da sinistra in basso, passa sotto
+      il testo e poi sale verso destra, dentro la luce dorata;
+   3. la percorre a passi regolari, destro e sinistro, e rimpicciolisce
+      le impronte man mano che si allontanano — chi cammina va via;
+   4. le appoggia una alla volta, tiene la traccia un istante, poi la
+      cancella dall'inizio. E ricomincia.
+
+   Ogni impronta che finirebbe sopra o addosso alle scritte viene
+   spostata sotto: la garanzia è nel codice, non nell'occhio.
+
+   Da toccare per cambiare ritmo: BATTITO (millisecondi fra un passo
+   e l'altro) e PAUSA (battute in cui la traccia resta intera).
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+  var zona  = document.getElementById('orme');
+  var hero  = zona && zona.closest('.hero');
+  var testo = hero && hero.querySelector('.wrap');
+  if (!zona || !hero || !testo) return;
+
+  var BATTITO = 260;
+  var PAUSA   = 5;
+  var MARGINE = 16;   /* aria minima fra le scritte e l'orma più vicina */
+
+  var SAGOMA   = '<i><svg viewBox="0 0 64 150"><use href="#ich-piede"></use></svg></i>';
+  var RAPPORTO = 150 / 64;
+
+  /* Percorso in frazioni di larghezza e altezza dell'hero.
+     Quattro punti = curva di Bézier.
+     Schermo largo: sotto il testo, poi la salita a destra.
+     Schermo stretto: tutta nella fascia bassa, il testo occupa la riga. */
+  var LARGO = {
+    curva:[[-.10,.86],[.24,.93],[.82,.93],[1.10,.16]],
+    quota:.046, min:38, max:78,
+    opA:.34, opB:.155, scA:1, scB:.5
+  };
+  var STRETTO = {
+    curva:[[-.24,.95],[.26,.98],[.62,.855],[1.24,.80]],
+    quota:.110, min:34, max:58,
+    opA:.37, opB:.19, scA:1, scB:.64
+  };
+
+  var orme = [], battuta = 0, fresca = null, motore = null, visibile = true;
+  var memW = -1, memH = -1, memC = -1;
+  var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function punto(p,t){
+    var u = 1-t, a = u*u*u, b = 3*u*u*t, c = 3*u*t*t, d = t*t*t;
+    return [ a*p[0][0] + b*p[1][0] + c*p[2][0] + d*p[3][0],
+             a*p[0][1] + b*p[1][1] + c*p[2][1] + d*p[3][1] ];
+  }
+  function verso(p,t){
+    var u = 1-t, a = 3*u*u, b = 6*u*t, c = 3*t*t;
+    return [ a*(p[1][0]-p[0][0]) + b*(p[2][0]-p[1][0]) + c*(p[3][0]-p[2][0]),
+             a*(p[1][1]-p[0][1]) + b*(p[2][1]-p[1][1]) + c*(p[3][1]-p[2][1]) ];
+  }
+  /* da "quanti pixel ho camminato" a "a che punto della curva sono" */
+  function dove(cum, d, tot, N){
+    if (d <= 0) return 0;
+    if (d >= tot) return 1;
+    var lo = 0, hi = cum.length - 1, mid;
+    while (lo < hi){ mid = (lo + hi) >> 1; if (cum[mid] < d) lo = mid + 1; else hi = mid; }
+    var a = cum[lo-1], b = cum[lo], f = (b - a) ? (d - a) / (b - a) : 0;
+    return (lo - 1 + f) / N;
+  }
+
+  /* l'ingombro reale dell'inchiostro, non del riquadro che lo contiene */
+  function inchiostro(){
+    var base = zona.getBoundingClientRect();
+    var destra = 0, fondo = 0, trovato = false;
+    var righe = testo.querySelectorAll('.occhiello, .parola, .glossa, .lead');
+    for (var i = 0; i < righe.length; i++){
+      var r = null;
+      try { var g = document.createRange(); g.selectNodeContents(righe[i]); r = g.getBoundingClientRect(); }
+      catch(e){ r = null; }
+      if (!r || (!r.width && !r.height)) r = righe[i].getBoundingClientRect();
+      if (!r.width && !r.height) continue;
+      destra = Math.max(destra, r.right - base.left);
+      fondo  = Math.max(fondo,  r.bottom - base.top);
+      trovato = true;
+    }
+    if (!trovato){
+      var w = testo.getBoundingClientRect();
+      destra = w.right - base.left; fondo = w.bottom - base.top;
+    }
+    return { destra: destra, fondo: fondo };
+  }
+
+  function svuota(){
+    ferma();
+    orme = []; battuta = 0; fresca = null;
+    while (zona.firstChild) zona.removeChild(zona.firstChild);
+  }
+
+  function costruisci(forzato){
+    var W = zona.clientWidth, H = zona.clientHeight;
+    if (!W || !H) return;
+
+    var ink   = inchiostro();
+    var cima  = Math.max(0, Math.min(H - 40, ink.fondo + MARGINE));  /* sotto questa quota si cammina sempre */
+    var muro  = ink.destra + MARGINE;                                /* oltre questa colonna si può anche salire */
+    var tetto = 96;                                                  /* sotto la barra di navigazione */
+
+    if (!forzato && Math.abs(W-memW) < 24 && Math.abs(H-memH) < 24 && Math.abs(cima-memC) < 8) return;
+    memW = W; memH = H; memC = cima;
+
+    if (H - cima < 74){ svuota(); return; }   /* niente spazio: niente orme */
+
+    var cfg  = (W < 900) ? STRETTO : LARGO;
+    var lato = Math.max(cfg.min, Math.min(cfg.max, Math.round(W * cfg.quota)));
+    var p    = cfg.curva.map(function(q){ return [ q[0]*W, q[1]*H ]; });
+
+    /* lunghezza della curva, campionata */
+    var N = 240, cum = [0], pre = punto(p,0), tot = 0, i, q;
+    for (i = 1; i <= N; i++){
+      q = punto(p, i/N);
+      tot += Math.sqrt((q[0]-pre[0])*(q[0]-pre[0]) + (q[1]-pre[1])*(q[1]-pre[1]));
+      cum.push(tot); pre = q;
+    }
+
+    /* dove cade ogni passo: la falcata si accorcia man mano che ci si allontana */
+    var base = lato * RAPPORTO * 1.14, tappe = [], d = 0;
+    while (d < tot && tappe.length < 24){
+      tappe.push(d);
+      d += base * (cfg.scA + (cfg.scB - cfg.scA) * (d / tot));
+    }
+
+    svuota();
+    var pezzo = document.createDocumentFragment();
+
+    tappe.forEach(function(dist, k){
+      var t = dove(cum, dist, tot, N);
+      var c = punto(p, t), v = verso(p, t);
+      var m = Math.sqrt(v[0]*v[0] + v[1]*v[1]) || 1;
+      var dx = v[0]/m, dy = v[1]/m;
+      var s  = dist / tot;
+
+      var scala  = cfg.scA + (cfg.scB - cfg.scA) * s;
+      var larg   = lato * scala;
+      var lung   = larg * RAPPORTO;
+      var destro = (k % 2 === 0);
+
+      /* scarto laterale: i piedi non camminano in fila indiana */
+      var scarto = larg * .52 * (destro ? 1 : -1);
+      var x = c[0] + (-dy) * scarto;
+      var y = c[1] + ( dx) * scarto;
+
+      /* il piede punta dove si va, più i gradi di apertura verso l'esterno */
+      var ang = Math.atan2(dy, dx) * 180 / Math.PI + 90
+              + (destro ? 7 : -7) + (Math.random()*5 - 2.5);
+
+      /* ingombro dell'orma una volta girata */
+      var r  = ang * Math.PI / 180;
+      var sn = Math.abs(Math.sin(r)), cs = Math.abs(Math.cos(r));
+      var mx = (larg * cs + lung * sn) / 2;
+      var my = (larg * sn + lung * cs) / 2;
+
+      /* garanzia: se l'orma è ancora nella colonna del testo deve stare
+         sotto le scritte. Passato il muro può salire quanto vuole. */
+      if (x - mx < muro && y - my < cima) y = cima + my;
+      if (y - my < tetto) y = tetto + my;
+
+      var el = document.createElement('span');
+      el.className = 'orma';
+      el.style.setProperty('--op', (cfg.opA + (cfg.opB - cfg.opA) * s).toFixed(3));
+      el.style.width     = larg.toFixed(1) + 'px';
+      el.style.left      = x.toFixed(1) + 'px';
+      el.style.top       = y.toFixed(1) + 'px';
+      el.style.transform = 'translate(-50%,-50%) rotate(' + ang.toFixed(1) + 'deg)'
+                         + (destro ? '' : ' scaleX(-1)');
+      el.innerHTML = SAGOMA;
+      pezzo.appendChild(el);
+      orme.push(el);
+    });
+
+    zona.appendChild(pezzo);
+
+    /* movimento ridotto: la traccia c'è, ferma e intera */
+    if (calmo){ orme.forEach(function(el){ el.classList.add('giu'); }); return; }
+    if (visibile) avvia();
+  }
+
+  function battito(){
+    var TOT = orme.length;
+    if (!TOT) return;
+    var giro = TOT + PAUSA + Math.ceil(TOT/2);
+    var t = battuta % giro;
+
+    if (t < TOT){
+      var el = orme[t];
+      if (fresca && fresca !== el) fresca.classList.remove('fresca');
+      el.classList.add('giu','fresca');
+      fresca = el;
+    } else {
+      if (fresca){ fresca.classList.remove('fresca'); fresca = null; }
+      if (t >= TOT + PAUSA){
+        var j = (t - TOT - PAUSA) * 2;
+        if (orme[j])   orme[j].classList.remove('giu');
+        if (orme[j+1]) orme[j+1].classList.remove('giu');
+      }
+    }
+    battuta++;
+  }
+
+  function avvia(){ if (motore || calmo || !orme.length) return; motore = setInterval(battito, BATTITO); }
+  function ferma(){ if (motore){ clearInterval(motore); motore = null; } }
+
+  /* quando l'hero è fuori schermo, o la scheda passa in secondo piano,
+     la camminata si mette in pausa */
+  if ('IntersectionObserver' in window){
+    visibile = false;
+    new IntersectionObserver(function(voci){
+      voci.forEach(function(v){
+        visibile = v.isIntersecting;
+        if (visibile) avvia(); else ferma();
+      });
+    }, { threshold: 0 }).observe(hero);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) ferma(); else if (visibile) avvia();
+  });
+
+  /* prima costruzione, poi ricontrolli quando il testo può essersi mosso */
+  costruisci(true);
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ setTimeout(function(){ costruisci(false); }, 60); });
+  }
+  addEventListener('load', function(){ setTimeout(function(){ costruisci(false); }, 80); });
+
+  var attesa = null;
+  addEventListener('resize', function(){
+    clearTimeout(attesa);
+    attesa = setTimeout(function(){ costruisci(false); }, 220);
+  }, { passive:true });
+})();
 </script>
 
 </body>
