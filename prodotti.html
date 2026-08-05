@@ -101,13 +101,23 @@ body{background:var(--inchiostro); overflow-x:hidden}
 .ichnav.menu-aperto .ichnav-logo--scuro{opacity:0}
 
 /* marchio: bianco sull'hero, verde quando la barra diventa solida */
-.ichnav-marchio{position:relative; display:block; line-height:0; height:28px; flex:none; transition:height .35s ease}
+.ichnav-marchio{
+  position:relative; display:block; line-height:0; height:28px; flex:none;
+  transform-origin:left center;
+  transition:height .35s ease, transform .25s cubic-bezier(.34,1.4,.64,1);
+}
 .ichnav-logo{height:100%; width:auto; display:block; transition:opacity .35s ease}
 .ichnav-logo--scuro{position:absolute; top:0; left:0; opacity:0}
 .ichnav.ridotta .ichnav-marchio{height:24px}
 .ichnav.ridotta .ichnav-logo--chiaro{opacity:0}
 .ichnav.ridotta .ichnav-logo--scuro{opacity:1}
 
+/* feedback al passaggio del mouse */
+@media (hover:hover){
+  .ichnav-marchio:hover{transform:scale(1.06)}
+}
+.ichnav-marchio:focus-visible{transform:scale(1.06); outline:none}
+.ichnav-marchio:active{transform:scale(.98)}
 .ichnav-linee{display:none; align-items:center; gap:clamp(18px,2.4vw,34px)}
 .ichnav-linee a{
   font-size:.88rem; font-weight:600; letter-spacing:.01em;
