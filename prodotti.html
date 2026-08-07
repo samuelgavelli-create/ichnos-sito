@@ -6,15 +6,15 @@
 
 <title>I prodotti del mese — Sardegna Ichnos</title>
 <meta name="description" content="Cosa puoi mettere nella tua box questo mese: prodotti sardi da piccoli produttori, con il costo in Monete Ichnos. Si raccoglie solo ciò che è già prenotato.">
-<link rel="canonical" href="https://samuelgavelli.github.io/ichnos-sito/prodotti.html">
+<link rel="canonical" href="https://projectichnos.samuel-gavelli.workers.dev/prodotti.html">
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="Sardegna Ichnos">
-<meta property="og:url" content="https://samuelgavelli.github.io/ichnos-sito/prodotti.html">
+<meta property="og:url" content="https://projectichnos.samuel-gavelli.workers.dev/prodotti.html">
 <meta property="og:title" content="I prodotti del mese — Sardegna Ichnos">
 <meta property="og:description" content="Quello che c'è adesso: prodotti sardi da piccoli produttori, col costo in Monete Ichnos.">
-<meta property="og:image" content="https://samuelgavelli.github.io/ichnos-sito/img/og-ichnos.jpg">
+<meta property="og:image" content="https://projectichnos.samuel-gavelli.workers.dev/img/og-ichnos.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -101,23 +101,13 @@ body{background:var(--inchiostro); overflow-x:hidden}
 .ichnav.menu-aperto .ichnav-logo--scuro{opacity:0}
 
 /* marchio: bianco sull'hero, verde quando la barra diventa solida */
-.ichnav-marchio{
-  position:relative; display:block; line-height:0; height:28px; flex:none;
-  transform-origin:left center;
-  transition:height .35s ease, transform .25s cubic-bezier(.34,1.4,.64,1);
-}
+.ichnav-marchio{position:relative; display:block; line-height:0; height:28px; flex:none; transition:height .35s ease}
 .ichnav-logo{height:100%; width:auto; display:block; transition:opacity .35s ease}
 .ichnav-logo--scuro{position:absolute; top:0; left:0; opacity:0}
 .ichnav.ridotta .ichnav-marchio{height:24px}
 .ichnav.ridotta .ichnav-logo--chiaro{opacity:0}
 .ichnav.ridotta .ichnav-logo--scuro{opacity:1}
 
-/* feedback al passaggio del mouse */
-@media (hover:hover){
-  .ichnav-marchio:hover{transform:scale(1.06)}
-}
-.ichnav-marchio:focus-visible{transform:scale(1.06); outline:none}
-.ichnav-marchio:active{transform:scale(.98)}
 .ichnav-linee{display:none; align-items:center; gap:clamp(18px,2.4vw,34px)}
 .ichnav-linee a{
   font-size:.88rem; font-weight:600; letter-spacing:.01em;
@@ -158,31 +148,64 @@ body{background:var(--inchiostro); overflow-x:hidden}
 
 /* la scatola */
 .scatola{
-  width:22px; height:22px; flex:none; overflow:visible;
-  fill:none; stroke:currentColor;
-  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+  width:22px;height:22px;flex:none;overflow:visible;
+  fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
-.scatola-aletta{transition:transform .42s cubic-bezier(.34,1.24,.5,1)}
-.scatola-aletta--sx{transform-box:view-box; transform-origin:4.5px 12px}
-.scatola-aletta--dx{transform-box:view-box; transform-origin:27.5px 12px}
-.scatola-moneta{fill:currentColor; stroke:none; transition:transform .46s cubic-bezier(.2,1.4,.4,1)}
+/* Le due alette. A riposo chiudono il coperchio e lasciano al centro la
+   fessura del cartone: e' quella che fa leggere il disegno come scatola
+   e non come rettangolo. Il perno di rotazione sta sul bordo del corpo. */
+.scatola-aletta{
+  transform-box:view-box;
+  transition:transform .44s cubic-bezier(.34,1.18,.44,1);
+}
+.scatola-aletta--sx{transform-origin:7px 11px}
+.scatola-aletta--dx{transform-origin:25px 11px}
+/* La moneta sta davvero dentro la scatola: la maschera la mostra solo
+   quando ha superato il bordo. Sotto quella riga non esiste. */
+.scatola-moneta{
+  fill:currentColor;stroke:none;
+  transition:transform .52s cubic-bezier(.2,1.32,.4,1);
+}
 
 /* si apre: mouse, tastiera, dito */
 .ichnav-box:hover .scatola-aletta--sx,
 .ichnav-box:focus-visible .scatola-aletta--sx,
-.ichnav-box:active .scatola-aletta--sx{transform:rotate(-78deg)}
+.ichnav-box:active .scatola-aletta--sx,
+.ichnav-cta:hover .scatola-aletta--sx,
+.ichnav-cta:focus-visible .scatola-aletta--sx,
+.ichnav-cta:active .scatola-aletta--sx{transform:rotate(-132deg)}
+
 .ichnav-box:hover .scatola-aletta--dx,
 .ichnav-box:focus-visible .scatola-aletta--dx,
-.ichnav-box:active .scatola-aletta--dx{transform:rotate(78deg)}
+.ichnav-box:active .scatola-aletta--dx,
+.ichnav-cta:hover .scatola-aletta--dx,
+.ichnav-cta:focus-visible .scatola-aletta--dx,
+.ichnav-cta:active .scatola-aletta--dx{transform:rotate(132deg)}
+
 .ichnav-box:hover .scatola-moneta,
 .ichnav-box:focus-visible .scatola-moneta,
-.ichnav-box:active .scatola-moneta{transform:translateY(-12px)}
+.ichnav-box:active .scatola-moneta,
+.ichnav-cta:hover .scatola-moneta,
+.ichnav-cta:focus-visible .scatola-moneta,
+.ichnav-cta:active .scatola-moneta{transform:translateY(-11.5px)}
 
 /* al clic si spalanca prima di partire */
 .ichnav-box.apre{transform:translateY(-1px) scale(1.02)}
-.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-118deg)}
-.ichnav-box.apre .scatola-aletta--dx{transform:rotate(118deg)}
-.ichnav-box.apre .scatola-moneta{transform:translateY(-14.5px)}
+.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-141deg)}
+.ichnav-box.apre .scatola-aletta--dx{transform:rotate(141deg)}
+.ichnav-box.apre .scatola-moneta{transform:translateY(-12.6px)}
+
+/* Sul telefono non esiste il passaggio del mouse: la scatola del menu si
+   apre da sola appena la cascata ha finito di scendere. */
+.ichnav-cta .scatola{width:21px;height:21px}
+.ichnav-menu.aperto .ichnav-cta .scatola-aletta--sx{transform:rotate(-132deg);transition-delay:.5s}
+.ichnav-menu.aperto .ichnav-cta .scatola-aletta--dx{transform:rotate(132deg);transition-delay:.5s}
+.ichnav-menu.aperto .ichnav-cta .scatola-moneta{transform:translateY(-11.5px);transition-delay:.58s}
+
+@media (prefers-reduced-motion:reduce){
+  .scatola-aletta,.scatola-moneta{transition:none}
+}
 
 /* il gettone resta: lo usano la CTA del menu telefono e il tasto "Scegli il tuo rango" */
 .gettone{
@@ -590,7 +613,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
     margin-right:calc(clamp(20px,5vw,72px) * -1);
     padding:4px clamp(20px,5vw,72px);
     overflow-x:auto; overscroll-behavior-x:contain;
-    scroll-snap-type:x mandatory;
+    scroll-snap-type:x proximity;
     scroll-padding-left:clamp(20px,5vw,72px);
     -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
@@ -811,11 +834,11 @@ body{background:var(--inchiostro); overflow-x:hidden}
       <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
       <a href="index.html#ranghi" class="ichnav-box">
         <svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
-          <defs><clipPath id="ichBocca"><rect x="-10" y="-22" width="52" height="34"/></clipPath></defs>
-          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="17" r="4.4"/></g>
-          <path d="M4.5 12v12A2.5 2.5 0 0 0 7 26.5h18a2.5 2.5 0 0 0 2.5-2.5V12"/>
-          <path class="scatola-aletta scatola-aletta--sx" d="M4.5 12V6.6h10.7V12z"/>
-          <path class="scatola-aletta scatola-aletta--dx" d="M27.5 12V6.6H16.8V12z"/>
+          <defs><clipPath id="ichBocca"><rect x="0" y="0" width="32" height="13.2"/></clipPath></defs>
+          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="18" r="3.7"/></g>
+          <path d="M7 11v12.6a2.4 2.4 0 0 0 2.4 2.4h13.2a2.4 2.4 0 0 0 2.4-2.4V11"/>
+          <path class="scatola-aletta scatola-aletta--sx" d="M7 11h7.4"/>
+          <path class="scatola-aletta scatola-aletta--dx" d="M25 11h-7.4"/>
         </svg>
         Le nostre BOX
       </a>
@@ -856,7 +879,13 @@ body{background:var(--inchiostro); overflow-x:hidden}
       <span class="ichnav-freccia" aria-hidden="true">→</span>
     </a>
 
-    <a class="ichnav-cta" href="index.html#ranghi"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+    <a class="ichnav-cta" href="index.html#ranghi"><svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
+        <defs><clipPath id="ichBoccaMenu"><rect x="0" y="0" width="32" height="13.2"/></clipPath></defs>
+        <g clip-path="url(#ichBoccaMenu)"><circle class="scatola-moneta" cx="16" cy="18" r="3.7"/></g>
+        <path d="M7 11v12.6a2.4 2.4 0 0 0 2.4 2.4h13.2a2.4 2.4 0 0 0 2.4-2.4V11"/>
+        <path class="scatola-aletta scatola-aletta--sx" d="M7 11h7.4"/>
+        <path class="scatola-aletta scatola-aletta--dx" d="M25 11h-7.4"/>
+      </svg>Le nostre BOX</a>
 
     <!-- secondo modo per uscire: in fondo, dove arriva il pollice -->
     <button class="ichnav-torna" type="button" id="ichnavTorna">&larr; Torna alla pagina</button>
@@ -1504,6 +1533,153 @@ body{background:var(--inchiostro); overflow-x:hidden}
   }
 })();
 </script>
- <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d30f26e8a4411fa893eb5cbb07431b"}'></script><!-- End Cloudflare Web Analytics -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ICHNOS × TALLY — comportamento del popup
+     Il form vive dentro un iframe di tally.so: i colori si cambiano
+     solo dal pannello di Tally. Da qui si governa tutto il resto:
+     la pagina non scorre più dietro al popup, il velo è verde Ichnos
+     e le misure cambiano fra schermo grande e telefono.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* pagina ferma mentre il popup è aperto (metodo che regge anche su iOS) */
+  html.ich-bloccato{overflow:hidden !important;overscroll-behavior:none}
+  body.ich-bloccato{position:fixed;left:0;width:100%;overflow:hidden !important}
+
+  /* il velo: verde Ichnos al posto del nero di serie */
+  .ich-velo{
+    position:fixed;inset:0;z-index:99998;opacity:0;
+    background:radial-gradient(circle at 50% 38%,rgba(26,74,46,.86),rgba(8,26,15,.95));
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    transition:opacity .3s ease;
+  }
+  .ich-velo.si-vede{opacity:1}
+
+  /* ─── schermo grande ─── */
+  .tally-popup{
+    z-index:99999 !important;
+    left:50% !important;right:auto !important;
+    top:50% !important;bottom:auto !important;
+    transform:translate(-50%,-50%) !important;
+    width:min(680px,calc(100vw - 48px)) !important;
+    max-width:none !important;
+    height:min(86vh,820px) !important;
+    max-height:none !important;
+    border-radius:20px !important;
+    overflow:hidden !important;
+    overscroll-behavior:contain;
+    box-shadow:0 30px 90px -18px rgba(8,26,15,.6);
+  }
+  .tally-popup iframe{
+    width:100% !important;height:100% !important;
+    border:0 !important;display:block;
+  }
+
+  /* ─── telefono: a tutto schermo, senza angoli ─── */
+  @media (max-width:640px){
+    .tally-popup{
+      left:0 !important;top:0 !important;
+      transform:none !important;
+      width:100% !important;
+      height:100dvh !important;
+      border-radius:0 !important;
+      box-shadow:none;
+    }
+  }
+</style>
+
+<script>
+(function(){
+  var y = 0, velo = null, aperto = false, inCoda = false;
+
+  function siVede(el){
+    if (!el) return false;
+    var s = getComputedStyle(el);
+    return s.display !== 'none' && s.visibility !== 'hidden'
+           && el.getBoundingClientRect().height > 0;
+  }
+
+  function blocca(){
+    if (aperto) return;
+    aperto = true;
+    y = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.top = (-y) + 'px';
+    document.documentElement.classList.add('ich-bloccato');
+    document.body.classList.add('ich-bloccato');
+    velo = document.createElement('div');
+    velo.className = 'ich-velo';
+    document.body.appendChild(velo);
+    requestAnimationFrame(function(){ if (velo) velo.classList.add('si-vede'); });
+  }
+
+  function sblocca(){
+    if (!aperto) return;
+    aperto = false;
+    document.documentElement.classList.remove('ich-bloccato');
+    document.body.classList.remove('ich-bloccato');
+    document.body.style.top = '';
+    window.scrollTo(0, y);
+    if (velo){ velo.remove(); velo = null; }
+  }
+
+  function controlla(){
+    inCoda = false;
+    if (siVede(document.querySelector('.tally-popup'))) blocca(); else sblocca();
+  }
+  function programma(){
+    if (inCoda) return;
+    inCoda = true;
+    requestAnimationFrame(controlla);
+  }
+
+  new MutationObserver(programma).observe(document.documentElement, {
+    childList:true, subtree:true, attributes:true, attributeFilter:['style','class']
+  });
+  programma();
+})();
+</script>
+
+<script>
+/* ── SCORRIMENTO VERTICALE LIBERO SUL CAROSELLO PRODOTTI ────────────
+   Su mobile lo snap orizzontale agganciava anche i gesti verticali:
+   la pagina si bloccava e le card si riallineavano di qualche pixel.
+   Se lo swipe risulta verticale, disattiviamo lo snap per la durata
+   del gesto. Nessun preventDefault: listener tutti passive. */
+(function () {
+  var g = document.querySelector('.pdm-griglia');
+  if (!g) return;
+  var x0 = 0, y0 = 0, deciso = false, spento = false, timer = null;
+
+  function ripristina(ritardo) {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      g.style.scrollSnapType = ''; spento = false;
+    }, ritardo);
+  }
+
+  g.addEventListener('touchstart', function (e) {
+    var t = e.changedTouches[0];
+    x0 = t.clientX; y0 = t.clientY; deciso = false;
+    clearTimeout(timer);
+  }, { passive: true });
+
+  g.addEventListener('touchmove', function (e) {
+    if (deciso) return;
+    var t = e.changedTouches[0];
+    var dx = Math.abs(t.clientX - x0), dy = Math.abs(t.clientY - y0);
+    if (dx < 6 && dy < 6) return;
+    deciso = true;
+    if (dy > dx) { g.style.scrollSnapType = 'none'; spento = true; }
+  }, { passive: true });
+
+  ['touchend', 'touchcancel'].forEach(function (ev) {
+    g.addEventListener(ev, function () { if (spento) ripristina(600); }, { passive: true });
+  });
+})();
+</script>
+
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d30f26e8a4411fa893eb5cbb07431b"}'></script><!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
