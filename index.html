@@ -1933,9 +1933,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
            aria-label="Componi la tua box — rango Contadinu"
            data-tally-open="vGOy04"
            data-tally-layout="modal"
-           data-tally-auto-close="2500"
-           data-tally-emoji-text="🟡"
-           data-tally-emoji-animation="tada">
+           data-tally-auto-close="2500">
           Componi la tua box <span class="freccia">→</span>
         </a>
         <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
@@ -1994,9 +1992,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
            aria-label="Componi la tua box — rango Possidenti"
            data-tally-open="Xx1oEg"
            data-tally-layout="modal"
-           data-tally-auto-close="2500"
-           data-tally-emoji-text="🟡"
-           data-tally-emoji-animation="tada">
+           data-tally-auto-close="2500">
           Componi la tua box <span class="freccia">→</span>
         </a>
         <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
@@ -2057,9 +2053,7 @@ body{background:var(--inchiostro); overflow-x:hidden}
            aria-label="Componi la tua box — rango Meri de Ommu"
            data-tally-open="eq0qBJ"
            data-tally-layout="modal"
-           data-tally-auto-close="2500"
-           data-tally-emoji-text="🟡"
-           data-tally-emoji-animation="tada">
+           data-tally-auto-close="2500">
           Componi la tua box <span class="freccia">→</span>
         </a>
         <p class="ich-cta-nota">Prenoti ora · consegna al prossimo Sardegna Day</p>
@@ -2851,6 +2845,9 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches){
   /* ─── schermo grande ─── */
   .tally-popup{
     z-index:99999 !important;
+    /* Il form e' piu' corto del riquadro: senza questo fondo, sotto
+       l'ultima domanda si vedeva il velo e sembrava una banda nera. */
+    background:#1a4a2e !important;
     left:50% !important;right:auto !important;
     top:50% !important;bottom:auto !important;
     transform:translate(-50%,-50%) !important;
@@ -2865,6 +2862,7 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches){
   }
   .tally-popup iframe{
     width:100% !important;height:100% !important;
+    background:#1a4a2e !important;
     border:0 !important;display:block;
   }
 
