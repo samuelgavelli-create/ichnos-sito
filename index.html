@@ -2861,20 +2861,33 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches){
     box-shadow:0 30px 90px -18px rgba(8,26,15,.6);
   }
   .tally-popup iframe{
-    width:100% !important;height:100% !important;
+    width:100% !important;
+    /* L'altezza va ripetuta nella stessa unita' del riquadro, non in
+       percentuale: il 100% si appoggia al contenitore intermedio di Tally,
+       che resta alto quanto decide lei. Risultato di prima: modulo tagliato
+       a meta' dalla barra in fondo e fascia verde morta sotto. */
+    height:min(86vh,820px) !important;
+    min-height:min(86vh,820px) !important;
     background:#1a4a2e !important;
     border:0 !important;display:block;
   }
 
-  /* ─── telefono: a tutto schermo, senza angoli ─── */
+  /* ─── telefono: a tutto schermo, senza angoli ───
+     100vh prima di 100dvh: se il browser non conosce dvh tiene vh e non
+     resta senza altezza. Su Android dvh esclude la barra dei gesti, vh no. */
   @media (max-width:640px){
     .tally-popup{
       left:0 !important;top:0 !important;
       transform:none !important;
       width:100% !important;
+      height:100vh !important;
       height:100dvh !important;
       border-radius:0 !important;
       box-shadow:none;
+    }
+    .tally-popup iframe{
+      height:100vh !important;min-height:100vh !important;
+      height:100dvh !important;min-height:100dvh !important;
     }
   }
 </style>
