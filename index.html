@@ -6,7 +6,7 @@
 
 <title>Sardegna Ichnos — Box alimentari dai piccoli produttori sardi</title>
 <meta name="description" content="Ogni box parte da un piccolo produttore sardo e arriva sulla tua tavola senza intermediari. Si raccoglie solo ciò che è già prenotato.">
-<link rel="canonical" href="https://projectichnos.pages.dev/">
+<link rel="canonical" href="https://projectichnos.samuel-gavelli.workers.dev/">
 
 <!-- Anteprima quando il link viene condiviso su Instagram / WhatsApp.
      ⚠ og:image vuole un URL assoluto e un file vero: carica in /img/
@@ -14,10 +14,10 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="Sardegna Ichnos">
-<meta property="og:url" content="https://projectichnos.pages.dev/">
+<meta property="og:url" content="https://projectichnos.samuel-gavelli.workers.dev/">
 <meta property="og:title" content="Sardegna Ichnos — Capitolo 0">
 <meta property="og:description" content="I produttori sardi pagati prima del raccolto. Si produce solo il prenotato.">
-<meta property="og:image" content="https://projectichnos.pages.dev/img/og-ichnos.jpg">
+<meta property="og:image" content="https://projectichnos.samuel-gavelli.workers.dev/img/og-ichnos.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -177,31 +177,64 @@ body{background:var(--inchiostro); overflow-x:hidden}
 
 /* la scatola */
 .scatola{
-  width:22px; height:22px; flex:none; overflow:visible;
-  fill:none; stroke:currentColor;
-  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+  width:22px;height:22px;flex:none;overflow:visible;
+  fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
-.scatola-aletta{transition:transform .42s cubic-bezier(.34,1.24,.5,1)}
-.scatola-aletta--sx{transform-box:view-box; transform-origin:4.5px 12px}
-.scatola-aletta--dx{transform-box:view-box; transform-origin:27.5px 12px}
-.scatola-moneta{fill:currentColor; stroke:none; transition:transform .46s cubic-bezier(.2,1.4,.4,1)}
+/* Le due alette. A riposo chiudono il coperchio e lasciano al centro la
+   fessura del cartone: e' quella che fa leggere il disegno come scatola
+   e non come rettangolo. Il perno di rotazione sta sul bordo del corpo. */
+.scatola-aletta{
+  transform-box:view-box;
+  transition:transform .44s cubic-bezier(.34,1.18,.44,1);
+}
+.scatola-aletta--sx{transform-origin:7px 11px}
+.scatola-aletta--dx{transform-origin:25px 11px}
+/* La moneta sta davvero dentro la scatola: la maschera la mostra solo
+   quando ha superato il bordo. Sotto quella riga non esiste. */
+.scatola-moneta{
+  fill:currentColor;stroke:none;
+  transition:transform .52s cubic-bezier(.2,1.32,.4,1);
+}
 
 /* si apre: mouse, tastiera, dito */
 .ichnav-box:hover .scatola-aletta--sx,
 .ichnav-box:focus-visible .scatola-aletta--sx,
-.ichnav-box:active .scatola-aletta--sx{transform:rotate(-78deg)}
+.ichnav-box:active .scatola-aletta--sx,
+.ichnav-cta:hover .scatola-aletta--sx,
+.ichnav-cta:focus-visible .scatola-aletta--sx,
+.ichnav-cta:active .scatola-aletta--sx{transform:rotate(-132deg)}
+
 .ichnav-box:hover .scatola-aletta--dx,
 .ichnav-box:focus-visible .scatola-aletta--dx,
-.ichnav-box:active .scatola-aletta--dx{transform:rotate(78deg)}
+.ichnav-box:active .scatola-aletta--dx,
+.ichnav-cta:hover .scatola-aletta--dx,
+.ichnav-cta:focus-visible .scatola-aletta--dx,
+.ichnav-cta:active .scatola-aletta--dx{transform:rotate(132deg)}
+
 .ichnav-box:hover .scatola-moneta,
 .ichnav-box:focus-visible .scatola-moneta,
-.ichnav-box:active .scatola-moneta{transform:translateY(-12px)}
+.ichnav-box:active .scatola-moneta,
+.ichnav-cta:hover .scatola-moneta,
+.ichnav-cta:focus-visible .scatola-moneta,
+.ichnav-cta:active .scatola-moneta{transform:translateY(-11.5px)}
 
 /* al clic si spalanca prima di partire */
 .ichnav-box.apre{transform:translateY(-1px) scale(1.02)}
-.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-118deg)}
-.ichnav-box.apre .scatola-aletta--dx{transform:rotate(118deg)}
-.ichnav-box.apre .scatola-moneta{transform:translateY(-14.5px)}
+.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-141deg)}
+.ichnav-box.apre .scatola-aletta--dx{transform:rotate(141deg)}
+.ichnav-box.apre .scatola-moneta{transform:translateY(-12.6px)}
+
+/* Sul telefono non esiste il passaggio del mouse: la scatola del menu si
+   apre da sola appena la cascata ha finito di scendere. */
+.ichnav-cta .scatola{width:21px;height:21px}
+.ichnav-menu.aperto .ichnav-cta .scatola-aletta--sx{transform:rotate(-132deg);transition-delay:.5s}
+.ichnav-menu.aperto .ichnav-cta .scatola-aletta--dx{transform:rotate(132deg);transition-delay:.5s}
+.ichnav-menu.aperto .ichnav-cta .scatola-moneta{transform:translateY(-11.5px);transition-delay:.58s}
+
+@media (prefers-reduced-motion:reduce){
+  .scatola-aletta,.scatola-moneta{transition:none}
+}
 
 /* il gettone resta: lo usa la CTA del menu telefono */
 .gettone{
@@ -1701,11 +1734,11 @@ body{background:var(--inchiostro); overflow-x:hidden}
       <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
       <a href="#ranghi" class="ichnav-box">
         <svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
-          <defs><clipPath id="ichBocca"><rect x="-10" y="-22" width="52" height="34"/></clipPath></defs>
-          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="17" r="4.4"/></g>
-          <path d="M4.5 12v12A2.5 2.5 0 0 0 7 26.5h18a2.5 2.5 0 0 0 2.5-2.5V12"/>
-          <path class="scatola-aletta scatola-aletta--sx" d="M4.5 12V6.6h10.7V12z"/>
-          <path class="scatola-aletta scatola-aletta--dx" d="M27.5 12V6.6H16.8V12z"/>
+          <defs><clipPath id="ichBocca"><rect x="0" y="0" width="32" height="13.2"/></clipPath></defs>
+          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="18" r="3.7"/></g>
+          <path d="M7 11v12.6a2.4 2.4 0 0 0 2.4 2.4h13.2a2.4 2.4 0 0 0 2.4-2.4V11"/>
+          <path class="scatola-aletta scatola-aletta--sx" d="M7 11h7.4"/>
+          <path class="scatola-aletta scatola-aletta--dx" d="M25 11h-7.4"/>
         </svg>
         Le nostre BOX
       </a>
@@ -1747,7 +1780,13 @@ body{background:var(--inchiostro); overflow-x:hidden}
       <span class="ichnav-freccia" aria-hidden="true">→</span>
     </a>
 
-    <a class="ichnav-cta" href="#ranghi"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+    <a class="ichnav-cta" href="#ranghi"><svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
+        <defs><clipPath id="ichBoccaMenu"><rect x="0" y="0" width="32" height="13.2"/></clipPath></defs>
+        <g clip-path="url(#ichBoccaMenu)"><circle class="scatola-moneta" cx="16" cy="18" r="3.7"/></g>
+        <path d="M7 11v12.6a2.4 2.4 0 0 0 2.4 2.4h13.2a2.4 2.4 0 0 0 2.4-2.4V11"/>
+        <path class="scatola-aletta scatola-aletta--sx" d="M7 11h7.4"/>
+        <path class="scatola-aletta scatola-aletta--dx" d="M25 11h-7.4"/>
+      </svg>Le nostre BOX</a>
 
     <!-- secondo modo per uscire: in fondo, dove arriva il pollice -->
     <button class="ichnav-torna" type="button" id="ichnavTorna">&larr; Torna alla pagina</button>
@@ -1894,8 +1933,6 @@ body{background:var(--inchiostro); overflow-x:hidden}
            aria-label="Componi la tua box — rango Contadinu"
            data-tally-open="vGOy04"
            data-tally-layout="modal"
-           data-tally-width="720"
-           data-tally-overlay="1"
            data-tally-auto-close="2500"
            data-tally-emoji-text="🟡"
            data-tally-emoji-animation="tada">
@@ -1957,8 +1994,6 @@ body{background:var(--inchiostro); overflow-x:hidden}
            aria-label="Componi la tua box — rango Possidenti"
            data-tally-open="Xx1oEg"
            data-tally-layout="modal"
-           data-tally-width="720"
-           data-tally-overlay="1"
            data-tally-auto-close="2500"
            data-tally-emoji-text="🟡"
            data-tally-emoji-animation="tada">
@@ -2022,8 +2057,6 @@ body{background:var(--inchiostro); overflow-x:hidden}
            aria-label="Componi la tua box — rango Meri de Ommu"
            data-tally-open="eq0qBJ"
            data-tally-layout="modal"
-           data-tally-width="720"
-           data-tally-overlay="1"
            data-tally-auto-close="2500"
            data-tally-emoji-text="🟡"
            data-tally-emoji-animation="tada">
@@ -2793,5 +2826,111 @@ if (matchMedia('(hover: hover) and (pointer: fine)').matches){
 </script>
 
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d30f26e8a4411fa893eb5cbb07431b"}'></script><!-- End Cloudflare Web Analytics -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ICHNOS × TALLY — comportamento del popup
+     Il form vive dentro un iframe di tally.so: i colori si cambiano
+     solo dal pannello di Tally. Da qui si governa tutto il resto:
+     la pagina non scorre più dietro al popup, il velo è verde Ichnos
+     e le misure cambiano fra schermo grande e telefono.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* pagina ferma mentre il popup è aperto (metodo che regge anche su iOS) */
+  html.ich-bloccato{overflow:hidden !important;overscroll-behavior:none}
+  body.ich-bloccato{position:fixed;left:0;width:100%;overflow:hidden !important}
+
+  /* il velo: verde Ichnos al posto del nero di serie */
+  .ich-velo{
+    position:fixed;inset:0;z-index:99998;opacity:0;
+    background:radial-gradient(circle at 50% 38%,rgba(26,74,46,.86),rgba(8,26,15,.95));
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    transition:opacity .3s ease;
+  }
+  .ich-velo.si-vede{opacity:1}
+
+  /* ─── schermo grande ─── */
+  .tally-popup{
+    z-index:99999 !important;
+    left:50% !important;right:auto !important;
+    top:50% !important;bottom:auto !important;
+    transform:translate(-50%,-50%) !important;
+    width:min(680px,calc(100vw - 48px)) !important;
+    max-width:none !important;
+    height:min(86vh,820px) !important;
+    max-height:none !important;
+    border-radius:20px !important;
+    overflow:hidden !important;
+    overscroll-behavior:contain;
+    box-shadow:0 30px 90px -18px rgba(8,26,15,.6);
+  }
+  .tally-popup iframe{
+    width:100% !important;height:100% !important;
+    border:0 !important;display:block;
+  }
+
+  /* ─── telefono: a tutto schermo, senza angoli ─── */
+  @media (max-width:640px){
+    .tally-popup{
+      left:0 !important;top:0 !important;
+      transform:none !important;
+      width:100% !important;
+      height:100dvh !important;
+      border-radius:0 !important;
+      box-shadow:none;
+    }
+  }
+</style>
+
+<script>
+(function(){
+  var y = 0, velo = null, aperto = false, inCoda = false;
+
+  function siVede(el){
+    if (!el) return false;
+    var s = getComputedStyle(el);
+    return s.display !== 'none' && s.visibility !== 'hidden'
+           && el.getBoundingClientRect().height > 0;
+  }
+
+  function blocca(){
+    if (aperto) return;
+    aperto = true;
+    y = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.top = (-y) + 'px';
+    document.documentElement.classList.add('ich-bloccato');
+    document.body.classList.add('ich-bloccato');
+    velo = document.createElement('div');
+    velo.className = 'ich-velo';
+    document.body.appendChild(velo);
+    requestAnimationFrame(function(){ if (velo) velo.classList.add('si-vede'); });
+  }
+
+  function sblocca(){
+    if (!aperto) return;
+    aperto = false;
+    document.documentElement.classList.remove('ich-bloccato');
+    document.body.classList.remove('ich-bloccato');
+    document.body.style.top = '';
+    window.scrollTo(0, y);
+    if (velo){ velo.remove(); velo = null; }
+  }
+
+  function controlla(){
+    inCoda = false;
+    if (siVede(document.querySelector('.tally-popup'))) blocca(); else sblocca();
+  }
+  function programma(){
+    if (inCoda) return;
+    inCoda = true;
+    requestAnimationFrame(controlla);
+  }
+
+  new MutationObserver(programma).observe(document.documentElement, {
+    childList:true, subtree:true, attributes:true, attributeFilter:['style','class']
+  });
+  programma();
+})();
+</script>
+
 </body>
 </html>
