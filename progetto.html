@@ -9,11 +9,11 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="Sardegna Ichnos">
-<meta property="og:url" content="https://projectichnos.netlify.app/progetto.html">
-<link rel="canonical" href="https://projectichnos.netlify.app/progetto.html">
+<meta property="og:url" content="https://projectichnos.samuel-gavelli.workers.dev/progetto.html">
+<link rel="canonical" href="https://projectichnos.samuel-gavelli.workers.dev/progetto.html">
 <meta property="og:title" content="Il Progetto — Ichnos">
 <meta property="og:description" content="Filiera diretta, magazzino zero, pagamento anticipato ai produttori. Capitolo 0: Sardegna.">
-<meta property="og:image" content="https://projectichnos.netlify.app/img/og-ichnos.jpg">
+<meta property="og:image" content="https://projectichnos.samuel-gavelli.workers.dev/img/og-ichnos.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,6 +33,7 @@
   ═══════════════════════════════════════════════════════════
   IMMAGINI USATE IN QUESTA PAGINA — tutte in /img/
   ───────────────────────────────────────────────────────────
+  img/hero-progetto.jpg  foto dell'intestazione (velata di verde)
   img/logo-verde.png     lettering ICHNOS verde (header)
   img/logo-bianco.png    lettering ICHNOS bianco (footer)
   img/sigillo-verde.png  il tondo/sigillo (sezione Sigillo)
@@ -53,6 +54,11 @@
   --panna:#F4EFE2;          /* bianco caldo del footer, identico a index */
   --carta-scura:#DFD8C7;
   --inchiostro:#12160F;
+  /* FOTO DELL'INTESTAZIONE — carica il file in img/ con questo nome
+     esatto (orizzontale, almeno 2000px di larghezza). Finché non c'è,
+     l'intestazione resta verde piena e non si rompe niente. */
+  --hero-foto: url('img/hero-progetto.jpg');
+
   --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --display:"Fraunces",Georgia,"Times New Roman",serif;
 }
@@ -131,19 +137,12 @@ p{font-size:1.03rem;line-height:1.72}
 .ichnav.menu-aperto .ichnav-logo--chiaro{opacity:1}
 .ichnav.menu-aperto .ichnav-logo--scuro{opacity:0}
 
-.ichnav-marchio{position:relative;display:block;line-height:0;height:28px;flex:none;transform-origin:left center;transition:height .35s ease,transform .25s cubic-bezier(.34,1.4,.64,1)}
+.ichnav-marchio{position:relative;display:block;line-height:0;height:28px;flex:none;transition:height .35s ease}
 .ichnav-logo{height:100%;width:auto;display:block;transition:opacity .35s ease}
 .ichnav-logo--scuro{position:absolute;top:0;left:0;opacity:0}
 .ichnav.ridotta .ichnav-marchio{height:24px}
 .ichnav.ridotta .ichnav-logo--chiaro{opacity:0}
 .ichnav.ridotta .ichnav-logo--scuro{opacity:1}
-
-/* feedback al passaggio del mouse */
-@media (hover:hover){
-  .ichnav-marchio:hover{transform:scale(1.06)}
-}
-.ichnav-marchio:focus-visible{transform:scale(1.06);outline:none}
-.ichnav-marchio:active{transform:scale(.98)}
 
 .ichnav-linee{display:none;align-items:center;gap:clamp(18px,2.4vw,34px)}
 .ichnav-linee a{
@@ -191,27 +190,60 @@ p{font-size:1.03rem;line-height:1.72}
   fill:none;stroke:currentColor;
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
-.scatola-aletta{transition:transform .42s cubic-bezier(.34,1.24,.5,1)}
-.scatola-aletta--sx{transform-box:view-box;transform-origin:4.5px 12px}
-.scatola-aletta--dx{transform-box:view-box;transform-origin:27.5px 12px}
-.scatola-moneta{fill:currentColor;stroke:none;transition:transform .46s cubic-bezier(.2,1.4,.4,1)}
+/* Le due alette. A riposo chiudono il coperchio e lasciano al centro la
+   fessura del cartone: e' quella che fa leggere il disegno come scatola
+   e non come rettangolo. Il perno di rotazione sta sul bordo del corpo. */
+.scatola-aletta{
+  transform-box:view-box;
+  transition:transform .44s cubic-bezier(.34,1.18,.44,1);
+}
+.scatola-aletta--sx{transform-origin:7px 11px}
+.scatola-aletta--dx{transform-origin:25px 11px}
+/* La moneta sta davvero dentro la scatola: la maschera la mostra solo
+   quando ha superato il bordo. Sotto quella riga non esiste. */
+.scatola-moneta{
+  fill:currentColor;stroke:none;
+  transition:transform .52s cubic-bezier(.2,1.32,.4,1);
+}
 
 /* si apre: mouse, tastiera, dito */
 .ichnav-box:hover .scatola-aletta--sx,
 .ichnav-box:focus-visible .scatola-aletta--sx,
-.ichnav-box:active .scatola-aletta--sx{transform:rotate(-78deg)}
+.ichnav-box:active .scatola-aletta--sx,
+.ichnav-cta:hover .scatola-aletta--sx,
+.ichnav-cta:focus-visible .scatola-aletta--sx,
+.ichnav-cta:active .scatola-aletta--sx{transform:rotate(-132deg)}
+
 .ichnav-box:hover .scatola-aletta--dx,
 .ichnav-box:focus-visible .scatola-aletta--dx,
-.ichnav-box:active .scatola-aletta--dx{transform:rotate(78deg)}
+.ichnav-box:active .scatola-aletta--dx,
+.ichnav-cta:hover .scatola-aletta--dx,
+.ichnav-cta:focus-visible .scatola-aletta--dx,
+.ichnav-cta:active .scatola-aletta--dx{transform:rotate(132deg)}
+
 .ichnav-box:hover .scatola-moneta,
 .ichnav-box:focus-visible .scatola-moneta,
-.ichnav-box:active .scatola-moneta{transform:translateY(-12px)}
+.ichnav-box:active .scatola-moneta,
+.ichnav-cta:hover .scatola-moneta,
+.ichnav-cta:focus-visible .scatola-moneta,
+.ichnav-cta:active .scatola-moneta{transform:translateY(-11.5px)}
 
 /* al clic si spalanca prima di partire */
 .ichnav-box.apre{transform:translateY(-1px) scale(1.02)}
-.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-118deg)}
-.ichnav-box.apre .scatola-aletta--dx{transform:rotate(118deg)}
-.ichnav-box.apre .scatola-moneta{transform:translateY(-14.5px)}
+.ichnav-box.apre .scatola-aletta--sx{transform:rotate(-141deg)}
+.ichnav-box.apre .scatola-aletta--dx{transform:rotate(141deg)}
+.ichnav-box.apre .scatola-moneta{transform:translateY(-12.6px)}
+
+/* Sul telefono non esiste il passaggio del mouse: la scatola del menu si
+   apre da sola appena la cascata ha finito di scendere. */
+.ichnav-cta .scatola{width:21px;height:21px}
+.ichnav-menu.aperto .ichnav-cta .scatola-aletta--sx{transform:rotate(-132deg);transition-delay:.5s}
+.ichnav-menu.aperto .ichnav-cta .scatola-aletta--dx{transform:rotate(132deg);transition-delay:.5s}
+.ichnav-menu.aperto .ichnav-cta .scatola-moneta{transform:translateY(-11.5px);transition-delay:.58s}
+
+@media (prefers-reduced-motion:reduce){
+  .scatola-aletta,.scatola-moneta{transition:none}
+}
 
 /* il gettone resta: lo usa la CTA del menu telefono */
 .gettone{
@@ -333,10 +365,21 @@ section[id]{scroll-margin-top:86px}
 
 /* ── hero ───────────────────────────────────── */
 .hero{
-  position:relative;background:var(--verde-scuro);color:#fff;
+  position:relative;color:#fff;
   /* il fondo è più alto di prima (era 64/110): quella fascia vuota
      sotto il testo è il terreno su cui passano le orme. */
-  padding:clamp(122px,18vw,190px) 0 clamp(200px,22vw,260px);overflow:hidden;
+  padding:clamp(122px,18vw,190px) 0 clamp(215px,22vw,285px);overflow:hidden;
+  /* foto + due veli verdi: scuro a sinistra, dove sta la carta di panna,
+     e sempre più pieno verso il basso, dove devono passare le orme.
+     Ordine dei livelli: l'ultimo è la foto, i primi le stanno sopra. */
+  background-color:var(--verde-scuro);
+  background-image:
+    linear-gradient(to bottom, rgba(26,74,46,.30) 0%, rgba(26,74,46,.74) 54%, rgba(13,39,24,.98) 100%),
+    linear-gradient(100deg, rgba(13,39,24,.90) 0%, rgba(26,74,46,.58) 48%, rgba(26,74,46,.26) 100%),
+    var(--hero-foto);
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 }
 .hero::before{
   content:"";position:absolute;width:640px;height:640px;right:-220px;top:-260px;
@@ -361,6 +404,46 @@ section[id]{scroll-margin-top:86px}
 .glossa em{color:var(--oro);font-style:normal;font-weight:600}
 .hero .lead{max-width:620px;color:rgba(255,255,255,.9)}
 .hero .lead strong{color:#fff;font-weight:700}
+
+/* ── la carta del progetto ──────────────────────
+   Il testo dell'hero sta su un foglio panna appoggiato sul verde.
+   Due ombre: una dura in basso a destra, che dà lo spessore, e una
+   morbida e larga, che stacca il foglio dal fondo. Qui dentro il
+   contrasto si ribalta e l'inchiostro torna scuro.
+   Le orme non ci salgono mai sopra: lo script in fondo alla pagina
+   misura questo riquadro e ci cammina attorno. */
+.carta-progetto{
+  position:relative;
+  max-width:760px;
+  background:linear-gradient(168deg,#FCF9F1 0%,#F4EFE2 54%,#EBE3D1 100%);
+  color:#1d241a;
+  border-radius:6px;
+  padding:clamp(30px,5.2vw,58px) clamp(24px,4.4vw,54px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.92),
+    11px 13px 0 -1px rgba(9,29,18,.55),
+    0 30px 62px -22px rgba(3,14,8,.9);
+}
+/* l'oro pieno su panna non si legge a questo corpo: qui è un oro cotto */
+.carta-progetto .occhiello{color:#8F6B08;margin-bottom:22px}
+.carta-progetto .occhiello::after{background:var(--oro);opacity:.65}
+.carta-progetto .parola{color:var(--verde-scuro);margin-bottom:20px}
+.carta-progetto .glossa{
+  color:#4d5648;
+  border-left-color:rgba(212,160,23,.9);
+  margin-bottom:30px;
+}
+.carta-progetto .glossa em{color:#8F6B08}
+.carta-progetto .lead{color:#2c3427}
+.carta-progetto .lead strong{color:var(--verde-scuro);font-weight:700}
+@media (max-width:640px){
+  .carta-progetto{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.92),
+      7px 8px 0 -1px rgba(9,29,18,.5),
+      0 20px 42px -16px rgba(3,14,8,.85);
+  }
+}
 
 /* ── la camminata ────────────────────────────
    Le impronte non stanno nell'HTML: le costruisce lo script in
@@ -450,26 +533,6 @@ section{position:relative}
 .sigillo-griglia{display:grid;gap:48px;align-items:center}
 .sigillo-img{max-width:250px;margin:0 auto}
 .sigillo-testo p+p{margin-top:18px}
-.ranghi{
-  display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;
-}
-.rango{
-  display:inline-flex;align-items:center;text-decoration:none;
-  font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  border:1px solid rgba(26,74,46,.3);border-radius:999px;
-  padding:13px 18px;color:var(--verde-scuro);
-  transition:background .25s ease,border-color .25s ease,color .25s ease,transform .18s ease;
-}
-/* freccia discreta: senza, le pillole si leggono come etichette morte */
-.rango::after{
-  content:"\2192";margin-left:9px;font-weight:400;opacity:.45;
-  transition:opacity .25s ease,transform .25s ease;
-}
-.rango:hover,.rango:focus-visible{
-  background:var(--verde-scuro);border-color:var(--verde-scuro);color:var(--carta);
-}
-.rango:hover::after{opacity:1;transform:translateX(3px)}
-.rango:active{transform:scale(.97)}
 
 /* ── LA ROTTA (elemento firma) ──────────────── */
 .capitolo-aperto{
@@ -577,42 +640,172 @@ section{position:relative}
 .bottone.fantasma{background:none;color:var(--oro);border:1px solid rgba(212,160,23,.55);margin-top:40px}
 .bottone.fantasma:hover{background:var(--oro);color:var(--verde-scuro)}
 
-/* ── footer ─────────────────────────────────────
-   Identico a quello di index.html: stesso prefisso
-   ichfoot-, stesse misure, stessi toni. Se cambia
-   di là, cambia anche qui. */
+/* ═══════════════ 6. FOOTER ═══════════════
+   Quattro fasce ben separate:
+     A. .ichfoot-chi       → che cos'è Ichnos (il progetto in generale)
+     B. .ichfoot-capitoli  → un blocco per capitolo, coi suoi collegamenti
+     C. .ichfoot-servizio  → ritiro, sede, contatti
+     D. .ichfoot-riga      → riga legale
+   Identico a index e prodotti: se cambia qui, cambia anche di là.
+   Unica differenza: il tasto della fascia A punta a #visione,
+   perché il progetto è questa pagina.
+   ──────────────────────────────────────── */
 .ichfoot{
   background:var(--verde-scuro);
   color:var(--panna);
   font-family:var(--font);
-  padding:clamp(56px,8vw,84px) clamp(24px,5vw,72px) 34px;
-  position:relative;
-  overflow:hidden;
+  padding:clamp(52px,8vw,96px) clamp(20px,5vw,72px) 30px;
+  position:relative; overflow:hidden;
 }
-.ichfoot-inner{max-width:1160px;margin:0 auto;position:relative;z-index:2}
-.ichfoot-alto{
-  display:flex;flex-wrap:wrap;gap:34px;justify-content:space-between;
-  align-items:flex-start;
+.ichfoot-inner{max-width:1160px; margin:0 auto; position:relative; z-index:2}
+.ichfoot a{color:inherit; text-decoration:none}
+.ichfoot a:focus-visible{outline:3px solid var(--oro); outline-offset:3px; border-radius:5px}
+
+/* etichette piccole, usate da tutte le fasce */
+.ichfoot-eti{
+  font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  font-weight:700; color:var(--oro); margin-bottom:16px;
 }
-.ichfoot-logo{height:30px;width:auto;display:block}
-.ichfoot-sede{
-  margin:16px 0 0;font-size:.9rem;line-height:1.6;
-  color:rgba(244,239,226,.55);max-width:280px;
+.ichfoot-titolino{
+  font-size:.7rem; letter-spacing:.15em; text-transform:uppercase;
+  font-weight:700; color:rgba(244,239,226,.5); margin-bottom:15px;
 }
-.ichfoot-link{display:flex;flex-direction:column;gap:12px}
-.ichfoot-link a{
-  color:rgba(244,239,226,.72);text-decoration:none;font-size:.95rem;
+
+/* ---------- A. CHE COS'E' ICHNOS ---------- */
+.ichfoot-chi{
+  background:rgba(13,39,24,.45);
+  border:1px solid rgba(244,239,226,.10);
+  border-radius:24px;
+  padding:clamp(26px,4vw,46px);
+  display:grid; gap:clamp(24px,3vw,52px); grid-template-columns:1fr;
+}
+@media (min-width:900px){
+  .ichfoot-chi{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); align-items:start}
+}
+.ichfoot-logo{height:34px; width:auto; display:block}
+.ichfoot-claim{
+  margin-top:20px;
+  font-family:var(--display); font-weight:600;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 60;
+  font-size:clamp(1.3rem,3.4vw,1.8rem); line-height:1.25;
+  max-width:20ch;
+}
+.ichfoot-testo p{
+  font-size:.97rem; line-height:1.72;
+  color:rgba(244,239,226,.72); max-width:58ch;
+}
+.ichfoot-pilastri{list-style:none; display:grid; gap:14px; margin:24px 0 26px; padding:0}
+@media (min-width:560px){.ichfoot-pilastri{grid-template-columns:repeat(3,1fr); gap:20px}}
+.ichfoot-pilastri li{
+  padding-top:13px; border-top:1px solid rgba(212,160,23,.38);
+  font-size:.83rem; line-height:1.5; color:rgba(244,239,226,.62);
+}
+.ichfoot-pilastri b{
+  display:block; margin-bottom:4px; color:var(--panna); font-size:.97rem;
+  font-family:var(--display); font-weight:600;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 30;
+}
+.ichfoot-porta{
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:.9rem; font-weight:700; color:var(--oro);
+  border-bottom:1px solid rgba(212,160,23,.42); padding-bottom:5px;
+  transition:gap .25s ease;
+}
+.ichfoot-porta:hover{gap:16px}
+
+/* ---------- nodo di separazione fra le fasce ---------- */
+.ichfoot-nodo{
+  display:flex; align-items:center; gap:18px;
+  margin:clamp(38px,5vw,58px) 0 clamp(26px,4vw,38px);
+}
+.ichfoot-nodo::before,.ichfoot-nodo::after{
+  content:""; flex:1; height:1px; background:rgba(244,239,226,.14);
+}
+.ichfoot-nodo i{width:7px; height:7px; background:var(--oro); transform:rotate(45deg)}
+
+/* ---------- B. I CAPITOLI ---------- */
+.ichfoot-capgriglia{display:grid; gap:18px; grid-template-columns:1fr}
+@media (min-width:1000px){
+  .ichfoot-capgriglia{grid-template-columns:minmax(0,2.35fr) minmax(0,1fr); align-items:stretch}
+}
+.ichfoot-cap{
+  border:1px solid rgba(244,239,226,.14); border-radius:22px;
+  padding:clamp(22px,3vw,34px);
+}
+.ichfoot-cap--aperto{background:rgba(99,153,34,.07); border-color:rgba(212,160,23,.26)}
+.ichfoot-cap--futuro{
+  border-style:dashed; border-color:rgba(244,239,226,.20);
+  display:flex; flex-direction:column; gap:18px; justify-content:space-between;
+}
+.ichfoot-captesta{
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  padding-bottom:18px; margin-bottom:24px;
+  border-bottom:1px solid rgba(244,239,226,.12);
+}
+.ichfoot-capnum{
+  font-family:var(--display); font-weight:700; color:var(--oro);
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 40;
+  font-size:1.5rem; line-height:1;
+}
+.ichfoot-capnome{
+  font-family:var(--display); font-weight:600;
+  font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 40;
+  font-size:1.3rem; line-height:1;
+}
+.ichfoot-stato{
+  margin-left:auto; font-size:.64rem; letter-spacing:.14em;
+  text-transform:uppercase; font-weight:700;
+  padding:5px 12px; border-radius:999px;
+  background:rgba(99,153,34,.22); color:#cde2a5;
+  border:1px solid rgba(99,153,34,.45);
+}
+.ichfoot-stato--attesa{
+  background:transparent; color:rgba(244,239,226,.5);
+  border-color:rgba(244,239,226,.22);
+}
+.ichfoot-colonne{
+  display:grid; gap:28px 30px;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+}
+.ichfoot-lista{list-style:none; display:grid; gap:11px; margin:0; padding:0}
+.ichfoot-lista a{
+  font-size:.92rem; line-height:1.35; color:rgba(244,239,226,.72);
   transition:color .2s ease;
 }
-.ichfoot-link a:hover{color:var(--oro)}
-.ichfoot-link a[aria-current]{color:var(--oro)}
-.ichfoot-riga{
-  margin-top:44px;padding-top:22px;
-  border-top:1px solid rgba(244,239,226,.14);
-  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
-  font-size:.82rem;color:rgba(244,239,226,.5);
+.ichfoot-lista a:hover{color:var(--oro)}
+.ichfoot-lista a[aria-current]{color:var(--oro)}
+/* voci delle box: nome sopra, costo sotto */
+.ichfoot-box{display:flex; flex-direction:column; gap:3px}
+.ichfoot-box .costo{font-size:.75rem; color:rgba(244,239,226,.42); transition:color .2s ease}
+.ichfoot-box:hover .costo{color:rgba(212,160,23,.8)}
+.ichfoot-nota{margin-top:15px; font-size:.75rem; line-height:1.55; color:rgba(244,239,226,.42)}
+.ichfoot-capfrase{font-size:.9rem; line-height:1.65; color:rgba(244,239,226,.6); max-width:34ch}
+.ichfoot-cta{
+  display:inline-flex; align-items:center; gap:9px; align-self:flex-start;
+  padding:11px 20px; border-radius:999px;
+  border:1px solid rgba(212,160,23,.55); color:var(--oro);
+  font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  transition:background .25s ease, color .25s ease;
 }
-.ichfoot a:focus-visible{outline:3px solid var(--oro);outline-offset:3px}
+.ichfoot-cta:hover{background:var(--oro); color:var(--verde-scuro)}
+
+/* ---------- C. RITIRO, SEDE, CONTATTI ---------- */
+.ichfoot-servizio{
+  margin-top:clamp(34px,5vw,52px);
+  display:grid; gap:24px;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+}
+.ichfoot-voce p{font-size:.92rem; line-height:1.6; color:rgba(244,239,226,.72)}
+.ichfoot-voce a:hover{color:var(--oro)}
+
+/* ---------- D. RIGA LEGALE ---------- */
+.ichfoot-riga{
+  margin-top:clamp(34px,5vw,50px); padding-top:22px;
+  border-top:1px solid rgba(244,239,226,.14);
+  display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between;
+  font-size:.8rem; color:rgba(244,239,226,.5);
+}
+
 
 /* ── animazioni di entrata ──────────────────── */
 .rivela{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
@@ -692,11 +885,11 @@ section{position:relative}
       <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
       <a href="index.html#ranghi" class="ichnav-box">
         <svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
-          <defs><clipPath id="ichBocca"><rect x="-10" y="-22" width="52" height="34"/></clipPath></defs>
-          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="17" r="4.4"/></g>
-          <path d="M4.5 12v12A2.5 2.5 0 0 0 7 26.5h18a2.5 2.5 0 0 0 2.5-2.5V12"/>
-          <path class="scatola-aletta scatola-aletta--sx" d="M4.5 12V6.6h10.7V12z"/>
-          <path class="scatola-aletta scatola-aletta--dx" d="M27.5 12V6.6H16.8V12z"/>
+          <defs><clipPath id="ichBocca"><rect x="0" y="0" width="32" height="13.2"/></clipPath></defs>
+          <g clip-path="url(#ichBocca)"><circle class="scatola-moneta" cx="16" cy="18" r="3.7"/></g>
+          <path d="M7 11v12.6a2.4 2.4 0 0 0 2.4 2.4h13.2a2.4 2.4 0 0 0 2.4-2.4V11"/>
+          <path class="scatola-aletta scatola-aletta--sx" d="M7 11h7.4"/>
+          <path class="scatola-aletta scatola-aletta--dx" d="M25 11h-7.4"/>
         </svg>
         Le nostre BOX
       </a>
@@ -737,7 +930,13 @@ section{position:relative}
       <span class="ichnav-freccia" aria-hidden="true">→</span>
     </a>
 
-    <a class="ichnav-cta" href="index.html#ranghi"><span class="gettone" aria-hidden="true"></span>Le nostre BOX</a>
+    <a class="ichnav-cta" href="index.html#ranghi"><svg class="scatola" viewBox="0 0 32 32" aria-hidden="true">
+        <defs><clipPath id="ichBoccaMenu"><rect x="0" y="0" width="32" height="13.2"/></clipPath></defs>
+        <g clip-path="url(#ichBoccaMenu)"><circle class="scatola-moneta" cx="16" cy="18" r="3.7"/></g>
+        <path d="M7 11v12.6a2.4 2.4 0 0 0 2.4 2.4h13.2a2.4 2.4 0 0 0 2.4-2.4V11"/>
+        <path class="scatola-aletta scatola-aletta--sx" d="M7 11h7.4"/>
+        <path class="scatola-aletta scatola-aletta--dx" d="M25 11h-7.4"/>
+      </svg>Le nostre BOX</a>
 
     <!-- secondo modo per uscire: in fondo, dove arriva il pollice -->
     <button class="ichnav-torna" type="button" id="ichnavTorna">&larr; Torna alla pagina</button>
@@ -767,18 +966,20 @@ section{position:relative}
   </svg>
 
   <div class="wrap">
-    <div class="occhiello">Il progetto</div>
-    <div class="parola">ichnos</div>
-    <p class="glossa">
-      dal greco <em>ἴχνος</em> — orma, traccia, segno di un passaggio. Non solo
-      l'impronta nel terreno: il lavoro delle persone, la storia di un territorio,
-      quello che resta quando chi è passato non c'è più.
-    </p>
-    <p class="lead">
-      Non siamo un e-commerce. Siamo una <strong>scatola che cammina</strong>:
-      parte soltanto quando qualcuno l'ha già chiesta, e porta con sé l'impronta
-      esatta del posto da cui viene.
-    </p>
+    <div class="carta-progetto">
+      <div class="occhiello">Il progetto</div>
+      <div class="parola">ichnos</div>
+      <p class="glossa">
+        dal greco <em>ἴχνος</em> — orma, traccia, segno di un passaggio. Non solo
+        l'impronta nel terreno: il lavoro delle persone, la storia di un territorio,
+        quello che resta quando chi è passato non c'è più.
+      </p>
+      <p class="lead">
+        Non siamo un e-commerce. Siamo una <strong>scatola che cammina</strong>:
+        parte soltanto quando qualcuno l'ha già chiesta, e porta con sé l'impronta
+        esatta del posto da cui viene.
+      </p>
+    </div>
   </div>
 </section>
 
@@ -864,7 +1065,6 @@ section{position:relative}
 
     <a class="bottone fantasma" href="https://tally.so/r/J9MP5R"
        data-tally-open="J9MP5R" data-tally-layout="modal"
-       data-tally-width="720" data-tally-overlay="1"
        target="_blank" rel="noopener">Proponi la prossima regione</a>
   </div>
 </section>
@@ -887,14 +1087,9 @@ section{position:relative}
         </p>
         <p>
           Dentro il sistema circolano le <strong>Monete Ichnos</strong> 🟡: sono il modo
-          in cui un abbonamento diventa impegno anticipato verso chi produce. Tre ranghi
-          accompagnano il percorso — un livello di scoperta del territorio, non un listino.
+          in cui un abbonamento diventa impegno anticipato verso chi produce. Non comprano
+          un prodotto già fatto — prenotano un lavoro che deve ancora cominciare.
         </p>
-        <div class="ranghi">
-          <a class="rango" href="index.html#ranghi" aria-label="Contadinu — vai agli abbonamenti">Contadinu</a>
-          <a class="rango" href="index.html#ranghi" aria-label="Possidenti — vai agli abbonamenti">Possidenti</a>
-          <a class="rango" href="index.html#ranghi" aria-label="Meri de Ommu — vai agli abbonamenti">Meri de Ommu</a>
-        </div>
       </div>
     </div>
   </div>
@@ -926,15 +1121,6 @@ section{position:relative}
   </div>
 </section>
 
-<!-- ═══ IL PATTO ═══ -->
-<section class="patto grana" id="patto">
-  <div class="wrap rivela">
-    <div class="fregio" aria-hidden="true"><i></i><span></span><i></i></div>
-    <blockquote>Ichnos custodisce l'impronta dei territori italiani, portandola ovunque senza alterarne l'origine.</blockquote>
-    <p class="firma">Samuel Gavelli · CEO</p>
-  </div>
-</section>
-
 <!-- ═══ COLLABORA ═══ -->
 <section class="sez chiara" id="collabora">
   <div class="wrap">
@@ -957,7 +1143,7 @@ section{position:relative}
           Nessuna esclusiva, nessun vincolo di volume.
         </p>
       <!-- TODO Tally: quando avrai l'ID, aggiungi data-tally-open="ID" data-tally-layout="modal"
-           data-tally-width="720" data-tally-overlay="1" e cambia href in https://tally.so/r/ID.
+           e cambia href in https://tally.so/r/ID.
            Fino ad allora il bottone porta ai messaggi Instagram: funziona. -->
         <a class="bottone" href="https://instagram.com/projectichnos"
            target="_blank" rel="noopener">Diventa produttore partner</a>
@@ -986,26 +1172,181 @@ section{position:relative}
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
+<!-- ═══ IL PATTO ═══ -->
+<section class="patto grana" id="patto">
+  <div class="wrap rivela">
+    <div class="fregio" aria-hidden="true"><i></i><span></span><i></i></div>
+    <blockquote>Ichnos custodisce l'impronta dei territori italiani, portandola ovunque senza alterarne l'origine.</blockquote>
+    <p class="firma">Samuel Gavelli · CEO</p>
+  </div>
+</section>
+
+<!-- ████████████████████████████████████████████████████████████
+     FOOTER — stessa struttura su tutte le pagine.
+     A. che cos'è Ichnos · B. i capitoli · C. ritiro e contatti · D. legale
+     ██████████████████████████████████████████████████████████ -->
 <footer class="ichfoot grana">
   <div class="ichfoot-inner">
 
-    <div class="ichfoot-alto">
+    <!-- ══ A · CHE COS'È ICHNOS ══════════════════════ -->
+    <section class="ichfoot-chi" aria-label="Il progetto Ichnos">
       <div>
         <img class="ichfoot-logo" src="img/logo-bianco.png" alt="Ichnos">
-        <p class="ichfoot-sede">
-          Hub di ritiro: Felizzano (AL).<br>Sede operativa: Alessandria.
-        </p>
+        <p class="ichfoot-claim">Custodiamo l'impronta dei territori italiani.</p>
       </div>
-      <nav class="ichfoot-link" aria-label="Collegamenti">
-        <a href="progetto.html" aria-current="page">Progetto Ichnos</a>
-        <a href="prodotti.html">I prodotti del mese</a>
-        <a href="index.html#sardegna-day">Sardegna Day</a>
-        <a href="index.html#ranghi">I ranghi</a>
-        <a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram</a>
-      </nav>
-    </div>
 
+      <div class="ichfoot-testo">
+        <p>
+          Ichnos non è un negozio: è un modo diverso di far viaggiare il cibo.
+          Un territorio alla volta, si raccoglie solo ciò che è già prenotato e i
+          produttori vengono pagati prima, sopra il prezzo della grande distribuzione.
+          Quello che parte ha già un nome sopra.
+        </p>
+
+        <ul class="ichfoot-pilastri">
+          <li><b>Filiera diretta</b>Dal produttore alla tua tavola, senza passaggi in mezzo.</li>
+          <li><b>Magazzino zero</b>Niente scorte, niente invenduto: si produce il prenotato.</li>
+          <li><b>Pagamento anticipato</b>Il 10% sopra la GDO, versato prima del raccolto.</li>
+        </ul>
+
+        <a class="ichfoot-porta" href="#visione">Leggi il progetto per intero <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <div class="ichfoot-nodo" aria-hidden="true"><i></i></div>
+
+    <!-- ══ B · I CAPITOLI ═════════════════════════════
+         Un capitolo = una regione, coi propri collegamenti dentro.
+         Per aggiungerne uno: duplica .ichfoot-cap, cambia numero,
+         nome e link.
+         ═════════════════════════════════════════════════ -->
+    <section class="ichfoot-capitoli" aria-label="I capitoli di Ichnos">
+      <p class="ichfoot-eti">I capitoli</p>
+
+      <div class="ichfoot-capgriglia">
+
+        <!-- ── Capitolo 0 · Sardegna ── -->
+        <article class="ichfoot-cap ichfoot-cap--aperto">
+          <header class="ichfoot-captesta">
+            <span class="ichfoot-capnum">00</span>
+            <span class="ichfoot-capnome">Sardegna</span>
+            <span class="ichfoot-stato">In corso</span>
+          </header>
+
+          <div class="ichfoot-colonne">
+
+            <div>
+              <p class="ichfoot-titolino">Cosa arriva nella box</p>
+              <ul class="ichfoot-lista">
+                <li><a href="prodotti.html">I prodotti del mese</a></li>
+                <li><a href="index.html#sardegna-day">Il Sardegna Day</a></li>
+                <li><a href="#metodo">Come funziona</a></li>
+                <li><a href="#sigillo">Le Monete Ichnos 🟡</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <p class="ichfoot-titolino">Le nostre BOX</p>
+              <ul class="ichfoot-lista">
+                <li>
+                  <a class="ichfoot-box"
+                     href="https://tally.so/r/vGOy04" target="_blank" rel="noopener"
+                     aria-label="Componi la tua box — rango Contadinu"
+                     data-tally-open="vGOy04" data-tally-layout="modal"
+                     data-tally-width="720" data-tally-overlay="1"
+                     data-tally-auto-close="2500"
+                     data-tally-emoji-text="🟡" data-tally-emoji-animation="tada">
+                    Contadinu<span class="costo">6 🟡 · 35,10€</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="ichfoot-box"
+                     href="https://tally.so/r/Xx1oEg" target="_blank" rel="noopener"
+                     aria-label="Componi la tua box — rango Possidenti"
+                     data-tally-open="Xx1oEg" data-tally-layout="modal"
+                     data-tally-width="720" data-tally-overlay="1"
+                     data-tally-auto-close="2500"
+                     data-tally-emoji-text="🟡" data-tally-emoji-animation="tada">
+                    Possidenti<span class="costo">12 🟡 · 62,10€</span>
+                  </a>
+                </li>
+                <li>
+                  <a class="ichfoot-box"
+                     href="https://tally.so/r/eq0qBJ" target="_blank" rel="noopener"
+                     aria-label="Componi la tua box — rango Meri de Ommu"
+                     data-tally-open="eq0qBJ" data-tally-layout="modal"
+                     data-tally-width="720" data-tally-overlay="1"
+                     data-tally-auto-close="2500"
+                     data-tally-emoji-text="🟡" data-tally-emoji-animation="tada">
+                    Meri de Ommu<span class="costo">18 🟡 · 89,10€</span>
+                  </a>
+                </li>
+                <li><a href="index.html#ranghi">Confronta i tre ranghi</a></li>
+              </ul>
+              <p class="ichfoot-nota">Spedizione sempre inclusa nel prezzo.</p>
+            </div>
+
+            <div>
+              <p class="ichfoot-titolino">Da dove arriva</p>
+              <ul class="ichfoot-lista">
+                <li><a href="#patto">Il Patto Ichnos</a></li>
+                <li><a href="#rotta">La rotta del capitolo</a></li>
+                <li><a href="#collabora">Diventa produttore partner</a></li>
+                <li><a href="#visione">La visione</a></li>
+              </ul>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- ── Capitolo 1 · ancora da scrivere ── -->
+        <article class="ichfoot-cap ichfoot-cap--futuro">
+          <header class="ichfoot-captesta">
+            <span class="ichfoot-capnum">01</span>
+            <span class="ichfoot-capnome">Da scrivere</span>
+            <span class="ichfoot-stato ichfoot-stato--attesa">In attesa</span>
+          </header>
+
+          <p class="ichfoot-capfrase">
+            Ogni capitolo è una regione, con i suoi produttori e le sue mani.
+            Il prossimo lo scegliete voi: dicci dove andare.
+          </p>
+
+          <a class="ichfoot-cta"
+             href="https://tally.so/r/J9MP5R" target="_blank" rel="noopener"
+             data-tally-open="J9MP5R" data-tally-layout="modal"
+             data-tally-width="720" data-tally-overlay="1"
+             data-tally-auto-close="2500"
+             data-tally-emoji-text="🟡" data-tally-emoji-animation="tada">
+            Proponi la prossima regione
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ══ C · RITIRO, SEDE, CONTATTI ══════════════════ -->
+    <section class="ichfoot-servizio" aria-label="Ritiro e contatti">
+      <div class="ichfoot-voce">
+        <p class="ichfoot-titolino">Ritiro</p>
+        <p>Felizzano (AL)<br>a ogni Sardegna Day.</p>
+      </div>
+      <div class="ichfoot-voce">
+        <p class="ichfoot-titolino">Sede operativa</p>
+        <p>Alessandria (AL)</p>
+      </div>
+      <div class="ichfoot-voce">
+        <p class="ichfoot-titolino">Dove ci trovi</p>
+        <p><a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Instagram @projectichnos</a></p>
+      </div>
+      <div class="ichfoot-voce">
+        <p class="ichfoot-titolino">Scrivici</p>
+        <!-- TODO: mettere la mail vera quando è pronta -->
+        <p><a href="https://instagram.com/projectichnos" target="_blank" rel="noopener">Un messaggio diretto su Instagram</a></p>
+      </div>
+    </section>
+
+    <!-- ══ D · RIGA LEGALE ══════════════════════════ -->
     <div class="ichfoot-riga">
       <span>© 2026 Sardegna Ichnos</span>
       <span>Capitolo 0 · Sardegna</span>
@@ -1166,7 +1507,7 @@ document.querySelectorAll('.rivela').forEach(el => osservatore.observe(el));
 
   var BATTITO = 260;
   var PAUSA   = 5;
-  var MARGINE = 16;   /* aria minima fra le scritte e l'orma più vicina */
+  var MARGINE = 26;   /* aria minima fra la carta e l'orma più vicina */
 
   var SAGOMA   = '<i><svg viewBox="0 0 64 150"><use href="#ich-piede"></use></svg></i>';
   var RAPPORTO = 150 / 64;
@@ -1210,9 +1551,21 @@ document.querySelectorAll('.rivela').forEach(el => osservatore.observe(el));
     return (lo - 1 + f) / N;
   }
 
-  /* l'ingombro reale dell'inchiostro, non del riquadro che lo contiene */
+  /* L'ingombro da evitare. Se il testo sta dentro la carta panna quello
+     che va scansato è tutta la carta, ombra compresa: un'orma sopra un
+     foglio opaco non si vedrebbe, e mezza orma che spunta da sotto il
+     bordo sembra un errore. Senza carta si torna a misurare l'inchiostro
+     riga per riga, come prima. */
   function inchiostro(){
-    var base = zona.getBoundingClientRect();
+    var base  = zona.getBoundingClientRect();
+    var carta = hero.querySelector('.carta-progetto');
+    if (carta){
+      var c = carta.getBoundingClientRect();
+      if (c.width || c.height){
+        /* l'ombra dura sporge in basso a destra: fa parte dell'ingombro */
+        return { destra: c.right - base.left + 13, fondo: c.bottom - base.top + 15 };
+      }
+    }
     var destra = 0, fondo = 0, trovato = false;
     var righe = testo.querySelectorAll('.occhiello, .parola, .glossa, .lead');
     for (var i = 0; i < righe.length; i++){
@@ -1380,6 +1733,114 @@ document.querySelectorAll('.rivela').forEach(el => osservatore.observe(el));
   }, { passive:true });
 })();
 </script>
- <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d30f26e8a4411fa893eb5cbb07431b"}'></script><!-- End Cloudflare Web Analytics -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ICHNOS × TALLY — comportamento del popup
+     Il form vive dentro un iframe di tally.so: i colori si cambiano
+     solo dal pannello di Tally. Da qui si governa tutto il resto:
+     la pagina non scorre più dietro al popup, il velo è verde Ichnos
+     e le misure cambiano fra schermo grande e telefono.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+  /* pagina ferma mentre il popup è aperto (metodo che regge anche su iOS) */
+  html.ich-bloccato{overflow:hidden !important;overscroll-behavior:none}
+  body.ich-bloccato{position:fixed;left:0;width:100%;overflow:hidden !important}
+
+  /* il velo: verde Ichnos al posto del nero di serie */
+  .ich-velo{
+    position:fixed;inset:0;z-index:99998;opacity:0;
+    background:radial-gradient(circle at 50% 38%,rgba(26,74,46,.86),rgba(8,26,15,.95));
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    transition:opacity .3s ease;
+  }
+  .ich-velo.si-vede{opacity:1}
+
+  /* ─── schermo grande ─── */
+  .tally-popup{
+    z-index:99999 !important;
+    left:50% !important;right:auto !important;
+    top:50% !important;bottom:auto !important;
+    transform:translate(-50%,-50%) !important;
+    width:min(680px,calc(100vw - 48px)) !important;
+    max-width:none !important;
+    height:min(86vh,820px) !important;
+    max-height:none !important;
+    border-radius:20px !important;
+    overflow:hidden !important;
+    overscroll-behavior:contain;
+    box-shadow:0 30px 90px -18px rgba(8,26,15,.6);
+  }
+  .tally-popup iframe{
+    width:100% !important;height:100% !important;
+    border:0 !important;display:block;
+  }
+
+  /* ─── telefono: a tutto schermo, senza angoli ─── */
+  @media (max-width:640px){
+    .tally-popup{
+      left:0 !important;top:0 !important;
+      transform:none !important;
+      width:100% !important;
+      height:100dvh !important;
+      border-radius:0 !important;
+      box-shadow:none;
+    }
+  }
+</style>
+
+<script>
+(function(){
+  var y = 0, velo = null, aperto = false, inCoda = false;
+
+  function siVede(el){
+    if (!el) return false;
+    var s = getComputedStyle(el);
+    return s.display !== 'none' && s.visibility !== 'hidden'
+           && el.getBoundingClientRect().height > 0;
+  }
+
+  function blocca(){
+    if (aperto) return;
+    aperto = true;
+    y = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.top = (-y) + 'px';
+    document.documentElement.classList.add('ich-bloccato');
+    document.body.classList.add('ich-bloccato');
+    velo = document.createElement('div');
+    velo.className = 'ich-velo';
+    document.body.appendChild(velo);
+    requestAnimationFrame(function(){ if (velo) velo.classList.add('si-vede'); });
+  }
+
+  function sblocca(){
+    if (!aperto) return;
+    aperto = false;
+    document.documentElement.classList.remove('ich-bloccato');
+    document.body.classList.remove('ich-bloccato');
+    document.body.style.top = '';
+    window.scrollTo(0, y);
+    if (velo){ velo.remove(); velo = null; }
+  }
+
+  function controlla(){
+    inCoda = false;
+    if (siVede(document.querySelector('.tally-popup'))) blocca(); else sblocca();
+  }
+  function programma(){
+    if (inCoda) return;
+    inCoda = true;
+    requestAnimationFrame(controlla);
+  }
+
+  new MutationObserver(programma).observe(document.documentElement, {
+    childList:true, subtree:true, attributes:true, attributeFilter:['style','class']
+  });
+  programma();
+})();
+</script>
+
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d30f26e8a4411fa893eb5cbb07431b"}'></script><!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
